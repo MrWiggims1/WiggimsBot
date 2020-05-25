@@ -1,0 +1,2 @@
+# WiggimsBot
+A discord bot
