@@ -74,7 +74,7 @@ namespace WigsBot.Bot.Commands
                     }
                     catch (Exception e)
                     {
-                        await ctx.Channel.SendMessageAsync(ctx.Guild.GetRole(role.RoleId).Name + "Could not be proccesed");
+                        await ctx.Channel.SendMessageAsync(ctx.Guild.GetRole(role.RoleId).Name + "Could not be processed");
                         Console.WriteLine(e.Message);
                     }
                 }
@@ -157,7 +157,7 @@ namespace WigsBot.Bot.Commands
                     }
                     catch (Exception e)
                     {
-                        await ctx.Channel.SendMessageAsync(ctx.Guild.GetRole(role.RoleId).Name + "Could not be proccesed");
+                        await ctx.Channel.SendMessageAsync(ctx.Guild.GetRole(role.RoleId).Name + "Could not be processed");
                         Console.WriteLine(e.Message);
                     }
                 }
@@ -261,14 +261,14 @@ namespace WigsBot.Bot.Commands
 
                 infoEmbed.AddField("Basic settings:",
                     $"Spelling tracking: enabled = {guildPreferences.SpellingEnabled}. list length {guildPreferences.ErrorListLength}\n" +
-                    $"Xp earnt per message: {guildPreferences.XpPerMessage} (For 10 messages within 60 seconds)\n" +
+                    $"Xp earned per message: {guildPreferences.XpPerMessage} (For 10 messages within 60 seconds)\n" +
                     $"Auto Role: Not Implemented yet\n");
 
                 infoEmbed.AddField("Admin Settings:",
                     $"Admin Role: Not Implemented yet\n" +
                     $"Guild Event Notifications: Not Implemented yet\n" +
                     $"Admin Notification Channel: Not Implemented yet\n" +
-                    $"Punnish @ every ones: Not Implemented yet\n");
+                    $"Punish @ every ones: Not Implemented yet\n");
 
                 infoEmbed.AddField("Roles available through `w!role join` and `w!role leave`:", sb.ToString());
 
@@ -342,7 +342,7 @@ namespace WigsBot.Bot.Commands
 
                 await _spellingSettingsService.ToggleSpellTracking(ctx.Guild.Id, !guildPreferences.SpellingEnabled);
 
-                await ctx.Channel.SendMessageAsync($"Spellchecking enabled: {!guildPreferences.SpellingEnabled}");
+                await ctx.Channel.SendMessageAsync($"Spell checking enabled: {!guildPreferences.SpellingEnabled}");
             }
 
             [Command("ToggleSpelling")]
@@ -353,7 +353,7 @@ namespace WigsBot.Bot.Commands
             {
                 await _spellingSettingsService.ToggleSpellTracking(ctx.Guild.Id, TrueOrFalse);
 
-                await ctx.Channel.SendMessageAsync($"Spellchecking enabled: {TrueOrFalse}");
+                await ctx.Channel.SendMessageAsync($"Spell checking enabled: {TrueOrFalse}");
             }
 
             [Command("SpellErrorList")]
@@ -380,269 +380,3 @@ namespace WigsBot.Bot.Commands
 
     }
 }
-
-
-
-
-/*
-[Command("rolejoin")]
-[Description("Provides a list of roles you can apply for by selecting an emoji (only one at a time for now).")]
-public async Task rolejoin(CommandContext ctx)
-{
-    await ctx.TriggerTypingAsync();
-
-    var over = DiscordEmoji.FromName(ctx.Client, ":Overwatch:");
-    var r6 = DiscordEmoji.FromName(ctx.Client, ":Rainbow6:");
-    var cs = DiscordEmoji.FromName(ctx.Client, ":CounterStrike:");
-    var mc = DiscordEmoji.FromName(ctx.Client, ":MCcraftingtable:");
-    var skrib = DiscordEmoji.FromName(ctx.Client, ":skribbl:");
-    var age = DiscordEmoji.FromName(ctx.Client, ":AgeOfEmpires:");
-    var callofduty = DiscordEmoji.FromName(ctx.Client, ":CallOfDuty:");
-    var golf = DiscordEmoji.FromName(ctx.Client, ":GolfWithFriends:");
-    var vr = DiscordEmoji.FromName(ctx.Client, ":VR:");
-    var uno = DiscordEmoji.FromName(ctx.Client, ":Uno:");
-
-    var overrole = ctx.Guild.GetRole(601761065524658192);
-    var r6role = ctx.Guild.GetRole(597030458437664768);
-    var csrole = ctx.Guild.GetRole(514397362874220547);
-    var mcrole = ctx.Guild.GetRole(661848126176624659);
-    var skribrole = ctx.Guild.GetRole(624532839387496468);
-    var agerole = ctx.Guild.GetRole(634906496022347795);
-    var callofdutyrole = ctx.Guild.GetRole(649545767715078154);
-    var golfrole = ctx.Guild.GetRole(595919780855283722);
-    var vrrole = ctx.Guild.GetRole(674943802045104128);
-    var unorole = ctx.Guild.GetRole(528904314979090464);
-
-    var joinEmbed = new DiscordEmbedBuilder
-    {
-        Title = "Would you like to receive pings for specific games?",
-        ThumbnailUrl = ctx.Client.CurrentUser.AvatarUrl,
-        Color = DiscordColor.Orange,
-        Description = $"Click the icons for the games that you play! \nYes this is imperfect, but at the moment its the best i can do. also this command does not allow you to leave a role, if you wish to leave a role please use the w!role leave command."
-    };
-
-    joinEmbed.AddField("Role Options", 
-        $"{DiscordEmoji.FromUnicode(over)} : {overrole.Name.ToString()} \n"+
-        $"{DiscordEmoji.FromUnicode(r6)} : {r6role.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(cs)} : {csrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(mc)} : {mcrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(skrib)} : {skribrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(age)} : {agerole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(callofduty)} : {callofdutyrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(golf)} : {golfrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(vr)} : {vrrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(uno)} : {unorole.Name.ToString()}");
-
-    var joinMessage = await ctx.Channel.SendMessageAsync(embed: joinEmbed).ConfigureAwait(false);
-    var userid = ctx.Member.Id;
-
-    await joinMessage.CreateReactionAsync(over).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(r6).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(cs).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(mc).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(skrib).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(age).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(callofduty).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(golf).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(vr).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(uno).ConfigureAwait(false);
-
-    var interactivity = ctx.Client.GetInteractivity();
-
-    try
-    {
-
-
-        var ReactionResult = await interactivity.WaitForReactionAsync(
-            x => x.Message == joinMessage &&
-            x.User == ctx.User &&
-            (x.Emoji == over || x.Emoji == r6 || x.Emoji == cs || x.Emoji == mc || x.Emoji == skrib || x.Emoji == age || x.Emoji == callofduty || x.Emoji == golf || x.Emoji == vr || x.Emoji == uno)).ConfigureAwait(false);
-
-        if (ReactionResult.Result.Emoji == over)
-        {
-            await ctx.Member.GrantRoleAsync(overrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Over watch role!").ConfigureAwait(false);
-
-        }
-        else if (ReactionResult.Result.Emoji == r6)
-        {
-            await ctx.Member.GrantRoleAsync(r6role).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Rainbow 6 Siege role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == cs)
-        {
-            await ctx.Member.GrantRoleAsync(csrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Counter Strike role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == mc)
-        {
-            await ctx.Member.GrantRoleAsync(mcrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Minecraft role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == skrib)
-        {
-            await ctx.Member.GrantRoleAsync(skribrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Skribble role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == age)
-        {
-            await ctx.Member.GrantRoleAsync(agerole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Age Of Empires role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == callofduty)
-        {
-            await ctx.Member.GrantRoleAsync(callofdutyrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Call Of Duty role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == golf)
-        {
-            await ctx.Member.GrantRoleAsync(golfrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Golf With Friends role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == vr)
-        {
-            await ctx.Member.GrantRoleAsync(vrrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the VR Games role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == uno)
-        {
-            await ctx.Member.GrantRoleAsync(unorole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Uno role!").ConfigureAwait(false);
-        }
-    }
-    catch
-    {
-        await ctx.Channel.SendMessageAsync(":clock10: Command timed out.").ConfigureAwait(false);
-    }
-}
-
-[Command("roleleave")]
-[Description("Provides a list of roles you can leave by selecting an emoji (only one at a time for now).")]
-public async Task roleleave(CommandContext ctx)
-{
-    await ctx.TriggerTypingAsync();
-
-    var over = DiscordEmoji.FromName(ctx.Client, ":Overwatch:");
-    var r6 = DiscordEmoji.FromName(ctx.Client, ":Rainbow6:");
-    var cs = DiscordEmoji.FromName(ctx.Client, ":CounterStrike:");
-    var mc = DiscordEmoji.FromName(ctx.Client, ":MCcraftingtable:");
-    var skrib = DiscordEmoji.FromName(ctx.Client, ":skribbl:");
-    var age = DiscordEmoji.FromName(ctx.Client, ":AgeOfEmpires:");
-    var callofduty = DiscordEmoji.FromName(ctx.Client, ":CallOfDuty:");
-    var golf = DiscordEmoji.FromName(ctx.Client, ":GolfWithFriends:");
-    var vr = DiscordEmoji.FromName(ctx.Client, ":VR:");
-    var uno = DiscordEmoji.FromName(ctx.Client, ":Uno:");
-
-    var overrole = ctx.Guild.GetRole(601761065524658192);
-    var r6role = ctx.Guild.GetRole(597030458437664768);
-    var csrole = ctx.Guild.GetRole(514397362874220547);
-    var mcrole = ctx.Guild.GetRole(661848126176624659);
-    var skribrole = ctx.Guild.GetRole(624532839387496468);
-    var agerole = ctx.Guild.GetRole(634906496022347795);
-    var callofdutyrole = ctx.Guild.GetRole(649545767715078154);
-    var golfrole = ctx.Guild.GetRole(595919780855283722);
-    var vrrole = ctx.Guild.GetRole(674943802045104128);
-    var unorole = ctx.Guild.GetRole(528904314979090464);
-
-    var joinEmbed = new DiscordEmbedBuilder
-    {
-        Title = "Would you like to stop receiving pings for specific games?",
-        ThumbnailUrl = ctx.Client.CurrentUser.AvatarUrl,
-        Color = DiscordColor.Orange,
-        Description = $"Click the icons for the games that you do not wish to play anymore. \nYes this is imperfect, but at the moment its the best i can do. also this command does not allow you to join the role, if you wish to join a role please use the w!role join command."
-    };
-
-    joinEmbed.AddField("Role Options",
-        $"{DiscordEmoji.FromUnicode(over)} : {overrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(r6)} : {r6role.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(cs)} : {csrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(mc)} : {mcrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(skrib)} : {skribrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(age)} : {agerole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(callofduty)} : {callofdutyrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(golf)} : {golfrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(vr)} : {vrrole.Name.ToString()} \n" +
-        $"{DiscordEmoji.FromUnicode(uno)} : {unorole.Name.ToString()}");
-
-    var joinMessage = await ctx.Channel.SendMessageAsync(embed: joinEmbed).ConfigureAwait(false);
-    var userid = ctx.Member.Id;
-
-    await joinMessage.CreateReactionAsync(skrib).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(over).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(r6).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(cs).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(mc).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(skrib).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(age).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(callofduty).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(golf).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(vr).ConfigureAwait(false);
-    await joinMessage.CreateReactionAsync(uno).ConfigureAwait(false);
-
-    var interactivity = ctx.Client.GetInteractivity();
-
-    try
-    {
-        var ReactionResult = await interactivity.WaitForReactionAsync(
-            x => x.Message == joinMessage &&
-            x.User == ctx.User &&
-            (x.Emoji == over || x.Emoji == r6 || x.Emoji == cs || x.Emoji == mc || x.Emoji == skrib || x.Emoji == age || x.Emoji == callofduty || x.Emoji == golf || x.Emoji == vr || x.Emoji == uno)).ConfigureAwait(false);
-
-        if (ReactionResult.Result.Emoji == over)
-        {
-            await ctx.Member.RevokeRoleAsync(overrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Over watch role!").ConfigureAwait(false);
-
-        }
-        else if (ReactionResult.Result.Emoji == r6)
-        {
-            await ctx.Member.RevokeRoleAsync(r6role).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Rainbow 6 Siege role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == cs)
-        {
-            await ctx.Member.RevokeRoleAsync(csrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Counter Strike role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == mc)
-        {
-            await ctx.Member.RevokeRoleAsync(mcrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Minecraft role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == skrib)
-        {
-            await ctx.Member.RevokeRoleAsync(skribrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Skribble role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == age)
-        {
-            await ctx.Member.RevokeRoleAsync(agerole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Age Of Empires role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == callofduty)
-        {
-            await ctx.Member.RevokeRoleAsync(callofdutyrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Call Of Duty role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == golf)
-        {
-            await ctx.Member.RevokeRoleAsync(golfrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Golf With Friends role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == vr)
-        {
-            await ctx.Member.RevokeRoleAsync(vrrole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the VR Games role!").ConfigureAwait(false);
-        }
-        else if (ReactionResult.Result.Emoji == uno)
-        {
-            await ctx.Member.RevokeRoleAsync(unorole).ConfigureAwait(false);
-            await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the Uno role!").ConfigureAwait(false);
-        }
-    }
-    catch
-    {
-        await ctx.Channel.SendMessageAsync(":clock10: Command timed out.").ConfigureAwait(false);
-    }
-}
-*/

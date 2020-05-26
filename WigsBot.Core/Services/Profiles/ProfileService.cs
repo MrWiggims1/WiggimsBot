@@ -13,10 +13,10 @@ namespace WigsBot.Core.Services.Profiles
     public interface IProfileService
     {
         /// <summary>
-        /// Gets a list of all the profiles avaliable in the Database.
+        /// Gets a list of all the profiles available in the Database.
         /// </summary>
         /// <returns>A list of all profiles.</returns>
-        Task<List<Profile>> GetAllProfilesAsync();
+        List<Profile> GetAllProfilesAsync();
 
         /// <summary>
         /// Gets or creates a members profile.
@@ -31,7 +31,7 @@ namespace WigsBot.Core.Services.Profiles
         /// </summary>
         /// <param name="guildId">The guild id.</param>
         /// <returns>List of guild profiles.</returns>
-        Task<List<Profile>> GetAllGuildProfiles(ulong guildId);
+        List<Profile> GetAllGuildProfiles(ulong guildId);
     }
 
     public class ProfileService : IProfileService
@@ -43,7 +43,7 @@ namespace WigsBot.Core.Services.Profiles
             _options = options;
         }
         
-        public async Task<List<Profile>> GetAllProfilesAsync()
+        public List<Profile> GetAllProfilesAsync()
         {
             using var context = new RPGContext(_options);
 
@@ -93,7 +93,7 @@ namespace WigsBot.Core.Services.Profiles
             return profile;
         }
 
-        public async Task<List<Profile>> GetAllGuildProfiles(ulong guildId)
+        public List<Profile> GetAllGuildProfiles(ulong guildId)
         {
             using var context = new RPGContext(_options);
 

@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IBoganCountService
     {
+        /// <summary>
+        /// Changes the members bogan word count.
+        /// </summary>
+        /// <param name="discordId">The members Id.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="BoganAmount">The change in bogan words.</param>
+        /// <returns></returns>
         Task GrantBoganCountAsync(ulong discordId, ulong guildId, int BoganAmount);
     }
 
@@ -22,13 +29,7 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Changes the members bogan word count.
-        /// </summary>
-        /// <param name="discordId">The members Id.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="BoganAmount">The change in bogan words.</param>
-        /// <returns></returns>
+        
         public async Task GrantBoganCountAsync(ulong discordId, ulong guildId, int BoganAmount)
         {
             using var context = new RPGContext(_options);

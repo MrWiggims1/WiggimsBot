@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IGotService
     {
+        /// <summary>
+        /// Grants a got to a member.
+        /// </summary>
+        /// <param name="discordId">The id of the member.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="GotAmount">The number of gots to add.</param>
+        /// <returns>It returns a boolean on weather or not they leveled up, not sure how it works, just copy and paste the code from somewhere else.</returns>
         Task<GrantGotViewModel> GrantGotAsync(ulong discordId, ulong guildId, int GotAmount);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Grants a got to a member.
-        /// </summary>
-        /// <param name="discordId">The id of the member.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="GotAmount">The number of gots to add.</param>
-        /// <returns>It returns a boolian on weather or not they leveled up, not sure how it works, just copy and paste the code from somwhere else.</returns>
         public async Task<GrantGotViewModel> GrantGotAsync(ulong discordId, ulong guildId, int GotAmount)
         {
             using var context = new RPGContext(_options);

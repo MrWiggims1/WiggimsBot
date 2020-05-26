@@ -34,7 +34,7 @@ namespace WigsBot.Bot.Commands
         [GroupCommand]
         public async Task ShowVersionInfo(CommandContext ctx, string versionNumber)
         {
-            var json = await _versionService.ReadJson(versionNumber);
+            var json = _versionService.ReadJson(versionNumber);
 
             var embed = new DiscordEmbedBuilder
             {
@@ -44,7 +44,7 @@ namespace WigsBot.Bot.Commands
             };
 
             if (json.PatchNotes != "empty")
-                embed.AddField("Patchnotes:", json.PatchNotes, false);
+                embed.AddField("Patch notes:", json.PatchNotes, false);
 
             if (json.MinorNotes != "empty")
                 embed.AddField("Minor changes and fixes:", json.MinorNotes);
@@ -53,10 +53,10 @@ namespace WigsBot.Bot.Commands
         }
 
         [Command("create")]
-        [Description("Creates a new verion.")]
+        [Description("Creates a new version.")]
         public async Task CreateNewVersion(CommandContext ctx, string versionNumber, string versionName)
         {
-            await _versionService.CreateNewVersionJson(versionNumber, versionName).ConfigureAwait(true);
+            _versionService.CreateNewVersionJson(versionNumber, versionName);
 
             await ctx.RespondAsync($"{versionNumber} - {versionName}. has been created.").ConfigureAwait(false);
         }

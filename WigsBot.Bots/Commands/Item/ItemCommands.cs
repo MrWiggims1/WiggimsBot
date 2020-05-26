@@ -73,7 +73,7 @@ namespace WigsBot.Bot.Commands.Item
             Profile profile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id).ConfigureAwait(false);
             Profile botProfile = await _profileService.GetOrCreateProfileAsync(ctx.Client.CurrentUser.Id, ctx.Guild.Id).ConfigureAwait(false);
 
-            var AllRobbingItmes = await _robbingItemService.GetAllRobbingItems();
+            var AllRobbingItmes = _robbingItemService.GetAllRobbingItems();
 
             try
             {
@@ -117,7 +117,7 @@ namespace WigsBot.Bot.Commands.Item
         [Aliases("information", "about")]
         public async Task itemInfo(CommandContext ctx, [RemainingText, Description("item name")] string itemName)
         {
-            List<RobbingItems> items = await _robbingItemService.GetAllRobbingItems().ConfigureAwait(false);
+            List<RobbingItems> items = _robbingItemService.GetAllRobbingItems();
 
             var item = items.First(x => x.Name.ToLower() == itemName.ToLower());
 
@@ -132,7 +132,7 @@ namespace WigsBot.Bot.Commands.Item
 
             ItemsJson itemsJson = JsonConvert.DeserializeObject<ItemsJson>(profile.ItemJson);
 
-            List<RobbingItems> robbingItems = await _robbingItemService.GetAllRobbingItems().ConfigureAwait(false);
+            List<RobbingItems> robbingItems = _robbingItemService.GetAllRobbingItems();
 
             var sortedList = robbingItems.OrderBy(x => x.LvlRequired);
 

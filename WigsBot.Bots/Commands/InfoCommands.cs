@@ -26,7 +26,7 @@ namespace WigsBot.Bot.Commands
                 Color = DiscordColor.Orange
             };
 
-            embed.AddField($"Wigims Bot Version", "2.0.0",true);
+            embed.AddField($"Wiggims Bot Version", "2.0.0",true);
             embed.AddField($"DSharp Version", $"{ctx.Client.VersionString}",true);
 
             if (os == "Win32NT") { embed.AddField("Current Mode", "Development, expect lots of drops in and out as Wiggims bot is being worked on currently."); }

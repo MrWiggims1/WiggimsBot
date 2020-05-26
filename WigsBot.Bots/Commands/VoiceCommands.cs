@@ -289,7 +289,7 @@ namespace WigsBot.Bot.Commands
                     return;
                 }
 
-                await ctx.Channel.SendMessageAsync($"Mimicking {discordMember.Username}, if they dont want people to have the ability to do this, they can use `W!Profile ToggleMimicking`.");
+                await ctx.Channel.SendMessageAsync($"Mimicking {discordMember.Username}, if they don't want people to have the ability to do this, they can use `W!Profile ToggleMimicking`.");
 
                 var psi = new ProcessStartInfo
                 {
@@ -341,7 +341,7 @@ namespace WigsBot.Bot.Commands
 
             [Command("list")]
             [RequirePrefixes("w!", "W!")]
-            public async Task Mimiclist(CommandContext ctx, [Description("The member whos mimic list you would like to see")] DiscordMember member)
+            public async Task Mimiclist(CommandContext ctx, [Description("The member who's mimic list you would like to see")] DiscordMember member)
             {
                 var files = Directory.GetFiles($"Resources/Sound/Mimics/{member.Id}/", "*");
 
@@ -365,12 +365,12 @@ namespace WigsBot.Bot.Commands
                 string newFilePath = fileToRename.Replace(fileToRename.Remove(0, 42), newName + ".mp3");
                 File.Move(fileToRename, newFilePath);
 
-                await ctx.Channel.SendMessageAsync("your mimic has been renamed, please keep in  mind this may hav affected mimic Id's.");
+                await ctx.Channel.SendMessageAsync("your mimic has been renamed, please keep in mind this may have affected mimic Id's.");
             }
 
             [Command("Delete")]
             [RequirePrefixes("w!", "W!")]
-            [Description("Delete a mimic of yours you dont want avaliable.")]
+            [Description("Delete a mimic of yours you don't want available.")]
             public async Task deletemimic(CommandContext ctx, [Description("Mimic Id.")] int Id)
             {
                 var files = Directory.GetFiles($"Resources/Sound/Mimics/{ctx.Member.Id}/", "*");
@@ -699,7 +699,7 @@ namespace WigsBot.Bot.Commands
             }
 
             if (exc != null)
-                await ctx.RespondAsync($"An exception occured during playback: `{exc.GetType()}: {exc.Message}`");
+                await ctx.RespondAsync($"An exception occurred during playback: `{exc.GetType()}: {exc.Message}`");
         }
 
         static string GetApiKey()

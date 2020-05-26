@@ -66,7 +66,7 @@ namespace WigsBot.Bot.Commands
         [RequirePrefixes("w!", "W!")]
         [Description("Use a magic 8 ball to answer your question.")]
         [Aliases("8Ball", "m8B", "eightball","magiceightball")]
-        public async Task Magic8Ball(CommandContext ctx)
+        public async Task Magic8Ball(CommandContext ctx, [Description("Question"), RemainingText] string question = "Uhhh idk")
         {
             await ctx.TriggerTypingAsync();
 
@@ -80,40 +80,7 @@ namespace WigsBot.Bot.Commands
             var response6 = "Don't count on it.";
             var response7 = "No";
             var response8 = "I don't think so.";
-            var response9 = "Im not sure... Im sure about one thing tho. you just got GOT!";
-
-            var rnd = new Random();
-            int Outcome = rnd.Next(0, 10);
-
-            if (Outcome == 0) { await ctx.Channel.SendMessageAsync(response0).ConfigureAwait(false); }
-            else if (Outcome == 1) { await ctx.Channel.SendMessageAsync(response1).ConfigureAwait(false); }
-            else if (Outcome == 2) { await ctx.Channel.SendMessageAsync(response2).ConfigureAwait(false); }
-            else if (Outcome == 3) { await ctx.Channel.SendMessageAsync(response3).ConfigureAwait(false); }
-            else if (Outcome == 4) { await ctx.Channel.SendMessageAsync(response4).ConfigureAwait(false); }
-            else if (Outcome == 5) { await ctx.Channel.SendMessageAsync(response5).ConfigureAwait(false); }
-            else if (Outcome == 6) { await ctx.Channel.SendMessageAsync(response6).ConfigureAwait(false); }
-            else if (Outcome == 7) { await ctx.Channel.SendMessageAsync(response7).ConfigureAwait(false); }
-            else if (Outcome == 8) { await ctx.Channel.SendMessageAsync(response8).ConfigureAwait(false); }
-            else { await ctx.Channel.SendMessageAsync(response9).ConfigureAwait(false); await GrantGot(ctx, 1, ctx.Member.Id); };
-        }
-
-        [Command("Magic8Ball")]
-        [RequirePrefixes("w!", "W!")]
-        public async Task Magic8Ball(CommandContext ctx, [Description("Question")] params string[] question)
-        {
-            await ctx.TriggerTypingAsync();
-
-            // Responses for 8 ball
-            var response0 = "It is certain.";
-            var response1 = "Without a doubt.";
-            var response2 = "Yes.";
-            var response3 = "Ask again later.";
-            var response4 = "Cannot predict now.";
-            var response5 = "Most likely.";
-            var response6 = "Don't count on it.";
-            var response7 = "No";
-            var response8 = "I don't think so.";
-            var response9 = "Im not sure... Im sure about one thing tho. you just got GOT!";
+            var response9 = "I'm not sure... I'm sure about one thing tho. you just got GOT!";
 
             var rnd = new Random();
             int Outcome = rnd.Next(0, 10);

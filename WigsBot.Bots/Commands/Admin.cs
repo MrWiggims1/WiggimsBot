@@ -111,7 +111,7 @@ namespace WigsBot.Bot.Commands
 
         [Command("getspellmistakes")]
         [RequirePrefixes("w@", "W@")]
-        [Description("Gets a list of all misspelt words made.")]
+        [Description("Gets a list of all misspelled words made.")]
         [RequireUserPermissions(Permissions.Administrator)]
         public async Task getspellmistakes(CommandContext ctx)
         {
@@ -143,7 +143,7 @@ namespace WigsBot.Bot.Commands
 
         [Command("Resetgold")]
         [RequirePrefixes("w@", "W@")]
-        [Description("Resets a users gold based on thier level and the items in their inventory.\n\n`Example`: @ Mr_Wiggims#3333")]
+        [Description("Resets a users gold based on their level and the items in their inventory.\n\n`Example`: @ Mr_Wiggims#3333")]
         [RequireOwner]
         public async Task resetgold(CommandContext ctx, DiscordMember member)
         {
@@ -167,7 +167,7 @@ namespace WigsBot.Bot.Commands
 
         [Command("Resetallgold")]
         [RequirePrefixes("w@", "W@")]
-        [Description("Resets gold for all members within server based on thier level and the items in their inventory.")]
+        [Description("Resets gold for all members within server based on their level and the items in their inventory.")]
         [RequireOwner]
         public async Task Resetallgold(CommandContext ctx)
         {

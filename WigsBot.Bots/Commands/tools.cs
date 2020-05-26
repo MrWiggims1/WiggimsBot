@@ -38,9 +38,7 @@ namespace WigsBot.Bot.Commands
 
         [Command("cancel")]
         [Hidden]
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task Cancel(CommandContext ctx)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return;
         }
@@ -359,7 +357,7 @@ namespace WigsBot.Bot.Commands
                 {
                     Title = $"{member.Username} has been sent to a timeout",
                     Color = DiscordColor.Orange,
-                    Description = $"To manually reset the roles of this member for whatever reasoon type `w@timeout restore {member.Id} {filePath}`"
+                    Description = $"To manually reset the roles of this member for whatever reason type `w@timeout restore {member.Id} {filePath}`"
                 };
 
                 await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);

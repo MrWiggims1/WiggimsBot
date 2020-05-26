@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IUplayIdService
     {
+        /// <summary>
+        /// Sets the uplay Id of a user.
+        /// </summary>
+        /// <param name="discordId">The Id of the member.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="UplayId">The members uplay Id.</param>
+        /// <returns></returns>
         Task SetUplayIdAsync(ulong discordId, ulong guildId, string UplayId);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Sets the uplay Id of a user.
-        /// </summary>
-        /// <param name="discordId">The Id of the member.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="UplayId">The members uplay Id.</param>
-        /// <returns></returns>
         public async Task SetUplayIdAsync(ulong discordId, ulong guildId, string UplayId)
         {
             using var context = new RPGContext(_options);

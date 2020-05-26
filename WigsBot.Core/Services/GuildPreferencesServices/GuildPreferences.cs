@@ -11,6 +11,11 @@ namespace WigsBot.Core.Services.GuildPreferenceServices
 {
     public interface IGuildPreferences
     {
+        /// <summary>
+        /// Will get the guilds preferences or create a Db entity if none exist.
+        /// </summary>
+        /// <param name="guildId">The Id of the discord guild.</param>
+        /// <returns>All the preferences of the guild.</returns>
         Task<GuildPreferences> GetOrCreateGuildPreferences(ulong GuildId);
     }
 
@@ -23,11 +28,6 @@ namespace WigsBot.Core.Services.GuildPreferenceServices
             _options = options;
         }
 
-        /// <summary>
-        /// Will get the guilds prefences or create a Db entity if none exist.
-        /// </summary>
-        /// <param name="guildId">The Id of the discord guild.</param>
-        /// <returns></returns>
         public async Task<GuildPreferences> GetOrCreateGuildPreferences(ulong guildId)
         {
             using var context = new RPGContext(_options);

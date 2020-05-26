@@ -11,7 +11,20 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
 {
     public interface ISpellingSettingsService
     {
+        /// <summary>
+        /// Sets if spelling should be enabled within this guild.
+        /// </summary>
+        /// <param name="guildId">The id of the discord guild.</param>
+        /// <param name="enabled">True if you wish the guild to track spelling.</param>
+        /// <returns></returns>
         public Task ToggleSpellTracking(ulong guildId, bool enabled);
+
+        /// <summary>
+        /// Change the length of the spelling error list.
+        /// </summary>
+        /// <param name="guildId">The id of the discord guild.</param>
+        /// <param name="listLength">The number of words to keep track of.</param>
+        /// <returns></returns>
         public Task SetSpellListLength(ulong guildId, int listLength);
     }
 
@@ -26,12 +39,6 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
             _guildPreferences = guildPreferences;
         }
 
-        /// <summary>
-        /// Sets if spelling should be anabled within this guild.
-        /// </summary>
-        /// <param name="guildId">The id of the discord guild.</param>
-        /// <param name="enabled">True if you wish the guild to track spelling.</param>
-        /// <returns></returns>
         public async Task ToggleSpellTracking(ulong guildId, bool enabled)
         {
             using var context = new RPGContext(_options);
@@ -45,12 +52,6 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Change the length of the spelling error list.
-        /// </summary>
-        /// <param name="guildId">The id of the discord guild.</param>
-        /// <param name="listLength">The number of words to keep track of.</param>
-        /// <returns></returns>
         public async Task SetSpellListLength(ulong guildId, int listLength)
         {
             using var context = new RPGContext(_options);

@@ -13,7 +13,21 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
 {
     public interface IAssignableRoleService
     {
+        /// <summary>
+        /// Adds a role to a guilds assignable roles list.
+        /// </summary>
+        /// <param name="guildId">The id of the discord guild.</param>
+        /// <param name="roleId">The id of the discord guild.</param>
+        /// <param name="emojiId">The Id of the emoji</param>
+        /// <returns></returns>
         public Task AddRoleToAssignableRoles(ulong guildId, ulong roleId, ulong emojiId);
+
+        /// <summary>
+        /// Removes a role from the guilds assignable roles list.
+        /// </summary>
+        /// <param name="guildId">The id of the discord guild.</param>
+        /// <param name="roleId">The id of the discord role.</param>
+        /// <returns></returns>
         public Task RemoveRoleFromAssignableRoles(ulong guildId, ulong roleId);
     }
 
@@ -28,13 +42,6 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
             _guildPreferences = guildPreferences;
         }
 
-        /// <summary>
-        /// Adds a role to a guilds assignable roles list.
-        /// </summary>
-        /// <param name="guildId">The id of the discord guild.</param>
-        /// <param name="roleId">The id of the discord guild.</param>
-        /// <param name="emojiId">The Id of the emoji</param>
-        /// <returns></returns>
         public async Task AddRoleToAssignableRoles(ulong guildId, ulong roleId, ulong emojiId)
         {
             using var context = new RPGContext(_options);
@@ -56,12 +63,6 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Removes a role from the guilds assignable roles list.
-        /// </summary>
-        /// <param name="guildId">The id of the discord guild.</param>
-        /// <param name="roleId">The id of the discord role.</param>
-        /// <returns></returns>
         public async Task RemoveRoleFromAssignableRoles(ulong guildId, ulong roleId)
         {
             using var context = new RPGContext(_options);
@@ -83,14 +84,27 @@ namespace WigsBot.Core.Services.GuildPreferencesServices
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// A list of roles that are assignable within this guild.
+        /// </summary>
         public class AssignableRoleJson
         {
             public List<Roles> Roles { get; set; }
         }
 
+        /// <summary>
+        /// The role assignable withing this guild.
+        /// </summary>
         public class Roles
         {
+            /// <summary>
+            /// The Id of the role.
+            /// </summary>
             public ulong RoleId { get; set; }
+
+            /// <summary>
+            /// The id of the emoji assigned to the role.
+            /// </summary>
             public ulong EmojiId { get; set; }
         }
     }

@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface ILeaveService
     {
+        /// <summary>
+        /// Add a leave to a user, this is used to track how many times a member has joined the server (more of a joke really, not very useful)
+        /// </summary>
+        /// <param name="discordId">The Id of the member.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="LeaveAmount">Te number of leaves to add.</param>
+        /// <returns></returns>
         Task GrantLeaveAsync(ulong discordId, ulong guildId, int LeaveAmount);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Add a leave to a user, this is used to track how many times a member has joined the server (more of a joke really, not very useful)
-        /// </summary>
-        /// <param name="discordId">The Id of the member.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="LeaveAmount">Te number of leaves to add.</param>
-        /// <returns></returns>
         public async Task GrantLeaveAsync(ulong discordId, ulong guildId, int LeaveAmount)
         {
             using var context = new RPGContext(_options);

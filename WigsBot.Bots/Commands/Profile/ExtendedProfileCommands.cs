@@ -476,13 +476,13 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 ItemsIdList.Add(item.Id);
             }
 
-            var items = await _robbingItemService.GetRobbingItems(ItemsIdList);
-            var userBuffStats = await _robbingItemService.GetBuffStats(profile);
+            var items = _robbingItemService.GetRobbingItems(ItemsIdList);
+            var userBuffStats = _robbingItemService.GetBuffStats(profile);
 
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Inventory.",
-                Description = $"Current robbing strength:\nAttack: {userBuffStats.attack * 100}%\nDefense: {userBuffStats.defense*100}%\nInventory is worth {await _robbingItemService.GetInvWorth(profile)} Gold.",
+                Description = $"Current robbing strength:\nAttack: {userBuffStats.attack * 100}%\nDefense: {userBuffStats.defense*100}%\nInventory is worth {_robbingItemService.GetInvWorth(profile)} Gold.",
                 ThumbnailUrl = member.AvatarUrl,
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
@@ -531,7 +531,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
             ItemsJson itemsJson = JsonConvert.DeserializeObject<ItemsJson>(profile.ItemJson);
 
-            List<RobbingItems> robbingItems = await _robbingItemService.GetAllRobbingItems().ConfigureAwait(false);
+            List<RobbingItems> robbingItems = _robbingItemService.GetAllRobbingItems();
 
             var sortedList = robbingItems.OrderBy(x => x.LvlRequired);
 
@@ -635,7 +635,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 await ctx.TriggerTypingAsync();
 
-                List<Profile> profiles = await _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                List<Profile> profiles = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
 
                 await SendTopXp(ctx, message, profiles, ctx.Member);
             }
@@ -652,7 +652,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 await ctx.TriggerTypingAsync();
 
-                List<Profile> profiles = await _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                List<Profile> profiles = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
 
                 await SendTopXp(ctx, message, profiles, ctx.Member);
             }
@@ -669,7 +669,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 await ctx.TriggerTypingAsync();
 
-                List<Profile> profiles = await _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                List<Profile> profiles = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
 
                 await SendTopGold(ctx, message, profiles, ctx.Member);
             }
@@ -686,7 +686,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 await ctx.TriggerTypingAsync();
 
-                List<Profile> profiles = await _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                List<Profile> profiles = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
 
                 await SendTopGots(ctx, message, profiles, ctx.Member);
             }
@@ -703,7 +703,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 await ctx.TriggerTypingAsync();
 
-                List<Profile> profiles = await _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                List<Profile> profiles = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
 
                 await SendTopSpelling(ctx, message, profiles, ctx.Member);
             }
@@ -720,7 +720,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 await ctx.TriggerTypingAsync();
 
-                List<Profile> profiles = await _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                List<Profile> profiles = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
 
                 await SendTopBogan(ctx, message, profiles, ctx.Member);
             }
@@ -1026,7 +1026,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 var profileEmbed = new DiscordEmbedBuilder
                 {
                     Timestamp = System.DateTime.Now,
-                    Title = "Whos the most bogan:",
+                    Title = "Who's the most bogan:",
                     Description = $"```py\n{sb.ToString()}-------------------------------------------------------\n@ To see more select an emoji below.\n```",
                     Color = DiscordColor.Orange
                 };

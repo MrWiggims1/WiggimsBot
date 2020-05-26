@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IExperienceService
     {
+        /// <summary>
+        /// Gives a member Experience points.
+        /// </summary>
+        /// <param name="discordId">The members Id.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="xpAmount">The change in the members Xp.</param>
+        /// <returns>Weather or not if the member leveled up or not, i don't understand how this works so just copy and past the code from somewhere else.</returns>
         Task<GrantXpViewModel> GrantXpAsync(ulong discordId, ulong guildId, int xpAmount);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Gives a member Experience points.
-        /// </summary>
-        /// <param name="discordId">The members Id.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="xpAmount">The change in the members xp.</param>
-        /// <returns></returns>
         public async Task<GrantXpViewModel> GrantXpAsync(ulong discordId, ulong guildId, int xpAmount)
         {
             using var context = new RPGContext(_options);

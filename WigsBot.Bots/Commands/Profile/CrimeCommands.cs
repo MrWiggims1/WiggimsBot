@@ -39,7 +39,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
         [Command("rob")]
         [RequirePrefixes("w!", "W!")]
-        [Description("Try your luck and attempt to steal someones gold, don't get too greedy or it may cost you. Defualts to max avaliable.\n\n`Cooldown`: 90 Minutes")]
+        [Description("Try your luck and attempt to steal someones gold, don't get too greedy or it may cost you. Defaults to max available.\n\n`Cooldown`: 90 Minutes")]
         [Aliases("StealGold", "TakeGold")]
         [Cooldown(1, 9000, CooldownBucketType.User)]
         public async Task rob(CommandContext ctx, [Description("Discord user")] DiscordMember member, [Description("How much do you want to steal")] int goldNum = 97153)
@@ -99,11 +99,11 @@ namespace WigsBot.Bot.Commands.Profilecommands
             ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, "Wiggims Bot: Robbing command modifier info.", $"Defenders advantage = {defStrenthAtvantage * 100 - 100}%\tChance Modifier = {chanceMult}\tMax chance of failure = {maxchance}", DateTime.Now);
             ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, "Wiggims Bot: Robbing command money info.", $"Carry bonus = {carryBonus}\tEntered rob amount = {goldNum}\tEarnings = {attackErn}\t% of vics gold = {vicsGoldRatio}\tFine if failed = {fine}", DateTime.Now);
 
-            //generate extras to inclue within embed
+            //generate extras to include within embed
             if (goldNum > vicProfile.Gold * maxCarryPercent)
             {
                 if (goldNum == 97153)
-                    extras.Append($"You did not enter a value for goldNum, automattically setting it to maximumavaliable.\n");
+                    extras.Append($"You did not enter a value for goldNum, automatically setting it to maximum available.\n");
                 else
                     extras.Append($"The maximum you can steal from another member is {maxCarryPercent * 100}%, if you want to steal more visit the item shop.\n");
             }
@@ -146,7 +146,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Description(" ")]
         public async Task analyzevaults(CommandContext ctx)
         {
-            await ctx.Channel.SendMessageAsync("Really sorry, havent finnished this yet");
+            await ctx.Channel.SendMessageAsync("Really sorry, haven't finished this yet");
         }
 
 

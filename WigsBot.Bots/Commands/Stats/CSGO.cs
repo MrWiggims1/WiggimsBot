@@ -126,7 +126,7 @@ namespace WigsBot.Bot.Commands.Stats
 
         [Command("smg")]
         [RequirePrefixes("w!", "W!")]
-        [Description("Shows CSGO smg stats.")]
+        [Description("Shows CSGO SMG stats.")]
         public async Task smg(CommandContext ctx)
         {
             string[] stringArray = { 
@@ -142,7 +142,7 @@ namespace WigsBot.Bot.Commands.Stats
 
         [Command("smg")]
         [RequirePrefixes("w!", "W!")]
-        [Description("Shows CSGO smg stats.")]
+        [Description("Shows CSGO SMG stats.")]
         public async Task smg(CommandContext ctx, [Description("Discord member")] DiscordUser member)
         {
             string[] stringArray = { 
@@ -414,8 +414,8 @@ namespace WigsBot.Bot.Commands.Stats
             try
             {
 
-                jsonCSGO Json = await GetJsonStringCSGO(urlApi);
-                jsonSteam jsonUser = await GetJsonStringSteam(steamUserApi);
+                jsonCSGO Json = GetJsonStringCSGO(urlApi);
+                jsonSteam jsonUser = GetJsonStringSteam(steamUserApi);
                 await GetDynamicCsgoStats(ctx, urlApi, steamUserApi, userSelf, member, Json, jsonUser, statArray, type);
             }
             catch
@@ -489,7 +489,7 @@ namespace WigsBot.Bot.Commands.Stats
             var embed = new DiscordEmbedBuilder
             {
                 Title = $"CSGO {type} Stats",
-                Description = $"SteamID: {Json.playerstats.steamID}\nProfile for {jsonUser.response.players[0].personaname}: {jsonUser.response.players[0].profileurl}\n\nIf you didnt find the stat you were looking for try 'w!help cs' to see what options there are.",
+                Description = $"SteamID: {Json.playerstats.steamID}\nProfile for {jsonUser.response.players[0].personaname}: {jsonUser.response.players[0].profileurl}\n\nIf you didn't find the stat you were looking for try 'w!help cs' to see what options there are.",
                 ThumbnailUrl = jsonUser.response.players[0].avatarmedium,
                 Color = ctx.Member.Color
             };
@@ -535,11 +535,7 @@ namespace WigsBot.Bot.Commands.Stats
             }
         }
 
-
-
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<jsonCSGO> GetJsonStringCSGO(string urlApi)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public jsonCSGO GetJsonStringCSGO(string urlApi)
         {
             WebRequest requestObjGet = WebRequest.Create(urlApi);
             requestObjGet.Method = "GET";
@@ -559,10 +555,7 @@ namespace WigsBot.Bot.Commands.Stats
             return Json;
         }
 
-
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<jsonSteam> GetJsonStringSteam(string steamUserApi)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public jsonSteam GetJsonStringSteam(string steamUserApi)
         {
             WebRequest requestObjGet = WebRequest.Create(steamUserApi);
             requestObjGet.Method = "GET";

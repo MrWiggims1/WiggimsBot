@@ -13,9 +13,44 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface ITodoService
     {
+        /// <summary>
+        /// Adds a new to-do list to the members to-do lists JSON.
+        /// </summary>
+        /// <param name="discordId">The member of the Member.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="listName">The name of the new list.</param>
+        /// <returns></returns>
         public Task AddNewListAsync(ulong discordId, ulong guildId, string listName);
+
+
+        /// <summary>
+        /// Gets a members to-do list JSON.
+        /// </summary>
+        /// <param name="discordId">The members Id.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <returns>The lists a member has.</returns>
         public Task<ToDoList> GetListsAsync(ulong discordId, ulong guildId);
+
+
+        /// <summary>
+        /// Gets a specific to-do list for a member.
+        /// </summary>
+        /// <param name="discordId">The Id of a member.</param>
+        /// <param name="guildId">The guild Id,</param>
+        /// <param name="listName">The name of the list to get.</param>
+        /// <returns>The list.</returns>
         public Task<Lists> GetListAsync(ulong discordId, ulong guildId, string listName);
+
+
+        /// <summary>
+        /// Adds a new task to a list.
+        /// </summary>
+        /// <param name="discordId">The Id of the member</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="listName">The name of the list.</param>
+        /// <param name="taskName">The name of the new task to add.</param>
+        /// <param name="taskDescription">The description of the task.</param>
+        /// <returns></returns>
         public Task AddNewTaskAsync(ulong discordId, ulong guildId, string listName, string taskName, string taskDescription);
     }
 
@@ -30,13 +65,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Adds a new todo list to the members todo lists json.
-        /// </summary>
-        /// <param name="discordId">The member of the Member.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="listName">The name of the new list.</param>
-        /// <returns></returns>
         public async Task AddNewListAsync(ulong discordId, ulong guildId, string listName)
         {
             using var context = new RPGContext(_options);
@@ -67,12 +95,6 @@ namespace WigsBot.Core.Services.Profiles
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets a members todolist json.
-        /// </summary>
-        /// <param name="discordId">The members Id.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <returns>The lists a member has.</returns>
         public async Task<ToDoList> GetListsAsync(ulong discordId, ulong guildId)
         {
             using var context = new RPGContext(_options);
@@ -82,13 +104,6 @@ namespace WigsBot.Core.Services.Profiles
             return JsonConvert.DeserializeObject<ToDoList>(profile.ToDoJson);
         }
 
-        /// <summary>
-        /// Gets a specific todo list for a member.
-        /// </summary>
-        /// <param name="discordId">The Id of a member.</param>
-        /// <param name="guildId">The guild Id,</param>
-        /// <param name="listName">The name of the list to get.</param>
-        /// <returns>The list.</returns>
         public async Task<Lists> GetListAsync(ulong discordId, ulong guildId, string listName)
         {
             using var context = new RPGContext(_options);
@@ -105,25 +120,16 @@ namespace WigsBot.Core.Services.Profiles
             return todoArray.lists.First(x => x.name == listName);
         }
 
-        /// <summary>
-        /// Adds a new task to a list.
-        /// </summary>
-        /// <param name="discordId">The Id of the member</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="listName">The name of the list.</param>
-        /// <param name="taskName">The name of the new task to add.</param>
-        /// <param name="taskDescription">The description of the task.</param>
-        /// <returns></returns>
         public async Task AddNewTaskAsync(ulong discordId, ulong guildId, string listName, string taskName, string taskDescription)
         {
             if (string.IsNullOrWhiteSpace(listName))
-                throw new Exception("Please read the instructions carefully, you did not use the command corectly.");
+                throw new Exception("Please read the instructions carefully, you did not use the command correctly.");
 
             if (string.IsNullOrWhiteSpace(taskName))
-                throw new Exception("Please read the instructions carefully, you did not use the command corectly.");
+                throw new Exception("Please read the instructions carefully, you did not use the command correctly.");
 
             if (string.IsNullOrWhiteSpace(taskDescription))
-                throw new Exception("Please read the instructions carefully, you did not use the command corectly.");
+                throw new Exception("Please read the instructions carefully, you did not use the command correctly.");
 
             using var context = new RPGContext(_options);
 
@@ -132,7 +138,7 @@ namespace WigsBot.Core.Services.Profiles
             ToDoList todoArray = JsonConvert.DeserializeObject<ToDoList>(profile.ToDoJson);
 
             if (!todoArray.lists.Any(x => x.name.ToLower() == listName.ToLower()))
-                throw new Exception("This lis does not exist.");
+                throw new Exception("This list does not exist.");
 
             Tasks newtask = new Tasks() { name = taskName, description = taskDescription, done = false};
             todoArray.lists.First(x => x.name.ToLower() == listName.ToLower()).tasks.Add(newtask);

@@ -39,7 +39,7 @@ namespace WigsBot.Bot.Commands
             jsonMC Json = JsonConvert.DeserializeObject<jsonMC>(stringresulttest);
             string pluginList = string.Join("\n", Json.plugins.raw);
 
-            if (Json.online == false) { await ctx.Channel.SendMessageAsync("The server appears to be offline at the moment."); }
+            if (Json.online == false) { await ctx.Channel.SendMessageAsync("The server appears to be off-line at the moment."); }
 
             var embed = new DiscordEmbedBuilder
             {

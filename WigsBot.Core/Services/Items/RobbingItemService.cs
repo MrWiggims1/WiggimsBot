@@ -18,14 +18,14 @@ namespace WigsBot.Core.Services.Items
     public interface IRobbingItemService
     {
         /// <summary>
-        /// Gets a list of items specifeid by the list if item Id's provided.
+        /// Gets a list of items specified by the list if item Id's provided.
         /// </summary>
         /// <param name="idList">List of items you wish to retrieve.</param>
         /// <returns>The list of times.</returns>
         List<RobbingItems> GetRobbingItems(List<int> idList);
 
         /// <summary>
-        /// Just gets a list of all avaliable items.
+        /// Just gets a list of all available items.
         /// </summary>
         /// <returns>A list of all items in the Db</returns>
         List<RobbingItems> GetAllRobbingItems();
@@ -48,14 +48,15 @@ namespace WigsBot.Core.Services.Items
         /// Gives a user an item by its DB Id.
         /// </summary>
         /// <param name="profile">The profile of the user that will be getting th item.</param>
+        /// <param name="botProfile">The profile of the Bot.</param>
         /// <param name="itemId">The Id of the item being given.</param>
-        /// <returns>A bool on weather or not the item was given.</returns>
         Task GiveUserItem(Profile profile, Profile botProfile, int itemId);
 
         /// <summary>
         /// Gives an item to a user based on its name and subtracts the correct amount of money.
         /// </summary>
         /// <param name="profile">The profile of the user that will receive the item</param>
+        /// <param name="botProfile">The profile of the bot.</param>
         /// <param name="itemName">The name of the item being given.</param>
         /// <returns></returns>
         Task GiveUserItem(Profile profile, Profile botProfile, string itemName);
@@ -72,7 +73,7 @@ namespace WigsBot.Core.Services.Items
         /// </summary>
         /// <param name="profile">Profile of the user</param>
         /// <param name="itemId">Item id to remove</param>
-        /// <param name="refundGold">Shoul the user be given their gold.</param>
+        /// <param name="refundGold">Should the user be given their gold.</param>
         /// <returns></returns>
         Task RemoveUserItemById(Profile profile, int itemId, bool refundGold);
 
@@ -186,7 +187,7 @@ namespace WigsBot.Core.Services.Items
             RobbingItems item = context.RobbingItems.SingleOrDefault(x => x.Id == itemId);
 
             if (profile.Gold < item.Cost)
-                throw new InvalidOperationException("The user cannot affor to purchase this item.");
+                throw new InvalidOperationException("The user cannot afford to purchase this item.");
 
             if (profile.Level < item.LvlRequired)
                 throw new InvalidOperationException("The user is not the correct level to purchase this item.");
@@ -354,7 +355,7 @@ namespace WigsBot.Core.Services.Items
 
         public async Task ModifyItem(int itemId, RobbingItems modifiedItem)
         {
-
+            throw new NotImplementedException("This is not yet implemented.");
         }
 
         /// <summary>
@@ -363,12 +364,12 @@ namespace WigsBot.Core.Services.Items
         public class BuffStats
         {
             /// <summary>
-            /// The attacking strenth of the user.
+            /// The attacking strength of the user.
             /// </summary>
             public decimal attack { get; set; }
 
             /// <summary>
-            /// The defending strenth of the user.
+            /// The defending strength of the user.
             /// </summary>
             public decimal defense { get; set; }
         }

@@ -12,7 +12,26 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface ITextProcessorService
     {
+        /// <summary>
+        /// Processes the users messages and updates the members profile.
+        /// </summary>
+        /// <param name="discordId">The id of the member.</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="spellCorrect">The correct number of words.</param>
+        /// <param name="spellWrong">The incorrect number of words.</param>
+        /// <param name="boganCount">The count of bogan words.</param>
+        /// <param name="xpAmount">The number of xp to give</param>
+        /// <param name="arrayLength">The length of the incorrectly spelt words list.</param>
+        /// <param name="incorrectWords">The incorrect words to add to a members list.</param>
+        /// <returns>Weather or not if the member leveled up, don't know how it works, just copy and paste the code.</returns>
         Task<TextProcessorViewModel> ProcessTextAsync(ulong discordId, ulong guildId, int spellCorrect, int spellWrong, int boganCount, int xpAmount, int arrayLength, List<string> incorrectWords);
+
+
+        /// <summary>
+        /// Removes a word for all users incorrect words lists, as well as retracting a error count if the word is present.
+        /// </summary>
+        /// <param name="newWord">The word to remove from lists.</param>
+        /// <returns></returns>
         Task RemoveDictionaryWordFromLists(string newWord);
     }
 
@@ -27,18 +46,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Procceses the users messages and updates the members profile.
-        /// </summary>
-        /// <param name="discordId">The id of the member.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="spellCorrect">The corect number of words.</param>
-        /// <param name="spellWrong">The incorrect number of words.</param>
-        /// <param name="boganCount">The count of bogan words.</param>
-        /// <param name="xpAmount">The number of xp to give</param>
-        /// <param name="arrayLength">The length of the incorrectly spelt words list.</param>
-        /// <param name="incorrectWords">The incorrect words to add to a members list.</param>
-        /// <returns>Weather or not if the member leveled up, dont know how it works, just copy and paste the code.</returns>
         public async Task<TextProcessorViewModel> ProcessTextAsync(ulong discordId, ulong guildId, int spellCorrect, int spellWrong, int boganCount, int xpAmount, int arrayLength, List<string> incorrectWords)
         {
             using var context = new RPGContext(_options);
@@ -120,11 +127,6 @@ namespace WigsBot.Core.Services.Profiles
             };
         }
 
-        /// <summary>
-        /// Removes a word for all users incorrect words lists, as well as retracting a error count if the word is present.
-        /// </summary>
-        /// <param name="newWord">The word to remove from lists.</param>
-        /// <returns></returns>
         public async Task RemoveDictionaryWordFromLists(string newWord)
         {
             using var context = new RPGContext(_options);

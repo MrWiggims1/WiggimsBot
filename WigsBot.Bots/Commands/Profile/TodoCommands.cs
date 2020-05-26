@@ -14,7 +14,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
     [Group("todo")]
     [RequirePrefixes("w!", "W!")]
     [RequireOwner]
-    [Description("A personal todo list for everyone to use")]
+    [Description("A personal to-do list for everyone to use")]
     public class TodoCommands : BaseCommandModule
     {
         private readonly IProfileService _profileService;
@@ -125,7 +125,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
         }
 
         [Command("addlist")]
-        [Description("Adds a new list to your todo lists.")]
+        [Description("Adds a new list to your to-do lists.")]
         public async Task addnewlist(CommandContext ctx, [RemainingText, Description("Name of new list")] string listName)
         {
             await _todoService.AddNewListAsync(ctx.User.Id, ctx.Guild.Id, listName);
@@ -137,7 +137,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
         {
             if (!ctx.Message.Content.Contains("."))
             {
-                throw new ArgumentException("There was no seperators present");
+                throw new ArgumentException("There was no separators present");
             }
 
             var stringResults = taskDetails.Split(".").ToList();

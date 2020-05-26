@@ -142,7 +142,7 @@ namespace WigsBot.Bot.Commands.Stats
             }
             catch
             {
-                await ctx.Channel.SendMessageAsync("It seems that there has been an error, please make sure your Beatsaber Id is correct (Should be 17 digit number).\nPlease keep in mind that if you have been inactive for an extended period of time in beatsaber No stats will be present for you and therefore will not work. Also this command relies on a non-official api and only works if you have played on a modded version of the game.").ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync("It seems that there has been an error, please make sure your Beatsaber Id is correct (Should be 17 digit number).\nPlease keep in mind that if you have been inactive for an extended period of time in beatsaber No stats will be present for you and therefore will not work. Also this command relies on a non-official API and only works if you have played on a modded version of the game.").ConfigureAwait(false);
                 await ValidateOrSetId(ctx, ctx.Member.Id);
             }
         }
@@ -178,7 +178,7 @@ namespace WigsBot.Bot.Commands.Stats
             }
             catch
             {
-                await ctx.Channel.SendMessageAsync("It seems that there has been an error, please make sure your Beatsaber Id is correct (Should be 17 digit number).\nPlease keep in mind that if you have been inactive for an extended period of time in beatsaber No stats will be present for you and therefore will not work. Also this command relies on a non-official api and only works if you have played on a modded version of the game.").ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync("It seems that there has been an error, please make sure your Beatsaber Id is correct (Should be 17 digit number).\nPlease keep in mind that if you have been inactive for an extended period of time in beatsaber No stats will be present for you and therefore will not work. Also this command relies on a non-official API and only works if you have played on a modded version of the game.").ConfigureAwait(false);
                 await ValidateOrSetId(ctx, ctx.Member.Id);
             }
         }
@@ -194,7 +194,7 @@ namespace WigsBot.Bot.Commands.Stats
 
         private async Task ValidateOrSetId(CommandContext ctx, ulong memberId)
         {
-            var SetBsIdStep = new TextStep("To find your Beatsaber Id either follow this url replacing 'username' With your username https://scoresaber.com/global?search=username then open your profile and get your Id from the url e.g. '76561198169909801'. Or user your steam Id if you are a steam user get your steam ID using this [website](https://steamidfinder.com/lookup/) and use the steamID64.", null);
+            var SetBsIdStep = new TextStep("To find your Beatsaber Id either follow this URL replacing 'username' With your username https://scoresaber.com/global?search=username then open your profile and get your Id from the URL e.g. '76561198169909801'. Or user your steam Id if you are a steam user get your steam ID using this [website](https://steamidfinder.com/lookup/) and use the steamID64.", null);
 
             string newBsId = string.Empty;
             SetBsIdStep.onValidResult += (result) => newBsId = result;
@@ -228,7 +228,7 @@ namespace WigsBot.Bot.Commands.Stats
 
         public async Task GetBasicInfo(CommandContext ctx, string urlApi, bool userSelf, DiscordMember member)
         {
-            jsonBeatSaber json = await GetJsonStringBsStats(urlApi);
+            jsonBeatSaber json = GetJsonStringBsStats(urlApi);
 
             var embed = new DiscordEmbedBuilder
             {
@@ -289,8 +289,8 @@ namespace WigsBot.Bot.Commands.Stats
 
         public async Task Getrecentplays(CommandContext ctx, string urlApi, string urlApi2, bool userSelf, DiscordMember member, string recentOrTop)
         {
-            jsonScores json = await GetJsonStringBsScores(urlApi);
-            jsonBeatSaber jsonUser = await GetJsonStringBsStats(urlApi2);
+            jsonScores json = GetJsonStringBsScores(urlApi);
+            jsonBeatSaber jsonUser = GetJsonStringBsStats(urlApi2);
             
             var embed = new DiscordEmbedBuilder
             {
@@ -345,9 +345,7 @@ namespace WigsBot.Bot.Commands.Stats
             }
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<jsonBeatSaber> GetJsonStringBsStats(string BeatsaberApi)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public jsonBeatSaber GetJsonStringBsStats(string BeatsaberApi)
         {
             WebRequest requestObjGet = WebRequest.Create(BeatsaberApi);
             requestObjGet.Method = "GET";
@@ -367,9 +365,7 @@ namespace WigsBot.Bot.Commands.Stats
             return Json;
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<jsonScores> GetJsonStringBsScores(string BeatsaberApi)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public jsonScores GetJsonStringBsScores(string BeatsaberApi)
         {
             WebRequest requestObjGet = WebRequest.Create(BeatsaberApi);
             requestObjGet.Method = "GET";

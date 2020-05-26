@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface ISpellCorrectService
     {
+        /// <summary>
+        /// Gives a user a count towards the number of correct words.
+        /// </summary>
+        /// <param name="discordId">The Id of the member.</param>
+        /// <param name="guildId">The guilds Id.</param>
+        /// <param name="SpellCorrectAmount">The amount of correct counts to give.</param>
+        /// <returns></returns>
         Task GrantSpellCorrectAsync(ulong discordId, ulong guildId, int SpellCorrectAmount);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Gives a user a count towards the number of correct words.
-        /// </summary>
-        /// <param name="discordId">The Id of the member.</param>
-        /// <param name="guildId">The guilds Id.</param>
-        /// <param name="SpellCorrectAmount">The amount of correct counts to give.</param>
-        /// <returns></returns>
         public async Task GrantSpellCorrectAsync(ulong discordId, ulong guildId, int SpellCorrectAmount)
         {
             using var context = new RPGContext(_options);

@@ -12,34 +12,33 @@ namespace WigsBot.Core.Services
     public interface IVersionService
     {
         /// <summary>
-        /// Creats a new version file and sets the correct date for the initial creation.
+        /// Creates a new version file and sets the correct date for the initial creation.
         /// </summary>
         /// <param name="versionNumber">The number of the version being saved, this will also be the file name.</param>
-        /// <param name="versionName">The title of this verion, or the main purpose of the update.</param>
+        /// <param name="versionName">The title of this version, or the main purpose of the update.</param>
         /// <returns></returns>
-        Task CreateNewVersionJson(string versionNumber, string versionName);
+        void CreateNewVersionJson(string versionNumber, string versionName);
 
         /// <summary>
-        /// Updates a verion with a patchnote.
+        /// Updates a version with a patch note.
         /// </summary>
         /// <param name="versionNumber">The number of the version being saved, this will also be the file name.</param>
         /// <param name="patchNote">The patch note to add to the version.</param>
-        /// <param name="isMinorOrBugfix">Is this patchnote minor or small?</param>
-        /// <param name="finalNote">Set this verion as complete and update the Release date?</param>
+        /// <param name="isMinorOrBugfix">Is this patch note minor or small?</param>
+        /// <param name="finalNote">Set this version as complete and update the Release date?</param>
         /// <returns></returns>
-        Task AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix, bool finalNote);
+        void AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix, bool finalNote);
 
-        Task<VersionJson> ReadJson(string versionNumber);
+        VersionJson ReadJson(string versionNumber);
     }
 
     public class VersionService : IVersionService
     {
-
-        public async Task CreateNewVersionJson(string versionNumber, string versionName)
+        public void CreateNewVersionJson(string versionNumber, string versionName)
         {
             if (File.Exists($"/Resources/VerisionJSONs/{ versionNumber }.json"))
             {
-                throw new Exception("This verion already exists.");
+                throw new Exception("This version already exists.");
             }
 
             var json = new VersionJson
@@ -52,12 +51,12 @@ namespace WigsBot.Core.Services
                 MinorNotes = "empty"
             };
 
-            await SaveJson(json, versionNumber);
+            SaveJson(json, versionNumber);
         }
 
-        public async Task AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix, bool finalNote)
+        public void AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix, bool finalNote)
         {
-            var json = await ReadJson(versionNumber);
+            var json = ReadJson(versionNumber);
 
             if (isMinorOrBugfix)
             {
@@ -79,17 +78,17 @@ namespace WigsBot.Core.Services
             if (finalNote)
                 json.ReleaseDate.Release = DateTime.Now;
 
-            await SaveJson(json, versionNumber);
+            SaveJson(json, versionNumber);
         }
 
-        public async Task SaveJson(VersionJson json, string versionNumber)
+        public void SaveJson(VersionJson json, string versionNumber)
         {
             string jsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
 
             File.WriteAllText($"/Resources/VerisionJSONs/{ versionNumber }.json", jsonString);
         }
 
-        public async Task<VersionJson> ReadJson(string versionNumber)
+        public VersionJson ReadJson(string versionNumber)
         {
             if (!File.Exists($"/Resources/VerisionJSONs/{ versionNumber }.json"))
             {

@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IMimicableService
     {
+        /// <summary>
+        /// Lets a user toggle if they should be mimicked or not.
+        /// </summary>
+        /// <param name="discordId">The Id of the member</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="enabled">If the member can be mimicked or not.</param>
+        /// <returns></returns>
         Task SetMimicableAsync(ulong discordId, ulong guildId, bool enabled);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Lets a user toggle if they should be mimicked or not.
-        /// </summary>
-        /// <param name="discordId">The Id of the member</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="enabled">If the member can be mimicked or not.</param>
-        /// <returns></returns>
         public async Task SetMimicableAsync(ulong discordId, ulong guildId, bool enabled)
         {
             using var context = new RPGContext(_options);

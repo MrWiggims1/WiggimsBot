@@ -74,8 +74,8 @@ namespace WigsBot.Bot.Commands.Stats
                 $"Win/Loss: {json.Stats.rankedpvp_matchwon} / {json.Stats.rankedpvp_matchlost}\n" +
                 $"Kill/Deaths: {json.Stats.rankedpvp_kills} / {json.Stats.rankedpvp_death}\n" +
                 $"Time Played: {Math.Round(TimeSpan.FromSeconds(json.Stats.rankedpvp_timeplayed).TotalHours, 1)} hours\n" +
-                $"Max rank: {json.ranked.AS_maxrankname} - {json.ranked.AS_maxmmr} mmr\n" +
-                $"current rank: {json.ranked.AS_rankname} - {json.ranked.AS_mmr} mmr\n"
+                $"Max rank: {json.ranked.AS_maxrankname} - {json.ranked.AS_maxmmr} MMR\n" +
+                $"current rank: {json.ranked.AS_rankname} - {json.ranked.AS_mmr} MMR\n"
                 , true);
 
             var embedMessage = await ctx.Channel.SendMessageAsync("", embed: embed);
@@ -114,8 +114,8 @@ namespace WigsBot.Bot.Commands.Stats
                 $"Win/Loss: {json.Stats.rankedpvp_matchwon} / {json.Stats.rankedpvp_matchlost}\n" +
                 $"Kill/Deaths: {json.Stats.rankedpvp_kills} / {json.Stats.rankedpvp_death}\n" +
                 $"Time Played: {Math.Round(TimeSpan.FromSeconds(json.Stats.rankedpvp_timeplayed).TotalHours, 1)} hours\n" +
-                $"Max rank: {json.ranked.AS_maxrankname} - {json.ranked.AS_maxmmr} mmr\n" +
-                $"current rank: {json.ranked.AS_rankname} - {json.ranked.AS_mmr} mmr\n"
+                $"Max rank: {json.ranked.AS_maxrankname} - {json.ranked.AS_maxmmr} MMR\n" +
+                $"current rank: {json.ranked.AS_rankname} - {json.ranked.AS_mmr} MMR\n"
                 , true);
 
             var embedMessage = await ctx.Channel.SendMessageAsync("", embed: embed);
@@ -355,7 +355,7 @@ namespace WigsBot.Bot.Commands.Stats
 
                 string urlApi = $"https://r6.apitab.com/search/uplay/{ uplayUsername }";
 
-                var json = await GetPlayerSearch(urlApi);
+                var json = GetPlayerSearch(urlApi);
 
                 int userChoice = 0;
 
@@ -396,9 +396,7 @@ namespace WigsBot.Bot.Commands.Stats
             catch { return false; }
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<JsonPlayerSearch> GetPlayerSearch(string urlApi)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public JsonPlayerSearch GetPlayerSearch(string urlApi)
         {
             WebRequest requestObjGet = WebRequest.Create(urlApi);
             requestObjGet.Method = "GET";
@@ -483,8 +481,6 @@ namespace WigsBot.Bot.Commands.Stats
             catch
             { await message.DeleteAllReactionsAsync(); }
         }
-
-        // json classes
 
         public class JsonPlayerSearch
         {

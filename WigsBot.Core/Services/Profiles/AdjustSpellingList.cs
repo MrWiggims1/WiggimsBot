@@ -17,9 +17,9 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="discordId">The members Id.</param>
         /// <param name="guildId">The guild Id.</param>
         /// <param name="arrayLength">The length of the guilds spelling list.</param>
-        /// <param name="incorrectWords">The list of incorect words</param>
+        /// <param name="incorrectWords">The list of incorrect words</param>
         /// <returns></returns>
-        Task SetSpellListAsync(ulong discordId, ulong guildId, int arrayLength, string[] SpellList);
+        Task SetSpellListAsync(ulong discordId, ulong guildId, int arrayLength, string[] incorrectWords);
     }
 
     public class SpellListService : ISpellListService
@@ -33,14 +33,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Modifies the members incorrect spelling list.
-        /// </summary>
-        /// <param name="discordId">The members Id.</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="arrayLength">The length of the guilds spelling list.</param>
-        /// <param name="incorrectWords">The list of incorect words</param>
-        /// <returns></returns>
         public async Task SetSpellListAsync(ulong discordId, ulong guildId, int arrayLength, string[] incorrectWords)
         {
             using var context = new RPGContext(_options);

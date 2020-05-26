@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IBeatSaberIdService
     {
+        /// <summary>
+        /// Sets the beatsaber Id of a member.
+        /// </summary>
+        /// <param name="discordId">The members Id.</param>
+        /// <param name="guildId">The guilds Id.</param>
+        /// <param name="beatSaberId">The members beatsaber Id.</param>
+        /// <returns></returns>
         Task SetBeatSaberIdAsync(ulong discordId, ulong guildId, long beatSaberId);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Sets the beatsaber Id of a member.
-        /// </summary>
-        /// <param name="discordId">The members Id.</param>
-        /// <param name="guildId">The guilds Id.</param>
-        /// <param name="beatSaberId">The members beatsaber Id.</param>
-        /// <returns></returns>
         public async Task SetBeatSaberIdAsync(ulong discordId, ulong guildId, long beatSaberId)
         {
             using var context = new RPGContext(_options);

@@ -147,12 +147,12 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 case 8:
                     castEarn = rareFish;
-                    reply = $"You caught a common fish worth {castEarn} gold";
+                    reply = $"You caught a rare fish worth {castEarn} gold";
                     break;
 
                 case 9:
                     castEarn = rareFish;
-                    reply = $"You caught a common fish worth {castEarn} gold";
+                    reply = $"You caught a rare fish worth {castEarn} gold";
                     break;
 
                 case 10:

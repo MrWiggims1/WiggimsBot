@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface IQuietModeService
     {
+        /// <summary>
+        /// Sets weather or not if the member should receive notifications.
+        /// </summary>
+        /// <param name="discordId">The Id of the member</param>
+        /// <param name="guildId">The guild Id.</param>
+        /// <param name="enabled">If notifications should be enabled or not.</param>
+        /// <returns></returns>
         Task SetQuietModeAsync(ulong discordId, ulong guildId, bool enabled);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Sets weather or not if the member should recive notifications.
-        /// </summary>
-        /// <param name="discordId">The Id of the member</param>
-        /// <param name="guildId">The guild Id.</param>
-        /// <param name="enabled">If notifications should be enabled or not.</param>
-        /// <returns></returns>
         public async Task SetQuietModeAsync(ulong discordId, ulong guildId, bool enabled)
         {
             using var context = new RPGContext(_options);

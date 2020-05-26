@@ -8,6 +8,13 @@ namespace WigsBot.Core.Services.Profiles
 {
     public interface ISteamIdService
     {
+        /// <summary>
+        /// Sets a users steam Id.
+        /// </summary>
+        /// <param name="discordId">The Id of the member</param>
+        /// <param name="guildId">The guilds Id.</param>
+        /// <param name="steamId">The members steam Id.</param>
+        /// <returns></returns>
         Task SetSteamIdAsync(ulong discordId, ulong guildId, long steamId);
     }
 
@@ -22,13 +29,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        /// <summary>
-        /// Sets a users steam Id.
-        /// </summary>
-        /// <param name="discordId">The Id of the member</param>
-        /// <param name="guildId">The guilds Id.</param>
-        /// <param name="steamId">The members steam Id.</param>
-        /// <returns></returns>
         public async Task SetSteamIdAsync(ulong discordId, ulong guildId, long steamId)
         {
             using var context = new RPGContext(_options);
