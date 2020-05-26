@@ -63,7 +63,7 @@ namespace WigsBot.Core.Services
                 if (json.MinorNotes == "empty")
                     json.MinorNotes = patchNote;
                 else
-                    json.MinorNotes = json.MinorNotes + "\n" + patchNote;
+                    json.MinorNotes = $"{json.MinorNotes}\n{patchNote}";
             }
 
             else
@@ -71,7 +71,7 @@ namespace WigsBot.Core.Services
                 if (json.PatchNotes == "empty")
                     json.PatchNotes = patchNote;
                 else
-                    json.PatchNotes = json.PatchNotes + "\n" + patchNote;
+                    json.PatchNotes = $"{json.PatchNotes}\n{patchNote}";
 
             }
 

@@ -124,6 +124,15 @@ namespace WigsBot.Bot.Commands.Item
             await ctx.Channel.SendMessageAsync($"{item.Name}:\t\tLevel required: `{item.LvlRequired}`\t\tItem buffs: `defense: {item.DefenseBuff * 100}%`\t`attack: {item.AttackBuff * 100}%`\n{item.Description}");
         }
 
+        [Command("Create")]
+        [RequirePrefixes("w@", "W@")]
+        [Description("Creates a new item for members to purchase.")]
+        [RequireOwner]
+        public async Task CreateNewItem(CommandContext ctx)
+        {
+            throw new NotImplementedException("This command is not implemented yet.");
+        }
+
         // ####### Tasks ########
 
         public async Task showShop(CommandContext ctx)
