@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using WigsBot.Core.Services;
 using WigsBot.Core.Services.GuildPreferenceServices;
 using WigsBot.Core.Services.GuildPreferencesServices;
 using WigsBot.Core.Services.Items;
@@ -57,6 +58,7 @@ namespace WigsBot.Bot
             services.AddScoped<ITodoService, TodoService>();
             services.AddScoped<IMimicableService, MimicableService>();
             services.AddScoped<IRobbingItemService, RobbingItemService>();
+            services.AddScoped<IVersionService, VersionService>();
 
 #pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
             var serviceProvider = services.BuildServiceProvider();

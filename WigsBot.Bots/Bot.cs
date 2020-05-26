@@ -104,6 +104,7 @@ namespace WigsBot.Bot
             Commands.RegisterCommands<TodoCommands>();
             Commands.RegisterCommands<VoiceCommands>();
             //Commands.RegisterCommands<SiegeGG>();
+            Commands.RegisterCommands<VersionCommands>();
 
             var VoiceConfig = new VoiceNextConfiguration
             {

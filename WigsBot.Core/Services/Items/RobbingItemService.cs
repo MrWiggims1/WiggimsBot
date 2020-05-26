@@ -353,7 +353,7 @@ namespace WigsBot.Core.Services.Items
             return carryAmount;
         }
 
-        public async Task ModifyItem(int itemId, RobbingItems modifiedItem)
+        public void ModifyItem(int itemId, RobbingItems modifiedItem)
         {
             throw new NotImplementedException("This is not yet implemented.");
         }

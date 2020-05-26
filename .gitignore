@@ -7,7 +7,7 @@
 *.mp3
 *.log
 *.webm
-*.wav*
+*.wav
 *.png
 
 # Prerequisites

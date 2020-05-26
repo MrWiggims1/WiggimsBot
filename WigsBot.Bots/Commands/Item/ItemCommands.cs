@@ -56,7 +56,7 @@ namespace WigsBot.Bot.Commands.Item
         }
 
         [Command("shop")]
-        [Aliases("list")]
+        [Aliases("list", "store")]
         [RequirePrefixes("w!", "W!")]
         [Description("Shows items available for purchase.")]
         public async Task shop(CommandContext ctx)

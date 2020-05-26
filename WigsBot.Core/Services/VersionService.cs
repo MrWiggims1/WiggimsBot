@@ -25,9 +25,8 @@ namespace WigsBot.Core.Services
         /// <param name="versionNumber">The number of the version being saved, this will also be the file name.</param>
         /// <param name="patchNote">The patch note to add to the version.</param>
         /// <param name="isMinorOrBugfix">Is this patch note minor or small?</param>
-        /// <param name="finalNote">Set this version as complete and update the Release date?</param>
         /// <returns></returns>
-        void AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix, bool finalNote);
+        void AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix);
 
         VersionJson ReadJson(string versionNumber);
     }
@@ -36,7 +35,7 @@ namespace WigsBot.Core.Services
     {
         public void CreateNewVersionJson(string versionNumber, string versionName)
         {
-            if (File.Exists($"/Resources/VerisionJSONs/{ versionNumber }.json"))
+            if (File.Exists($"Resources/VersionJSONs/{ versionNumber }.json"))
             {
                 throw new Exception("This version already exists.");
             }
@@ -54,7 +53,7 @@ namespace WigsBot.Core.Services
             SaveJson(json, versionNumber);
         }
 
-        public void AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix, bool finalNote)
+        public void AddPatchNoteToVersion(string versionNumber, string patchNote, bool isMinorOrBugfix)
         {
             var json = ReadJson(versionNumber);
 
@@ -75,8 +74,7 @@ namespace WigsBot.Core.Services
 
             }
 
-            if (finalNote)
-                json.ReleaseDate.Release = DateTime.Now;
+            json.ReleaseDate.Release = DateTime.Now;
 
             SaveJson(json, versionNumber);
         }
@@ -85,19 +83,19 @@ namespace WigsBot.Core.Services
         {
             string jsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
 
-            File.WriteAllText($"/Resources/VerisionJSONs/{ versionNumber }.json", jsonString);
+            File.WriteAllText($"Resources/VersionJSONs/{ versionNumber }.json", jsonString);
         }
 
         public VersionJson ReadJson(string versionNumber)
         {
-            if (!File.Exists($"/Resources/VerisionJSONs/{ versionNumber }.json"))
+            if (!File.Exists($"Resources/VersionJSONs/{ versionNumber }.json"))
             {
                 throw new FileNotFoundException("This version does not yet exist."); ;
             }
 
             var json = string.Empty;
 
-            using (var fs = File.OpenRead($"/Resources/VerisionJSONs/{ versionNumber }.json"))
+            using (var fs = File.OpenRead($"Resources/VersionJSONs/{ versionNumber }.json"))
             using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
                 json = sr.ReadToEnd();
 

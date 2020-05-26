@@ -37,7 +37,7 @@ namespace WigsBot.Bot.Commands
             _profileService = profileService;
         }
 
-        private ConcurrentDictionary<uint, Process> ffmpegs;
+        //private ConcurrentDictionary<uint, Process> ffmpegs;
 
         [Command("join")]
         [RequirePrefixes("w!", "W!")]
@@ -53,7 +53,7 @@ namespace WigsBot.Bot.Commands
         [Description("Disconnect bot from voice chat.")]
         public async Task leavesound(CommandContext ctx)
         {
-            await LeaveVCAsync(ctx);
+            LeaveVCAsync(ctx);
         }
 
         [Command("playfile")]
@@ -639,7 +639,7 @@ namespace WigsBot.Bot.Commands
             return VoiceClient.GetConnection(ctx.Guild);
         }
 
-        async Task LeaveVCAsync(CommandContext ctx)
+        void LeaveVCAsync(CommandContext ctx)
         {
             var VoiceClient = ctx.Client.GetVoiceNext();
 
@@ -747,7 +747,7 @@ namespace WigsBot.Bot.Commands
             return (Math.Sign(byteCount) * num).ToString() + suf[place];
         }
 
-        public async Task OnVoiceReceived(VoiceReceiveEventArgs ea)
+        /*public async Task OnVoiceReceived(VoiceReceiveEventArgs ea)
         {
             if (!this.ffmpegs.ContainsKey(ea.SSRC))
             {
@@ -766,6 +766,6 @@ namespace WigsBot.Bot.Commands
             var ffmpeg = this.ffmpegs[ea.SSRC];
             await ffmpeg.StandardInput.BaseStream.WriteAsync(buff, 0, buff.Length);
             await ffmpeg.StandardInput.BaseStream.FlushAsync();
-        }
+        }*/
     }
 } 
