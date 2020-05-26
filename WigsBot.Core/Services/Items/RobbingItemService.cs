@@ -90,6 +90,13 @@ namespace WigsBot.Core.Services.Items
         /// <param name="allowHeist">Does this item give a member the ability to perform a heist?</param>
         /// <returns></returns>
         Task CreateNewItem(string itemName, string itemDescription, int itemCost, int maxAllowed, int levelRequired, decimal defenseBuff, decimal attackBuff, bool allowHeist = false);
+
+        /// <summary>
+        /// Checks to see if a user has an item that allows them to organize a heist.
+        /// </summary>
+        /// <param name="profile">The profile of the member.</param>
+        /// <returns></returns>
+        bool UserHasHeistItem(Profile profile);
     }
 
     public class RobbingItemService : IRobbingItemService
@@ -219,7 +226,7 @@ namespace WigsBot.Core.Services.Items
 
             context.Profiles.Update(profile);
 
-            botProfile.Gold = +item.Cost;
+            botProfile.Gold += item.Cost;
 
             context.Profiles.Update(botProfile);
 
@@ -268,7 +275,7 @@ namespace WigsBot.Core.Services.Items
 
             context.Profiles.Update(profile);
 
-            botProfile.Gold = +item.Cost;
+            botProfile.Gold += item.Cost;
 
             context.Profiles.Update(botProfile);
 
@@ -351,6 +358,27 @@ namespace WigsBot.Core.Services.Items
             decimal carryAmount = .05M * Convert.ToDecimal(itemsJson.Robbing.First(x => x.Id == 12).Count);
 
             return carryAmount;
+        }
+
+        public bool UserHasHeistItem(Profile profile)
+        {
+            var usersItems = JsonConvert.DeserializeObject<ItemsJson>(profile.ItemJson);
+
+            var allItems = GetAllRobbingItems();
+
+            foreach (var item in allItems.Where(x => x.AllowHeist == true))
+            {
+                try
+                {
+                    if (usersItems.Robbing.Where(x => x.Id == item.Id).First().Count > 1)
+                    {
+                        return true;
+                    }
+                }
+                catch { }
+            }
+
+            return false;
         }
 
         public void ModifyItem(int itemId, RobbingItems modifiedItem)
