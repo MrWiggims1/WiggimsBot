@@ -1,5 +1,9 @@
 /WigsBot.Bots/config.json
 /WigsBot.Bots/update.sh
+/WigsBot.Bots/bin/
+/WigsBot.Bots/obj/
+/WigsBot.Bots/.vs/
+/.vs/
 *.mp3
 *.log
 *.webm
