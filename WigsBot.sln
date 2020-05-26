@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WigsBot.Bot", "WigsBot.Bots\WigsBot.Bot.csproj", "{77AA86D0-4B7B-465A-B1EB-F8BC5661AF4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WigsBot.Bot", "WigsBot.Bot", "{E5E5A66D-B869-4CE1-A8DF-B8080FDBF312}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WigsBot.DAL", "WigsBot.DAL", "{D79347F1-4A9A-4CC9-AD96-15712B557F9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WigsBot.DAL", "WigsBot.DAL\WigsBot.DAL.csproj", "{E244D8F4-D29B-40B4-94D0-B9FB7C3D7274}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WigsBot.DAL.Migrations", "WigsBot.DAL.Migrations\WigsBot.DAL.Migrations.csproj", "{9E66C498-1D89-43BC-A849-3B9E1C0AFBB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WigsBot.Core", "WigsBot.Core", "{45B55285-F541-4336-BA1D-BE64D5BB33AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WigsBot.Core", "WigsBot.Core\WigsBot.Core.csproj", "{24A2F420-E4E3-4DD7-A523-FB50C86DC1AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77AA86D0-4B7B-465A-B1EB-F8BC5661AF4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77AA86D0-4B7B-465A-B1EB-F8BC5661AF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77AA86D0-4B7B-465A-B1EB-F8BC5661AF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77AA86D0-4B7B-465A-B1EB-F8BC5661AF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E244D8F4-D29B-40B4-94D0-B9FB7C3D7274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E244D8F4-D29B-40B4-94D0-B9FB7C3D7274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E244D8F4-D29B-40B4-94D0-B9FB7C3D7274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E244D8F4-D29B-40B4-94D0-B9FB7C3D7274}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E66C498-1D89-43BC-A849-3B9E1C0AFBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E66C498-1D89-43BC-A849-3B9E1C0AFBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E66C498-1D89-43BC-A849-3B9E1C0AFBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E66C498-1D89-43BC-A849-3B9E1C0AFBB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24A2F420-E4E3-4DD7-A523-FB50C86DC1AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24A2F420-E4E3-4DD7-A523-FB50C86DC1AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24A2F420-E4E3-4DD7-A523-FB50C86DC1AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24A2F420-E4E3-4DD7-A523-FB50C86DC1AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{77AA86D0-4B7B-465A-B1EB-F8BC5661AF4C} = {E5E5A66D-B869-4CE1-A8DF-B8080FDBF312}
+		{E244D8F4-D29B-40B4-94D0-B9FB7C3D7274} = {D79347F1-4A9A-4CC9-AD96-15712B557F9F}
+		{9E66C498-1D89-43BC-A849-3B9E1C0AFBB2} = {D79347F1-4A9A-4CC9-AD96-15712B557F9F}
+		{24A2F420-E4E3-4DD7-A523-FB50C86DC1AE} = {45B55285-F541-4336-BA1D-BE64D5BB33AC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A430F93F-EBBD-4ABB-AAAF-B78F0B8A17F6}
+	EndGlobalSection
+EndGlobal
