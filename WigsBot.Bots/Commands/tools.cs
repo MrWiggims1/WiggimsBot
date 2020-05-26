@@ -399,7 +399,7 @@ namespace WigsBot.Bot.Commands
             {
                 var roles = member.Roles.ToArray();
                 var json = new TimeoutJson() { RoleId = new List<ulong>() };
-                string fileName = $"Resources/RoleJSONs/{member.Username}-{DateTime.Now.Hour}-{DateTime.Now.Minute}.json";
+                string fileName = $"Resources/RoleJSONs/{member.Username}-{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Hour}-{DateTime.Now.Minute}.json";
 
                 if (roles.Length > 0)
                 {
@@ -409,7 +409,7 @@ namespace WigsBot.Bot.Commands
                     }
                 }
 
-                string jsonString = JsonConvert.SerializeObject(json);
+                string jsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
 
                 File.WriteAllText($"{fileName}", jsonString);
 

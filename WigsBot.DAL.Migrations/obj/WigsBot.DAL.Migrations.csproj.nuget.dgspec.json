@@ -1,32 +1,35 @@
 {
   "format": 1,
   "restore": {
-    "/home/liam/discord_bots/WigsBot/WigsBot.DAL.Migrations/WigsBot.DAL.Migrations.csproj": {}
+    "Y:\\WigsBot\\WigsBot.DAL.Migrations\\WigsBot.DAL.Migrations.csproj": {}
   },
   "projects": {
-    "/home/liam/discord_bots/WigsBot/WigsBot.DAL.Migrations/WigsBot.DAL.Migrations.csproj": {
+    "Y:\\WigsBot\\WigsBot.DAL.Migrations\\WigsBot.DAL.Migrations.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/liam/discord_bots/WigsBot/WigsBot.DAL.Migrations/WigsBot.DAL.Migrations.csproj",
+        "projectUniqueName": "Y:\\WigsBot\\WigsBot.DAL.Migrations\\WigsBot.DAL.Migrations.csproj",
         "projectName": "WigsBot.DAL.Migrations",
-        "projectPath": "/home/liam/discord_bots/WigsBot/WigsBot.DAL.Migrations/WigsBot.DAL.Migrations.csproj",
-        "packagesPath": "/home/liam/.nuget/packages/",
-        "outputPath": "/home/liam/discord_bots/WigsBot/WigsBot.DAL.Migrations/obj/",
+        "projectPath": "Y:\\WigsBot\\WigsBot.DAL.Migrations\\WigsBot.DAL.Migrations.csproj",
+        "packagesPath": "C:\\Users\\Liam Thompson\\.nuget\\packages\\",
+        "outputPath": "Y:\\WigsBot\\WigsBot.DAL.Migrations\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/liam/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Liam Thompson\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.emzi0767.com/api/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj": {
-                "projectPath": "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj"
+              "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj": {
+                "projectPath": "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj"
               }
             }
           }
@@ -78,27 +81,30 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj": {
+    "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj",
+        "projectUniqueName": "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj",
         "projectName": "WigsBot.DAL",
-        "projectPath": "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj",
-        "packagesPath": "/home/liam/.nuget/packages/",
-        "outputPath": "/home/liam/discord_bots/WigsBot/WigsBot.DAL/obj/",
+        "projectPath": "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj",
+        "packagesPath": "C:\\Users\\Liam Thompson\\.nuget\\packages\\",
+        "outputPath": "Y:\\WigsBot\\WigsBot.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/liam/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Liam Thompson\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.emzi0767.com/api/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.0": {
@@ -159,7 +165,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
