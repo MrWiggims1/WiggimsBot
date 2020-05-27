@@ -11,8 +11,12 @@ namespace WigsBot.DAL.Models.GuildPreferences
         public int XpPerMessage { get; set; }
         public bool SpellingEnabled { get; set; }
         public int ErrorListLength { get; set; }
+        public bool IsGoldEnabled { get; set; }
+        public int GoldPerLevelUp { get; set; }
 
         public string AssignableRoleJson { get; set; }
+        public ulong TimeoutRoleId { get; set; }
+        public ulong TimeoutTextChannelId { get; set; }
 
         public ulong AdminRole { get; set; }
         public ulong AutoRole { get; set; }

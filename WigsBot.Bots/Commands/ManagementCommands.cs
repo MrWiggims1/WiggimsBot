@@ -213,6 +213,7 @@ namespace WigsBot.Bot.Commands
         }
 
         [Group("Guild")]
+        [RequirePrefixes("w@", "W@")]
         [Description("Shows current wiggims bot settings for the guild.")]
         [Aliases("Guildsettings")]
         [RequireUserPermissions(Permissions.Administrator)]
@@ -234,6 +235,7 @@ namespace WigsBot.Bot.Commands
             }
 
             [GroupCommand]
+            [RequirePrefixes("w@", "W@")]
             public async Task guildInfo(CommandContext ctx)
             {
                 await ctx.TriggerTypingAsync();
@@ -251,6 +253,10 @@ namespace WigsBot.Bot.Commands
                     sb.Append(emoji + $" : {roleName}\n");
                 }
 
+                string timeoutRoleName;
+                try { timeoutRoleName = ctx.Guild.GetRole(guildPreferences.TimeoutRoleId).Name; }
+                catch { timeoutRoleName = "not set"; }
+
                 var infoEmbed = new DiscordEmbedBuilder
                 {
                     Title = $"Wiggims Bot Settings for {ctx.Guild.Name}",
@@ -262,7 +268,8 @@ namespace WigsBot.Bot.Commands
                 infoEmbed.AddField("Basic settings:",
                     $"Spelling tracking: enabled = {guildPreferences.SpellingEnabled}. list length {guildPreferences.ErrorListLength}\n" +
                     $"Xp earned per message: {guildPreferences.XpPerMessage} (For 10 messages within 60 seconds)\n" +
-                    $"Auto Role: Not Implemented yet\n");
+                    $"Auto Role: Not Implemented yet\n" +
+                    $"Timeout role: {timeoutRoleName}");
 
                 infoEmbed.AddField("Admin Settings:",
                     $"Admin Role: Not Implemented yet\n" +
@@ -365,6 +372,23 @@ namespace WigsBot.Bot.Commands
                 await _spellingSettingsService.SetSpellListLength(ctx.Guild.Id, listLength);
 
                 await ctx.Channel.SendMessageAsync($"Spell error list set to: {listLength}");
+            }
+
+            [Command("SetTimeoutRole")]
+            [RequirePrefixes("w@", "W@")]
+            [Description("Sets the role that the timeout command will give the target member.")]
+            [RequireUserPermissions(Permissions.Administrator)]
+            public async Task SetTimeoutRole(CommandContext ctx, DiscordRole discordRole)
+            {
+                if (discordRole.Name.ToLower() == "timeout")
+                {
+                    await ctx.RespondAsync("Please do not use 'timeout' as the name as when you try to execute the `w@timeout` command you will ping the role rather than execute the command.").ConfigureAwait(false);
+                    return;
+                }
+
+                await _guildPreferences.SetTimeoutRole(ctx.Guild.Id, discordRole.Id).ConfigureAwait(true);
+
+                await ctx.RespondAsync($"{discordRole.Name} has been set as the timeout role for {ctx.Guild.Name}.").ConfigureAwait(false);
             }
 
             //######## Guild Tasks ############

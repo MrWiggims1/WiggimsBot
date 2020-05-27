@@ -20,6 +20,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Text;
 using DSharpPlus.Net.Models;
+using WigsBot.Core.Services.GuildPreferenceServices;
 
 namespace WigsBot.Bot.Commands
 {
@@ -27,13 +28,16 @@ namespace WigsBot.Bot.Commands
     {
         private readonly ITextProcessorService _textProcessorService;
         private readonly IProfileService _profileService;
+        private readonly IGuildPreferences _guildPreferences;
 
         public tools(
             ITextProcessorService textProcessorService,
-            IProfileService profileService)
+            IProfileService profileService,
+            IGuildPreferences guildPreferences)
         {
             _textProcessorService = textProcessorService;
             _profileService = profileService;
+            _guildPreferences = guildPreferences;
         }
 
         [Command("cancel")]
@@ -332,6 +336,14 @@ namespace WigsBot.Bot.Commands
         [Description("Will give a user a role which will effectively set them in a corner to let them cool off.")]
         public class TimeoutCommands : BaseCommandModule
         {
+            private readonly IGuildPreferences _guildPreferences;
+
+            public TimeoutCommands(
+                IGuildPreferences guildPreferences)
+            {
+                _guildPreferences = guildPreferences;
+            }
+
             [GroupCommand]
             [RequirePrefixes("w@", "W@")]
             [RequireUserPermissions(Permissions.Administrator)]
@@ -339,12 +351,20 @@ namespace WigsBot.Bot.Commands
             {
                 await ctx.Message.DeleteAsync();
 
+                var guildPrefs = await _guildPreferences.GetOrCreateGuildPreferences(ctx.Guild.Id);
+
+                if (guildPrefs.TimeoutRoleId == 0U)
+                {
+                    await ctx.RespondAsync("There is no timeout role set yet, please use ` w@guild settimeoutrole <role>` to set it.");
+                    return;
+                }
+
                 if (timeSpan == null)
                     timeSpan = TimeSpan.FromMinutes(10);
 
                 string filePath = MakeTimeoutJson(member);
                 var roles = member.Roles.ToArray();
-                DiscordRole timeoutRole = ctx.Guild.GetRole(514405137402429471);
+                DiscordRole timeoutRole = ctx.Guild.GetRole(guildPrefs.TimeoutRoleId);
 
                 foreach (var role in roles)
                 {

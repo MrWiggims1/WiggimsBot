@@ -4171,3 +4171,5 @@ unluggy - unluggy
 frick - Frick
  - ^^^
 woah - Woah
+finnaly - Finnaly
+ffs - Ffs

@@ -120,6 +120,7 @@ namespace WigsBot.DAL.Models.Profiles
         /// </summary>
         public DateTime RobbingCooldown { get; set; }
 
+
         
 
         /// <summary>
