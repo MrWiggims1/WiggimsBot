@@ -156,12 +156,15 @@ namespace WigsBot.Bot.Commands
         public class MimicCommands : BaseCommandModule
         {
             private readonly IProfileService _profileService;
+            private readonly IMimicableService _mimicableService;
 
             public MimicCommands(
-                IProfileService profileService
+                IProfileService profileService,
+                IMimicableService mimicableService
                 )
             {
                 _profileService = profileService;
+                _mimicableService = mimicableService;
             }
 
             [GroupCommand]
@@ -220,6 +223,7 @@ namespace WigsBot.Bot.Commands
                 }
 
                 await ctx.Channel.SendMessageAsync($"Mimicking {discordMember.Username} (Mimic Id: {Id}), if they dont want people to have the ability to do this, they can use `W!Profile ToggleMimicking`.");
+                await _mimicableService.TackAMimic(profile);
 
                 var psi = new ProcessStartInfo
                 {
@@ -290,6 +294,7 @@ namespace WigsBot.Bot.Commands
                 }
 
                 await ctx.Channel.SendMessageAsync($"Mimicking {discordMember.Username}, if they don't want people to have the ability to do this, they can use `W!Profile ToggleMimicking`.");
+                await _mimicableService.TackAMimic(profile);
 
                 var psi = new ProcessStartInfo
                 {

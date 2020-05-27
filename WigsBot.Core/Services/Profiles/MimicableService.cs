@@ -16,6 +16,13 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="enabled">If the member can be mimicked or not.</param>
         /// <returns></returns>
         Task SetMimicableAsync(ulong discordId, ulong guildId, bool enabled);
+
+        /// <summary>
+        /// Adds a point to hoe many times a member has been mimicked.
+        /// </summary>
+        /// <param name="profile">The members Profile.</param>
+        /// <returns></returns>
+        Task TackAMimic(Profile profile);
     }
 
     public class MimicableService : IMimicableService
@@ -36,6 +43,17 @@ namespace WigsBot.Core.Services.Profiles
             Profile profile = await _profileService.GetOrCreateProfileAsync(discordId, guildId).ConfigureAwait(false);
 
             profile.IsMimicable = enabled;
+
+            context.Profiles.Update(profile);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task TackAMimic(Profile profile)
+        {
+            using var context = new RPGContext(_options);
+
+            profile.TimesMimicked++;
 
             context.Profiles.Update(profile);
 

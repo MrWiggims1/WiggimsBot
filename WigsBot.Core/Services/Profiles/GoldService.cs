@@ -92,6 +92,16 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="robberySuccessfull">Was the robbery successful? if so the gold will be transfered to the attacker, otherwise it goes to the defender.</param>
         /// <returns></returns>
         Task ProccessMembersRobbing(Profile attacker, Profile victim, int goldNum, bool robberySuccessfull);
+
+        /// <summary>
+        /// Transfers gold between the member and the bot, as well as tracks info within database.
+        /// </summary>
+        /// <param name="profile">The profile of the member.</param>
+        /// <param name="botProfile"> The profile of the bot.</param>
+        /// <param name="goldNum">The winnings/losses.</param>
+        /// <param name="memberWonGame">Did the member win the game?</param>
+        /// <returns></returns>
+        Task ProccessMemberRoulette(Profile profile, Profile botProfile, int goldNum, bool memberWonGame);
     }
 
     public class GoldService : IGoldService
@@ -217,6 +227,8 @@ namespace WigsBot.Core.Services.Profiles
 
             profile.DailyCooldown = DateTime.Now;
             profile.Gold += goldNum;
+            profile.TotalDailyEarnings += goldNum;
+            profile.DailiesCollected++;
 
             botProfile.Gold -= goldNum;
 
@@ -232,7 +244,22 @@ namespace WigsBot.Core.Services.Profiles
 
             if(!robberySuccessfull)
             {
+                attacker.RobbingAttackLost++;
+                victim.RobbingDefendWon++;
+
+                attacker.GoldLostFines += goldNum;
+                victim.GoldGainedFines += goldNum;
+
+                //Make sure set to negative after you track the results not before.
                 goldNum = -goldNum;
+            }
+            else
+            {
+                attacker.RobbingAttackWon++;
+                victim.RobbingDefendLost++;
+
+                attacker.GoldStolen += goldNum;
+                victim.GoldLostFromTheft += goldNum;
             }
 
             attacker.RobbingCooldown = DateTime.Now;
@@ -242,6 +269,33 @@ namespace WigsBot.Core.Services.Profiles
 
             context.Profiles.Update(attacker);
             context.Profiles.Update(victim);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMemberRoulette(Profile profile, Profile botProfile, int goldNum, bool memberWonGame)
+        {
+            using var context = new RPGContext(_options);
+
+            if (!memberWonGame)
+            {
+                profile.RouletteFails++;
+
+                //Make sure set to negative after you track the results not before.
+                goldNum = -goldNum;
+            }
+            else
+            {
+                profile.RouletteSuccesses++;
+            }
+
+            profile.TotalRouletteEarnings += goldNum;
+
+            profile.Gold += goldNum;
+            botProfile.Gold -= goldNum;
+
+            context.Profiles.Update(profile);
+            context.Profiles.Update(botProfile);
 
             await context.SaveChangesAsync().ConfigureAwait(false);
         }

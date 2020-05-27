@@ -43,7 +43,7 @@ namespace WigsBot.Bot.Commands
 
             if (bet < 1)
             {
-                await ctx.Channel.SendMessageAsync("Your a dip shit, you cant bet 0 Gold.");
+                await ctx.Channel.SendMessageAsync("Your a dip shit, you cant bet less than 1 Gold.");
                 return;
             }
 
@@ -61,12 +61,12 @@ namespace WigsBot.Bot.Commands
             if (guess == Results)
             {
                 int reward = bet * 35;
-                await _goldService.TransferGold(botProfile, profile, reward, true);
+                await _goldService.ProccessMemberRoulette(profile, botProfile, reward, true);
                 await ctx.Channel.SendMessageAsync($"You won {reward} gold!").ConfigureAwait(false);
             }
             else
             {
-                await _goldService.TransferGold(profile, botProfile, bet, false);
+                await _goldService.ProccessMemberRoulette(profile, botProfile, bet, false);
                 await ctx.Channel.SendMessageAsync($"You lost {bet} gold. ball landed on {Results}, you guessed {guess}").ConfigureAwait(false);
             }
         }

@@ -121,6 +121,83 @@ namespace WigsBot.DAL.Models.Profiles
         public DateTime RobbingCooldown { get; set; }
 
 
+
+
+
+        /// <summary>
+        /// How many times has the member failed to rob someone. (since 27/5/2020)
+        /// </summary>
+        public int RobbingAttackLost { get; set; }
+
+        /// <summary>
+        /// How many times a member has robbed successfully (since 27/5/2020)
+        /// </summary>
+        public int RobbingAttackWon { get; set; }
+
+        /// <summary>
+        /// How many times has this member been robbed but defended them self. (since 27/5/2020)
+        /// </summary>
+        public int RobbingDefendWon { get; set; }
+
+        /// <summary>
+        /// How many times has this member been robbed. (since 27/5/2020)
+        /// </summary>
+        public int RobbingDefendLost { get; set; }
+
+        /// <summary>
+        /// How much gold has this member stolen from other members. (since 27/5/2020)
+        /// </summary>
+        public int GoldStolen { get; set; }
+
+        /// <summary>
+        /// How much gold has this member lost from other members robbing them. (since 27/5/2020)
+        /// </summary>
+        public int GoldLostFromTheft { get; set; }
+
+        /// <summary>
+        /// How much gold has this member lost from being fined. (since 27/5/2020)
+        /// </summary>
+        public int GoldLostFines { get; set; }
+
+        /// <summary>
+        /// How much gold has this member received from fines of others. (since 27/5/2020)
+        /// </summary>
+        public int GoldGainedFines { get; set; }
+
+        /// <summary>
+        /// How many times a member has used the daily command. (since 27/5/2020)
+        /// </summary>
+        public int DailiesCollected { get; set; }
+
+        /// <summary>
+        /// How much has this member Earned from dailies. (since 27/5/2020)
+        /// </summary>
+        public int TotalDailyEarnings { get; set; }
+
+        /// <summary>
+        /// How many times has the member been mimicked. (since 27/5/2020)
+        /// </summary>
+        public int TimesMimicked { get; set; }
+
+        /// <summary>
+        /// How many times has the member played roulette and succeeded. (since 27/5/2020)
+        /// </summary>
+        public int RouletteSuccesses { get; set; }
+
+        /// <summary>
+        /// How many times has the member played roulette and failed. (since 27/5/2020)
+        /// </summary>
+        public int RouletteFails { get; set; }
+
+        /// <summary>
+        /// How much money has the member won from roulette in total (includes losses). (since 27/5/20)
+        /// </summary>
+        public int TotalRouletteEarnings { get; set; }
+
+
+
+
+
         
 
         /// <summary>
@@ -147,5 +224,20 @@ namespace WigsBot.DAL.Models.Profiles
         /// The ratio between amount of times a member has been got and messages sent.
         /// </summary>
         public double gotWordRatio => Math.Round((Convert.ToDouble(Gots))/((Convert.ToDouble(Xp))) * 100, 5);
+
+        /// <summary>
+        /// How often does this member succeed at robbing.
+        /// </summary>
+        public decimal RobAttackSuccessRate => Math.Round(Convert.ToDecimal(RobbingAttackWon) / (Convert.ToDecimal(RobbingAttackWon) + Convert.ToDecimal(RobbingAttackLost)) * 100, 2);
+
+        /// <summary>
+        /// How often does this member succeed at defending a robbing.
+        /// </summary>
+        public decimal RobDefendSuccessRate => Math.Round(Convert.ToDecimal(RobbingDefendWon) / (Convert.ToDecimal(RobbingDefendWon) + Convert.ToDecimal(RobbingDefendLost)) * 100, 2);
+
+        /// <summary>
+        /// How often does this member succeed at Roulette.
+        /// </summary>
+        public decimal RouletteSuccessRate => Math.Round(Convert.ToDecimal(RouletteSuccesses) / (Convert.ToDecimal(RouletteSuccesses) + Convert.ToDecimal(RouletteFails)) * 100, 2);
     }
 }
