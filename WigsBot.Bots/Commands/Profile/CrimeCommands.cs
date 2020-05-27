@@ -13,6 +13,7 @@ using DSharpPlus.Net.Models;
 using WigsBot.Core.Services.Items;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace WigsBot.Bot.Commands.Profilecommands
 {
@@ -56,7 +57,18 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
             if (timeDiff > TimeSpan.FromHours(0))
             {
-                throw new Exception($"You must wait 90 minutes between robberies {timeDiff.Hours}:{timeDiff.Minutes}:{timeDiff.Seconds} remaining.");
+                DiscordEmbedBuilder CooldownEmbed = new DiscordEmbedBuilder()
+                {
+                    Title = $"You must wait 90 minutes between robberies { timeDiff.Hours }:{ timeDiff.Minutes}:{ timeDiff.Seconds} remaining.",
+                    Color = DiscordColor.Red
+                }; // generate a message about adding a timer
+
+                CooldownEmbed.WithFooter("Click the clock emoji below to set a reminder for when you can next rob someone.");
+
+
+                var msg = await ctx.RespondAsync(embed: CooldownEmbed);
+                await SendCooldownAlarm(ctx, msg, timeDiff);
+                return;
             }
 
             //###### checks before performing the heist #####
@@ -180,37 +192,37 @@ namespace WigsBot.Bot.Commands.Profilecommands
             return embed;
         }
 
-        public async Task Threaten(CommandContext ctx)
-        {
-            await ctx.Channel.SendMessageAsync("500 gold has been removed from your account.");
-
-            var interatcivity = ctx.Client.GetInteractivity();
-
-            var msg = await interatcivity.WaitForMessageAsync(x => x.Author == ctx.User && x.Channel == ctx.Channel).ConfigureAwait(false);
-
-            if (msg.TimedOut)
-            { return; }
-            
-            await ctx.Channel.SendMessageAsync("At least it will be if you try that shit again.");
-        }
-
-        public async Task showOddsOnReact(CommandContext ctx, DiscordMessage msg, string message)
+        public async Task SendCooldownAlarm(CommandContext ctx, DiscordMessage msg, TimeSpan timeSpan)
         {
             try
             {
-                await msg.CreateReactionAsync(DiscordEmoji.FromName(ctx.Client, ":gear:"));
+                await msg.CreateReactionAsync(DiscordEmoji.FromName(ctx.Client, ":alarm_clock:"));
 
                 var interactivity = ctx.Client.GetInteractivity();
 
                 var reaction = await interactivity.WaitForReactionAsync(
                     x => x.Message == msg &&
                     x.User.Id == 318999364192174080 &&
-                    x.Emoji == DiscordEmoji.FromName(ctx.Client, ":gear:"));
+                    x.Emoji == DiscordEmoji.FromName(ctx.Client, ":alarm_clock:"));
 
                 if (!reaction.TimedOut)
                 {
+                    await msg.DeleteAllReactionsAsync();
                     DiscordDmChannel dmChannel = ctx.Guild.GetMemberAsync(318999364192174080).Result.CreateDmChannelAsync().Result;
-                    await dmChannel.SendMessageAsync(message);
+
+                    DiscordEmbedBuilder CooldownEmbed = new DiscordEmbedBuilder()
+                    {
+                        Title = $"Your timer has been set.",
+                        Color = DiscordColor.Red
+                    }; // generate a message about adding a timer
+
+                    CooldownEmbed.WithFooter("Keep in mind this timer will only go off if the bot is not reset (which happens fairly often).");
+
+                    await msg.ModifyAsync(embed: CooldownEmbed.Build());
+
+                    System.Threading.Thread.Sleep(Convert.ToInt32(timeSpan.TotalMilliseconds));
+
+                    await dmChannel.SendMessageAsync($"Your cooldown has ended, you can now rob to your hearts content.");
                 }
             }
             catch { await msg.DeleteAllReactionsAsync().ConfigureAwait(false);  }
