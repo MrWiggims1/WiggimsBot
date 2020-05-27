@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WigsBot.DAL;
 
 namespace WigsBot.DAL.Migrations.Migrations
 {
     [DbContext(typeof(RPGContext))]
-    partial class RPGContextModelSnapshot : ModelSnapshot
+    [Migration("20200527002849_AddedDailyCooldown")]
+    partial class AddedDailyCooldown
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,9 +144,6 @@ namespace WigsBot.DAL.Migrations.Migrations
 
                     b.Property<bool>("QuietMode")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("RobbingCooldown")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("SpellCorrectCount")
                         .HasColumnType("int");

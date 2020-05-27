@@ -31,3 +31,15 @@ D:/WigsBot/WigsBot.Core/obj/Debug/netcoreapp3.1/WigsBot.Core.AssemblyInfo.cs
 D:/WigsBot/WigsBot.Core/obj/Debug/netcoreapp3.1/WigsBot.Core.csproj.CopyComplete
 D:/WigsBot/WigsBot.Core/obj/Debug/netcoreapp3.1/WigsBot.Core.dll
 D:/WigsBot/WigsBot.Core/obj/Debug/netcoreapp3.1/WigsBot.Core.pdb
+Y:\WigsBot\WigsBot.Core\bin\Debug\netcoreapp3.1\WigsBot.Core.deps.json
+Y:\WigsBot\WigsBot.Core\bin\Debug\netcoreapp3.1\WigsBot.Core.dll
+Y:\WigsBot\WigsBot.Core\bin\Debug\netcoreapp3.1\WigsBot.Core.pdb
+Y:\WigsBot\WigsBot.Core\bin\Debug\netcoreapp3.1\WigsBot.DAL.dll
+Y:\WigsBot\WigsBot.Core\bin\Debug\netcoreapp3.1\WigsBot.DAL.pdb
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.csprojAssemblyReference.cache
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.csproj.CoreCompileInputs.cache
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.AssemblyInfoInputs.cache
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.AssemblyInfo.cs
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.csproj.CopyComplete
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.dll
+Y:\WigsBot\WigsBot.Core\obj\Debug\netcoreapp3.1\WigsBot.Core.pdb

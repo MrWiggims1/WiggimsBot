@@ -74,6 +74,24 @@ namespace WigsBot.Core.Services.Profiles
         /// <returns></returns>
         Task TransferGoldWTax(Profile payer, Profile payee, Profile wigsBotProfile, int goldAmount, decimal wigsBotTaxPercent);
 
+        /// <summary>
+        /// Gives a member their daily and resets the cooldown time on the member.
+        /// </summary>
+        /// <param name="profile">The members Profile.</param>
+        /// <param name="botProfile">The bots Profile.</param>
+        /// <param name="goldNum">The amount of gold to give the member.</param>
+        /// <returns></returns>
+        Task ProccessMemberDaily(Profile profile, Profile botProfile, int goldNum);
+
+        /// <summary>
+        /// Transfers the gold between attacker and defender appropriately and resets the cooldown of the member attacking.
+        /// </summary>
+        /// <param name="attacker">The profile of the member attacking.</param>
+        /// <param name="victim">The profile of the member defending.</param>
+        /// <param name="goldNum">The amount of gold to transfer.</param>
+        /// <param name="robberySuccessfull">Was the robbery successful? if so the gold will be transfered to the attacker, otherwise it goes to the defender.</param>
+        /// <returns></returns>
+        Task ProccessMembersRobbing(Profile attacker, Profile victim, int goldNum, bool robberySuccessfull);
     }
 
     public class GoldService : IGoldService
@@ -189,6 +207,41 @@ namespace WigsBot.Core.Services.Profiles
             context.Profiles.Update(payer);
             context.Profiles.Update(payee);
             context.Profiles.Update(wigsBotProfile);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMemberDaily(Profile profile, Profile botProfile, int goldNum)
+        {
+            using var context = new RPGContext(_options);
+
+            profile.DailyCooldown = DateTime.Now;
+            profile.Gold += goldNum;
+
+            botProfile.Gold -= goldNum;
+
+            context.Profiles.Update(profile);
+            context.Profiles.Update(botProfile);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMembersRobbing(Profile attacker, Profile victim, int goldNum, bool robberySuccessfull)
+        {
+            using var context = new RPGContext(_options);
+
+            if(!robberySuccessfull)
+            {
+                goldNum = -goldNum;
+            }
+
+            attacker.RobbingCooldown = DateTime.Now;
+
+            attacker.Gold += goldNum;
+            victim.Gold -= goldNum;
+
+            context.Profiles.Update(attacker);
+            context.Profiles.Update(victim);
 
             await context.SaveChangesAsync().ConfigureAwait(false);
         }

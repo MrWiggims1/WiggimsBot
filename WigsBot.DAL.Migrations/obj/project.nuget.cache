@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "0P54KeAkkIPyyAPaaCXF/UzIV6S2V721+fZfw3yhaqafRuQ7goPzf8YLOYc4qqgWFm2iiwe0VC2A3sZ1244/Hg==",
+  "dgSpecHash": "W+t3h/s6Gzq9oLWAvOgDxa6f0SS0AQ8lgj5TnbioGfh1fAfTx96KhVu4ehjLJwpZ3XUHlFxcCWXUN2DaHdQ2wQ==",
   "success": true,
   "projectFilePath": "Y:\\WigsBot\\WigsBot.DAL.Migrations\\WigsBot.DAL.Migrations.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,7 @@
     "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore\\3.1.2\\microsoft.entityframeworkcore.3.1.2.nupkg.sha512",
     "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\3.1.2\\microsoft.entityframeworkcore.abstractions.3.1.2.nupkg.sha512",
     "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\3.1.2\\microsoft.entityframeworkcore.analyzers.3.1.2.nupkg.sha512",
-    "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.design\\3.1.1\\microsoft.entityframeworkcore.design.3.1.1.nupkg.sha512",
+    "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.design\\3.1.2\\microsoft.entityframeworkcore.design.3.1.2.nupkg.sha512",
     "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\3.1.2\\microsoft.entityframeworkcore.relational.3.1.2.nupkg.sha512",
     "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.relational.design\\2.0.0-preview1-final\\microsoft.entityframeworkcore.relational.design.2.0.0-preview1-final.nupkg.sha512",
     "C:\\Users\\Liam Thompson\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\3.1.2\\microsoft.entityframeworkcore.sqlserver.3.1.2.nupkg.sha512",

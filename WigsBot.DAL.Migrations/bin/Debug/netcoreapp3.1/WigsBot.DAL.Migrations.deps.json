@@ -9,7 +9,7 @@
       "WigsBot.DAL.Migrations/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Analyzers": "3.1.2",
-          "Microsoft.EntityFrameworkCore.Design": "3.1.1",
+          "Microsoft.EntityFrameworkCore.Design": "3.1.2",
           "Microsoft.EntityFrameworkCore.Relational": "3.1.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.2",
           "Microsoft.EntityFrameworkCore.SqlServer.Design": "2.0.0-preview1-final",
@@ -208,15 +208,15 @@
         }
       },
       "Microsoft.EntityFrameworkCore.Analyzers/3.1.2": {},
-      "Microsoft.EntityFrameworkCore.Design/3.1.1": {
+      "Microsoft.EntityFrameworkCore.Design/3.1.2": {
         "dependencies": {
           "Microsoft.CSharp": "4.7.0",
           "Microsoft.EntityFrameworkCore.Relational": "3.1.2"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Design.dll": {
-            "assemblyVersion": "3.1.1.0",
-            "fileVersion": "3.100.119.61403"
+            "assemblyVersion": "3.1.2.0",
+            "fileVersion": "3.100.220.6703"
           }
         }
       },
@@ -1435,12 +1435,12 @@
       "path": "microsoft.entityframeworkcore.analyzers/3.1.2",
       "hashPath": "microsoft.entityframeworkcore.analyzers.3.1.2.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.Design/3.1.1": {
+    "Microsoft.EntityFrameworkCore.Design/3.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-qCy5oedJEy1Hp7tr6tsgiiH+W68JQkMjDXmBcdGVexgOpt0VpcEKm+iBBJZ0I1Nbih3menlgOu0U1T4gNKi2Ew==",
-      "path": "microsoft.entityframeworkcore.design/3.1.1",
-      "hashPath": "microsoft.entityframeworkcore.design.3.1.1.nupkg.sha512"
+      "sha512": "sha512-DVbwHFZVWp37ti2uAqzSnfLqqvI1TjxLy8xOYm5jAyFLr/9OiGGyJHdtrMr3n62SG28eV3CeD+N4YwedyVhKSQ==",
+      "path": "microsoft.entityframeworkcore.design/3.1.2",
+      "hashPath": "microsoft.entityframeworkcore.design.3.1.2.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Relational/3.1.2": {
       "type": "package",

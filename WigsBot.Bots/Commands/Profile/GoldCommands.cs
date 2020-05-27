@@ -33,7 +33,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Command("daily")]
         [RequirePrefixes("w!", "W!")]
         [Description("Get gold every 24hrs. Or give it to another user")]
-        [Cooldown(1, 86400, CooldownBucketType.User)]
+        //[Cooldown(1, 86400, CooldownBucketType.User)]
         [Aliases("dole")]
         public async Task Daily(CommandContext ctx)
         {
@@ -211,6 +211,16 @@ namespace WigsBot.Bot.Commands.Profilecommands
             await ctx.TriggerTypingAsync();
             Profile profile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id);
             Profile botProfile = await _profileService.GetOrCreateProfileAsync(ctx.Client.CurrentUser.Id, ctx.Guild.Id);
+
+            //Make sure its been 24 hours since the command has been used.
+
+            System.TimeSpan timeDiff = TimeSpan.FromDays(1).Subtract(DateTime.Now.Subtract(profile.DailyCooldown));
+
+            if (timeDiff > TimeSpan.FromDays(0))
+            {
+                throw new Exception($"You must wait 24 hours between dailies {timeDiff.Hours}:{timeDiff.Minutes}:{timeDiff.Seconds} remaining.");
+            }
+
             var rnd = new Random();
             decimal luck = rnd.Next(10, 30);
             decimal boost = 1.6M;
@@ -231,7 +241,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             {
                 await ctx.Channel.SendMessageAsync($"{emoji} {member.DisplayName} gained {Convert.ToInt32(luck)} gold!").ConfigureAwait(false);
             }
-            else if (profile.Gold <= 0 && profile.Gold > -200)
+            else if (profile.Gold < 0 && profile.Gold > -200)
             {
                 luck *= 1.5M;
                 await ctx.Channel.SendMessageAsync($"{emoji} {emoji} {emoji} {member.DisplayName} gained {Convert.ToInt32(luck)} gold!").ConfigureAwait(false);
@@ -243,7 +253,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             }
 
             int payment = Convert.ToInt32(luck);
-            await _goldService.TransferGold(botProfile, profile, payment, true);
+            await _goldService.ProccessMemberDaily(profile, botProfile, payment);
         }
     }
 }

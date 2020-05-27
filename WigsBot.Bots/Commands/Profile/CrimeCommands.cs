@@ -41,10 +41,23 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         [Description("Try your luck and attempt to steal someones gold, don't get too greedy or it may cost you. Defaults to max available.\n\n`Cooldown`: 90 Minutes")]
         [Aliases("StealGold", "TakeGold")]
-        [Cooldown(1, 9000, CooldownBucketType.User)]
+        //[Cooldown(1, 9000, CooldownBucketType.User)]
         public async Task rob(CommandContext ctx, [Description("Discord user")] DiscordMember member, [Description("How much do you want to steal")] int goldNum = 97153)
         {
             await ctx.TriggerTypingAsync();
+
+            Profile vicProfile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id).ConfigureAwait(false);
+            Profile attackProfile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id).ConfigureAwait(false);
+            StringBuilder extras = new StringBuilder();
+
+            //Make sure its been 24 hours since the command has been used.
+
+            System.TimeSpan timeDiff = TimeSpan.FromHours(1.5).Subtract(DateTime.Now.Subtract(attackProfile.RobbingCooldown));
+
+            if (timeDiff > TimeSpan.FromHours(0))
+            {
+                throw new Exception($"You must wait 90 minutes between robberies {timeDiff.Hours}:{timeDiff.Minutes}:{timeDiff.Seconds} remaining.");
+            }
 
             //###### checks before performing the heist #####
             if (ctx.Message.Author.Id == member.Id) 
@@ -68,9 +81,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             }
 
             // set variables
-            Profile vicProfile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id).ConfigureAwait(false);
-            Profile attackProfile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id).ConfigureAwait(false);
-            StringBuilder extras = new StringBuilder();
+            
 
             int ranResult = new Random().Next(0, 100);
             ctx.Client.DebugLogger.LogMessage(LogLevel.Info, "Wiggims Bot: Robbing command debug info.", $"{ctx.Member.Username} is attempting to rob {member.Username}", DateTime.Now);
@@ -126,12 +137,12 @@ namespace WigsBot.Bot.Commands.Profilecommands
             if (chance > ranResult)
             {
                 responseEmbed = GenerateEmbed(embed, $"The robbery of {member.Mention}'s vault was successful and {ctx.Member.Mention} came out {attackErn} gold richer.", true, extras);
-                await _goldService.TransferGold(vicProfile, attackProfile, attackErn, false).ConfigureAwait(false);
+                await _goldService.ProccessMembersRobbing(attackProfile, vicProfile, attackErn, true).ConfigureAwait(false);
             }
             else
             {
                 responseEmbed = GenerateEmbed(embed, $"{ctx.Member.Mention} you were caught trying to rob {member.Username} by the police with {attackErn} gold packed away in their gold bags, you have been fined {fine} gold which goes towards {member.Username}.", false, extras);
-                await _goldService.TransferGold(attackProfile, vicProfile, fine, true).ConfigureAwait(false);
+                await _goldService.ProccessMembersRobbing(attackProfile, vicProfile, fine, false).ConfigureAwait(false);
             }
 
             await ctx.RespondAsync(embed: responseEmbed).ConfigureAwait(false);

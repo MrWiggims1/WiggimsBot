@@ -373,6 +373,7 @@ namespace WigsBot.Bot.Commands
                     DiscordRole role = ctx.Guild.GetRole(roleId);
                     await member.GrantRoleAsync(role);
                 }
+
                 await ctx.Channel.SendMessageAsync($"{member.Username}'s timeout has ended.");
             }
 

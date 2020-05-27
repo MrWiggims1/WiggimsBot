@@ -110,6 +110,16 @@ namespace WigsBot.DAL.Models.Profiles
         /// </summary>
         public string ItemJson { get; set; }
 
+        /// <summary>
+        /// The last date a member used the daily command.
+        /// </summary>
+        public DateTime DailyCooldown { get; set; }
+
+        /// <summary>
+        /// The last time the member robbed someone.
+        /// </summary>
+        public DateTime RobbingCooldown { get; set; }
+
         
 
         /// <summary>
