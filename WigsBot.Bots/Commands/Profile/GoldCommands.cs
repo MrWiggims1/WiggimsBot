@@ -218,12 +218,19 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
             if (timeDiff > TimeSpan.FromDays(0))
             {
-                throw new Exception($"You must wait 24 hours between dailies {timeDiff.Hours}:{timeDiff.Minutes}:{timeDiff.Seconds} remaining.");
+                DiscordEmbedBuilder CooldownEmbed = new DiscordEmbedBuilder()
+                {
+                    Title = $"You must wait 24 hours between dailies {timeDiff.Hours}:{timeDiff.Minutes}:{timeDiff.Seconds} remaining.",
+                    Color = DiscordColor.Red
+                };
+
+                var msg = await ctx.RespondAsync(embed: CooldownEmbed);
+                return;
             }
 
             var rnd = new Random();
             decimal luck = rnd.Next(10, 30);
-            decimal boost = 1.6M;
+            decimal boost = 1.3M;
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":moneybag:");
             DiscordRole boostRole;
             try

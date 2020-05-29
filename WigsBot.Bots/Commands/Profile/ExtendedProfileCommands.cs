@@ -1047,6 +1047,8 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 await AwaitTopReaction(ctx, message, profiles, member, emojiList).ConfigureAwait(false);
             }
 
+
+
             public class ProfilesList
             {
                 public int Xp { get; set; }

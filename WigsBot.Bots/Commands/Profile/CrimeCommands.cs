@@ -61,7 +61,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 {
                     Title = $"You must wait 90 minutes between robberies { timeDiff.Hours }:{ timeDiff.Minutes}:{ timeDiff.Seconds} remaining.",
                     Color = DiscordColor.Red
-                }; // generate a message about adding a timer
+                };
 
                 CooldownEmbed.WithFooter("Click the clock emoji below to set a reminder for when you can next rob someone.");
 
@@ -214,8 +214,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                     {
                         Title = $"Your timer has been set.",
                         Color = DiscordColor.Red
-                    }; // generate a message about adding a timer
-
+                    };
                     CooldownEmbed.WithFooter("Keep in mind this timer will only go off if the bot is not reset (which happens fairly often).");
 
                     await msg.ModifyAsync(embed: CooldownEmbed.Build());
@@ -223,6 +222,10 @@ namespace WigsBot.Bot.Commands.Profilecommands
                     System.Threading.Thread.Sleep(Convert.ToInt32(timeSpan.TotalMilliseconds));
 
                     await dmChannel.SendMessageAsync($"Your cooldown has ended, you can now rob to your hearts content.");
+                }
+                else
+                {
+                    await msg.DeleteAllReactionsAsync();
                 }
             }
             catch { await msg.DeleteAllReactionsAsync().ConfigureAwait(false);  }

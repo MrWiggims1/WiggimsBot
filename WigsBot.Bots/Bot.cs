@@ -238,15 +238,9 @@ namespace WigsBot.Bot
             {
                 if (e.Command.Name == "earnxp" || e.Command.Name == "wiggimsbotspell") { return; }
 
-                if (e.Command.Name == "rob")
-                {
-                    await e.Context.Channel.SendMessageAsync($"{e.Context.Member.Username} best you wait a little longer before trying again, you don't want to get caught.");
-                    return;
-                }
-
                 if (e.Command.Name == "fish")
                 {
-                    await e.Context.Channel.SendMessageAsync($"{e.Context.Member.Username} PLease wait 60 seconds between each cast.");
+                    await e.Context.Channel.SendMessageAsync($"{e.Context.Member.Username} please wait 60 seconds between each cast.");
                     return;
                 }
 
