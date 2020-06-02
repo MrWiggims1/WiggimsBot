@@ -159,39 +159,31 @@ namespace WigsBot.Bot.Commands
         [Command("Purge")]
         [RequirePrefixes("w@", "W@")]
         [RequirePermissions(Permissions.Administrator)]
-        public async Task Purge(CommandContext ctx, [Description("Delete all messages up to this message Id or link.")] DiscordMessage message, [Description("Messages to be excluded."), Optional] params DiscordMessage[] discordMessages)
+        public async Task Purge(CommandContext ctx, [Description("Delete all messages up to this message Id or link.")] DiscordMessage message, [Description("The final message to be purged.")] DiscordMessage FinaldiscordMessage = null)
         {
             var messagesToDelete = await ctx.Channel.GetMessagesAfterAsync(message.Id, 100);
-            int deletionCount = 0;
-            bool delete;
 
-            List<DiscordMessage> list = new List<DiscordMessage>(messagesToDelete);
+            List<DiscordMessage> list;
+
+            if (FinaldiscordMessage != null)
+            {
+                var messagesToIgnore = await ctx.Channel.GetMessagesAfterAsync(FinaldiscordMessage.Id, 100);
+
+                list = new List<DiscordMessage>(messagesToDelete).Except(messagesToIgnore).ToList();
+            }
+            else
+            {
+                list = new List<DiscordMessage>(messagesToDelete);
+            }
+
+            int deletionCount = 0;
 
             foreach (DiscordMessage mesg in list)
             {
-                delete = true;
-
-                if (discordMessages.Length > 0)
-                {
-                    ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, "Wiggims bot: purge command by message Id with exclusions", $"{message.Id} is being searched", DateTime.Now);
-
-                    foreach (var blackListMessage in discordMessages)
-                    {
-                        if (blackListMessage == mesg)
-                        {
-                            delete = false;
-                            ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, "Wiggims bot: purge command by message Id with exclusions", $"{message.Id} will not be deleted.", DateTime.Now);
-                        }
-                    }
-                }
-
-                if (delete)
-                {
-                    await mesg.DeleteAsync();
-                    deletionCount += 1;
-                    ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, "Wiggims bot: purge command", $"{message.Id} has been deleted.", DateTime.Now);
-                    System.Threading.Thread.Sleep(500);
-                }
+                await mesg.DeleteAsync();
+                deletionCount += 1;
+                ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, "Wiggims bot: purge command", $"{message.Id} has been deleted.", DateTime.Now);
+                System.Threading.Thread.Sleep(500);
             }
 
             var responseMessage = await ctx.Channel.SendMessageAsync($"{deletionCount} messages purged by {ctx.Member.Username}");

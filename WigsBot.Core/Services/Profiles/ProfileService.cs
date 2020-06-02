@@ -77,8 +77,6 @@ namespace WigsBot.Core.Services.Profiles
                 BoganCount = 0,
                 BeatSaberId = 0L,
                 UplayUsername = "not set",
-                BattleNetUsername = "not set",
-                CODMWUsername = "not set",
                 SpellErrorList = "still, empty",
                 ToDoJson = "{\"lists\":[{\"name\":\"Todo List\",\"tasks\":[{\"name\":\"Add first item to todolist!\",\"description\":\"Use the w!todo add task command to add a new task to your list\",\"done\":false}]}]}",
                 IsMimicable = true,

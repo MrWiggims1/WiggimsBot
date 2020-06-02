@@ -404,7 +404,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             profileEmbed.AddField("Steam Id:", profile.SteamId.ToString(), true);
             profileEmbed.AddField("Uplay Id:", profile.UplayUsername.ToString(), true);
             profileEmbed.AddField("Beatsaber Id:", profile.BeatSaberId.ToString(), true);
-            profileEmbed.AddField("Battle.net Id:", profile.BattleNetUsername.ToString(), true);
 
             await message.ModifyAsync(content: "     ", embed: profileEmbed.Build());
 

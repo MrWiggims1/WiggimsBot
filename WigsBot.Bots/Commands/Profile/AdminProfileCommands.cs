@@ -92,7 +92,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             try { profileEmbed.AddField("Steam Id:", profile.SteamId.ToString(), true); } catch { profileEmbed.AddField("Steam Id:", "Error", true); }
             try { profileEmbed.AddField("Beatsaber Id:", profile.BeatSaberId.ToString(), true); } catch { profileEmbed.AddField("Beatsaber Id:", "Error", true); }
             try { profileEmbed.AddField("Uplay Username:", profile.UplayUsername.ToString(), true); } catch { profileEmbed.AddField("Uplay Username:", "Error", true); }
-            try { profileEmbed.AddField("Battle.Net Username:", profile.BattleNetUsername.ToString(), true); } catch { profileEmbed.AddField("Battle.Net Username:", "Error", true); }
             try { profileEmbed.AddField("Leave count:", profile.LeaveCount.ToString(), true); } catch { profileEmbed.AddField("Leave count:", "Error", true); }
             try { profileEmbed.AddField("Spelling error list:", profile.SpellErrorList.ToString(), true); } catch { profileEmbed.AddField("Spelling Error List:", "Error", true); }
 
@@ -242,7 +241,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             try { profileEmbed.AddField("Steam Id:", profile.SteamId.ToString(), true); } catch { profileEmbed.AddField("Steam Id:", "Error", true); }
             try { profileEmbed.AddField("Beatsaber Id:", profile.BeatSaberId.ToString(), true); } catch { profileEmbed.AddField("Beatsaber Id:", "Error", true); }
             try { profileEmbed.AddField("Uplay Username:", profile.UplayUsername.ToString(), true); } catch { profileEmbed.AddField("Uplay Username:", "Error", true); }
-            try { profileEmbed.AddField("Battle.Net Username:", profile.BattleNetUsername.ToString(), true); } catch { profileEmbed.AddField("Battle.Net Username:", "Error", true); }
             try { profileEmbed.AddField("Leave count:", profile.LeaveCount.ToString(), true); } catch { profileEmbed.AddField("Leave count:", "Error", true); }
             try { profileEmbed.AddField("Spelling error list:", profile.SpellErrorList.ToString(), true); } catch { profileEmbed.AddField("Spelling Error List:", "Error", true); }
 

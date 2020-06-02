@@ -5904,34 +5904,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Liam Thompson\\.nuget\\packages\\": {}
+    "/home/liam/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "Y:\\WigsBot\\WigsBot.Core\\WigsBot.Core.csproj",
+      "projectUniqueName": "/home/liam/discord_bots/WigsBot/WigsBot.Core/WigsBot.Core.csproj",
       "projectName": "WigsBot.Core",
-      "projectPath": "Y:\\WigsBot\\WigsBot.Core\\WigsBot.Core.csproj",
-      "packagesPath": "C:\\Users\\Liam Thompson\\.nuget\\packages\\",
-      "outputPath": "Y:\\WigsBot\\WigsBot.Core\\obj\\",
+      "projectPath": "/home/liam/discord_bots/WigsBot/WigsBot.Core/WigsBot.Core.csproj",
+      "packagesPath": "/home/liam/.nuget/packages/",
+      "outputPath": "/home/liam/discord_bots/WigsBot/WigsBot.Core/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Liam Thompson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/liam/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.emzi0767.com/api/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj": {
-              "projectPath": "Y:\\WigsBot\\WigsBot.DAL\\WigsBot.DAL.csproj"
+            "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj": {
+              "projectPath": "/home/liam/discord_bots/WigsBot/WigsBot.DAL/WigsBot.DAL.csproj"
             }
           }
         }
@@ -5969,7 +5966,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.102/RuntimeIdentifierGraph.json"
       }
     }
   }

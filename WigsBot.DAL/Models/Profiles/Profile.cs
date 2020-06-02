@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 //using WigsBot.DAL.Models.Items;
 
@@ -13,11 +14,13 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// The Members Id.
         /// </summary>
+        [Required]
         public ulong DiscordId { get; set; }
 
         /// <summary>
         /// The Id of the guild.
         /// </summary>
+        [Required] 
         public ulong GuildId { get; set; }
 
         /// <summary>
@@ -58,6 +61,7 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// A list of words spelt incorrectly, separated by commas.
         /// </summary>
+        [MaxLength(600)]
         public string SpellErrorList {get; set;}
 
         /// <summary>
@@ -78,17 +82,8 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// The members uplay Id
         /// </summary>
+        [MaxLength(40)]
         public String UplayUsername { get; set; }
-
-        /// <summary>
-        /// The members Battle Net Id.
-        /// </summary>
-        public String BattleNetUsername { get; set; }
-
-        /// <summary>
-        /// The members Call Of Duty Id.
-        /// </summary>
-        public String CODMWUsername { get; set; }
 
         /// <summary>
         /// If the user should recive notifications on events (I gave this a dumb name sorry).
@@ -108,6 +103,7 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// The json string containing the members items.
         /// </summary>
+        [MaxLength(500)]
         public string ItemJson { get; set; }
 
         /// <summary>
