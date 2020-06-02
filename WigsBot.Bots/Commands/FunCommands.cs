@@ -23,12 +23,14 @@ namespace WigsBot.Bot.Commands
         private readonly IProfileService _profileService;
         private readonly IExperienceService _experienceService;
         private readonly IGotService _gotService;
+        private readonly IStatsService _statsService;
 
-        public FunCommands(IProfileService profileService, IExperienceService experienceService, IGotService gotService)
+        public FunCommands(IProfileService profileService, IExperienceService experienceService, IGotService gotService, IStatsService statsService)
         {
             _profileService = profileService;
             _experienceService = experienceService;
             _gotService = gotService;
+            _statsService = statsService;
         }
 
         [Command("poll")]
@@ -166,16 +168,19 @@ namespace WigsBot.Bot.Commands
             }
         }
 
-        [Command("kill")]
+        [Command("Murder")]
         [RequirePrefixes("w!", "W!")]
         [Description("Mention the user you want to kill, Fun for all! Just don't miss.")]
-        [Aliases("Murder", "Shoot")]
-        public async Task kill( CommandContext ctx, [Description("User you wish to kill")] DiscordUser victim)
+        [Aliases("Kill", "Shoot")]
+        public async Task kill( CommandContext ctx, [Description("User you wish to kill")] DiscordMember victim)
         {
             var killer = ctx.Message.Author.Username;
             var victimName = victim.Username;
             var random = new Random();
             int luck = random.Next(0, 10);
+
+            var killerProfile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id).ConfigureAwait(false);
+            var vicProfile = await _profileService.GetOrCreateProfileAsync(victim.Id, ctx.Guild.Id).ConfigureAwait(false);
 
             if (killer == victimName)
             {
@@ -187,15 +192,18 @@ namespace WigsBot.Bot.Commands
                 else { await ctx.Channel.SendMessageAsync("Well done ya fucking idiot \n https://tenor.com/view/homero-simpson-out-doh-gif-15451551").ConfigureAwait(false); };
                 return;
             }
+
             else
             {
                 if (luck > 1)
                 {
                     await ctx.Channel.SendMessageAsync($"{victimName} runs as fast as they can, trying to evade the bullet from the barrel of {killer}'s gun... But it was too little, too late.").ConfigureAwait(false);
+                    await _statsService.ProccessKillStat(killerProfile, vicProfile, true).ConfigureAwait(false);
                 }
                 else { 
                     await ctx.Channel.SendMessageAsync($"{victimName} runs as fast as they can, trying to evade the bullet from the barrel of {killer}'s gun... But {killer} has terrible aim and missed!!! And as punishment a got has been added to {killer}").ConfigureAwait(false);
-                    await GrantGot(ctx, 1, ctx.Member.Id);
+                    await _statsService.ProccessKillStat(killerProfile, vicProfile, false).ConfigureAwait(true);
+                    await GrantGot(ctx, 1, ctx.Member.Id).ConfigureAwait(false);
                 };
 
             }

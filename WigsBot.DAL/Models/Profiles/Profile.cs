@@ -41,7 +41,7 @@ namespace WigsBot.DAL.Models.Profiles
         public int GotLevel => Gots / 20;
 
         /// <summary>
-        /// How many times a user has rejoined the server (only actictive for someusers).
+        /// How many times a user has rejoined the server (only active for some users).
         /// </summary>
         public int LeaveCount { get; set; }
 
@@ -56,7 +56,7 @@ namespace WigsBot.DAL.Models.Profiles
         public int SpellCorrectCount { get; set; }
 
         /// <summary>
-        /// A list of words spelt incorrectly, seperated by commas.
+        /// A list of words spelt incorrectly, separated by commas.
         /// </summary>
         public string SpellErrorList {get; set;}
 
@@ -195,7 +195,22 @@ namespace WigsBot.DAL.Models.Profiles
         public int TotalRouletteEarnings { get; set; }
 
 
+        public int TimesMurdered { get; set; }
 
+
+        public int TimesBeenMurdered { get; set; }
+
+
+        public int TimesFailedToMurder { get; set; }
+
+
+        public int TimesEscapedMurder { get; set; }
+
+
+        /// <summary>
+        /// A members karma, used for determining how evil / good someone is.
+        /// </summary>
+        public int Karma => 0 - (RobbingAttackLost + RobbingAttackLost + TimesMimicked + TimesFailedToMurder);
 
 
         
@@ -239,5 +254,20 @@ namespace WigsBot.DAL.Models.Profiles
         /// How often does this member succeed at Roulette.
         /// </summary>
         public decimal RouletteSuccessRate => Math.Round(Convert.ToDecimal(RouletteSuccesses) / (Convert.ToDecimal(RouletteSuccesses) + Convert.ToDecimal(RouletteFails)) * 100, 2);
+
+        /// <summary>
+        /// How much gold the member gets per robbing on average.
+        /// </summary>
+        public decimal AverageRobAmout => Math.Round(Convert.ToDecimal(GoldStolen) / Convert.ToDecimal(RobbingAttackLost + RobbingAttackWon));
+
+        /// <summary>
+        /// The average amount of gold being stolen when failing to rob another member.
+        /// </summary>
+        public decimal AverageRobLostAmout => Math.Round(Convert.ToDecimal(GoldLostFines / .3M) / Convert.ToDecimal(RobbingAttackLost));
+
+        /// <summary>
+        /// The average amount of gold earned from the daily command.
+        /// </summary>
+        public decimal AverageEarntFromDailies => Math.Round(Convert.ToDecimal(TotalDailyEarnings) / Convert.ToDecimal(DailiesCollected));
     }
 }

@@ -59,6 +59,7 @@ namespace WigsBot.Bot
             services.AddScoped<IMimicableService, MimicableService>();
             services.AddScoped<IRobbingItemService, RobbingItemService>();
             services.AddScoped<IVersionService, VersionService>();
+            services.AddScoped<IStatsService, StatsService>();
 
 #pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
             var serviceProvider = services.BuildServiceProvider();
