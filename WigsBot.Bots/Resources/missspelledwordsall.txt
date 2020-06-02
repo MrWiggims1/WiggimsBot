@@ -4549,3 +4549,8 @@ halfassed - half-assed
 angery - ANGERY
 9s - 9's,
 45s - 45's,
+usernameemail - Username/email?
+lemme - lemme
+contributers - contributers
+nsfw - NSFW
+porngore - (Porn/Gore)
