@@ -224,7 +224,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
                 int goldperlevelup = configJson.goldperlevelup;
 
-                await _goldService.GrantGoldAsync(ctx.Member.Id, ctx.Guild.Id, goldperlevelup);
+                await _goldService.TransferGold(ctx.Client.CurrentUser.Id, ctx.Member.Id, ctx.Guild.Id ,goldperlevelup, true);
 
                 if (profile.QuietMode == true) { return; }
                 

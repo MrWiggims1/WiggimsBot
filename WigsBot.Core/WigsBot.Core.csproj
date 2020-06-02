@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="Services\Items\ItemService.cs" />
+    <Compile Remove="Services\Profiles\Class1.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -33,7 +33,6 @@ namespace WigsBot.Core.Services.Profiles
         /// <returns>The new gold amount for the user.</returns>
         Task<int> ResetGold(ulong discordId, ulong guildId, int goldPerLevel);
 
-
         /// <summary>
         /// Resets all the users gold in a guild.
         /// </summary>
@@ -41,7 +40,6 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="goldPerLevel">The amount of gold per level.</param>
         /// <returns></returns>
         Task ResetAllGold(ulong guildId, int goldPerLevel);
-
 
         /// <summary>
         /// Sets a users gold to a specific amount.
@@ -52,7 +50,6 @@ namespace WigsBot.Core.Services.Profiles
         /// <returns></returns>
         Task SetGold(ulong discordId, ulong guildId, int goldAmount);
 
-
         /// <summary>
         /// Transfers gold between 2 members.
         /// </summary>
@@ -62,6 +59,17 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="allowDebt">Should the payer be allowed to go into debt.</param>
         /// <returns></returns>
         Task TransferGold(Profile payer, Profile payee, int goldAmount, bool allowDebt);
+
+        /// <summary>
+        /// Transfers gold between 2 members.
+        /// </summary>
+        /// <param name="payerId">The discord Id of the payer.</param>
+        /// <param name="payeeId">The discord Id of the payee.</param>
+        /// <param name="guildId">The discord Id of the guild.</param>
+        /// <param name="goldAmount">The amount of gold to transfer.</param>
+        /// <param name="allowDebt">Should the payer be allowed to go into debt.</param>
+        /// <returns></returns>
+        Task TransferGold(ulong payerId, ulong payeeId, ulong guildId, int goldAmount, bool allowDebt);
 
         /// <summary>
         /// Transfers gold between 2 users with wiggims bot taking a cut.
@@ -102,6 +110,25 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="memberWonGame">Did the member win the game?</param>
         /// <returns></returns>
         Task ProccessMemberRoulette(Profile profile, Profile botProfile, int goldNum, bool memberWonGame);
+
+        /// <summary>
+        /// Transfers gold between 2 members while also tracking the stats for tracking the pays.
+        /// </summary>
+        /// <param name="payer">The profile to take gold from.</param>
+        /// <param name="payee">The profile to give gold to.</param>
+        /// <param name="goldAmount">The amount of gold to transfer.</param>
+        /// <returns></returns>
+        Task ProccessMembersPayingEachother(Profile payer, Profile payee, int goldAmount);
+
+        /// <summary>
+        /// Transfers gold between 2 members while also tracking the stats for tracking the pays.
+        /// </summary>
+        /// <param name="payerId">The profile to take gold from.</param>
+        /// <param name="payeeId">The profile to give gold to.</param>
+        /// <param name="guildId">The Id of the guild.</param>
+        /// <param name="goldAmount">The amount of gold to transfer.</param>
+        /// <returns></returns>
+        Task ProccessMembersPayingEachother(ulong payerId, ulong payeeId, ulong guildId, int goldAmount);
     }
 
     public class GoldService : IGoldService
@@ -204,6 +231,29 @@ namespace WigsBot.Core.Services.Profiles
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        public async Task TransferGold(ulong payerId, ulong payeeId, ulong guildId, int goldAmount, bool allowDebt)
+        {
+            using var context = new RPGContext(_options);
+
+            var payer = await _profileService.GetOrCreateProfileAsync(payerId, guildId);
+            var payee = await _profileService.GetOrCreateProfileAsync(payeeId, guildId);
+
+            if (!allowDebt)
+            {
+                if (goldAmount > payer.Gold && payer.DiscordId != 629962329655607308)
+                    throw new InvalidOperationException("User does not have enough gold to afford this, please add a check within the command");
+            }
+
+            checked { payer.Gold -= goldAmount; }
+
+            checked { payee.Gold += goldAmount; }
+
+            context.Profiles.Update(payer);
+            context.Profiles.Update(payee);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
         public async Task TransferGoldWTax(Profile payer, Profile payee, Profile wigsBotProfile, int goldAmount, decimal wigsBotTaxPercent)
         {
             using var context = new RPGContext(_options);
@@ -244,31 +294,76 @@ namespace WigsBot.Core.Services.Profiles
 
             if(!robberySuccessfull)
             {
-                attacker.RobbingAttackLost++;
-                victim.RobbingDefendWon++;
+                checked { attacker.RobbingAttackLost++; }
+                checked { victim.RobbingDefendWon++; }
 
-                attacker.GoldLostFines += goldNum;
-                victim.GoldGainedFines += goldNum;
+                checked { attacker.GoldLostFines += goldNum; }
+                checked { victim.GoldGainedFines += goldNum; }
 
                 //Make sure set to negative after you track the results not before.
                 goldNum = -goldNum;
             }
             else
             {
-                attacker.RobbingAttackWon++;
-                victim.RobbingDefendLost++;
+                checked { attacker.RobbingAttackWon++; }
+                checked { victim.RobbingDefendLost++; }
 
-                attacker.GoldStolen += goldNum;
-                victim.GoldLostFromTheft += goldNum;
+                checked { attacker.GoldStolen += goldNum; }
+                checked { victim.GoldLostFromTheft += goldNum; }
             }
 
             attacker.RobbingCooldown = DateTime.Now;
 
-            attacker.Gold += goldNum;
-            victim.Gold -= goldNum;
+            checked { attacker.Gold += goldNum; }
+            checked { victim.Gold -= goldNum; }
 
             context.Profiles.Update(attacker);
             context.Profiles.Update(victim);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMembersPayingEachother(Profile payer, Profile payee, int goldAmount)
+        {
+            using var context = new RPGContext(_options);
+
+            checked { payer.Gold -= goldAmount; }
+
+            checked { payee.Gold += goldAmount; }
+
+            payer.TimesPayedOtherMember++;
+            checked { payer.GoldPayedToMembers += goldAmount; }
+
+            payee.TimesPayedByMember++;
+            checked { payee.GoldRecivedFromMembers += goldAmount; }
+
+
+            context.Profiles.Update(payer);
+            context.Profiles.Update(payee);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMembersPayingEachother(ulong payerId, ulong payeeId, ulong guildId, int goldAmount)
+        {
+            using var context = new RPGContext(_options);
+
+            var payer = await _profileService.GetOrCreateProfileAsync(payerId, guildId);
+            var payee = await _profileService.GetOrCreateProfileAsync(payeeId, guildId);
+
+            checked { payer.Gold -= goldAmount; }
+
+            checked { payee.Gold += goldAmount; }
+
+            payer.TimesPayedOtherMember++;
+            checked { payer.GoldPayedToMembers += goldAmount; }
+
+            payee.TimesPayedByMember++;
+            checked { payee.GoldRecivedFromMembers += goldAmount; }
+
+
+            context.Profiles.Update(payer);
+            context.Profiles.Update(payee);
 
             await context.SaveChangesAsync().ConfigureAwait(false);
         }

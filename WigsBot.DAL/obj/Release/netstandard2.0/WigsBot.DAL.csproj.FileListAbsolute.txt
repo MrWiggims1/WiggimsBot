@@ -22,3 +22,4 @@ Y:\WigsBot\WigsBot.DAL\obj\Release\netstandard2.0\WigsBot.DAL.AssemblyInfo.cs
 Y:\WigsBot\WigsBot.DAL\obj\Release\netstandard2.0\WigsBot.DAL.dll
 Y:\WigsBot\WigsBot.DAL\obj\Release\netstandard2.0\WigsBot.DAL.pdb
 Y:\WigsBot\WigsBot.DAL\obj\Release\netstandard2.0\WigsBot.DAL.csproj.CoreCompileInputs.cache
+Y:\WigsBot\WigsBot.DAL\obj\Release\netstandard2.0\WigsBot.DAL.csprojAssemblyReference.cache

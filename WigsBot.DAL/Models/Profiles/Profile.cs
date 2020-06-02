@@ -194,23 +194,54 @@ namespace WigsBot.DAL.Models.Profiles
         /// </summary>
         public int TotalRouletteEarnings { get; set; }
 
-
+        /// <summary>
+        /// How many times this member has murdered another.
+        /// </summary>
         public int TimesMurdered { get; set; }
 
-
+        /// <summary>
+        /// How many times this member has been murdered with the murder command.
+        /// </summary>
         public int TimesBeenMurdered { get; set; }
 
-
+        /// <summary>
+        /// How many times this member has failed to murder someone.
+        /// </summary>
         public int TimesFailedToMurder { get; set; }
 
-
+        /// <summary>
+        /// How many times this member has escaped murder.
+        /// </summary>
         public int TimesEscapedMurder { get; set; }
+
+        /// <summary>
+        /// How many times this member has payed another
+        /// </summary>
+        public int TimesPayedOtherMember { get; set; }
+
+        /// <summary>
+        /// How many times this member has been payed by another
+        /// </summary>
+        public int TimesPayedByMember { get; set; }
+
+        /// <summary>
+        /// How much gold this member has given to others.
+        /// </summary>
+        public int GoldPayedToMembers { get; set; }
+
+        /// <summary>
+        /// How much gold has been given to this member
+        /// </summary>
+        public int GoldRecivedFromMembers { get; set; }
+
+
+
 
 
         /// <summary>
-        /// A members karma, used for determining how evil / good someone is.
+        /// A members karma, used for determining how evil / good someone is. Not is use just yet.
         /// </summary>
-        public int Karma => 0 - (RobbingAttackLost + RobbingAttackLost + TimesMimicked + TimesFailedToMurder);
+        public decimal Karma => GoldPayedToMembers - (RobbingAttackLost + RobbingAttackLost + TimesMurdered + TimesFailedToMurder);
 
 
         
@@ -238,7 +269,7 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// The ratio between amount of times a member has been got and messages sent.
         /// </summary>
-        public double gotWordRatio => Math.Round((Convert.ToDouble(Gots))/((Convert.ToDouble(Xp))) * 100, 5);
+        public double GotWordRatio => Math.Round((Convert.ToDouble(Gots))/((Convert.ToDouble(Xp))) * 100, 5);
 
         /// <summary>
         /// How often does this member succeed at robbing.

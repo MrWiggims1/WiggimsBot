@@ -81,7 +81,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
             Profile payeeProfile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id);
 
-            await _goldService.TransferGold(profile, payeeProfile, goldNum, false).ConfigureAwait(false);
+            await _goldService.ProccessMembersPayingEachother(profile, payeeProfile, goldNum).ConfigureAwait(false);
 
             await ctx.Channel.SendMessageAsync($"You successfully paid {member.Username} {goldNum} gold.");
         }

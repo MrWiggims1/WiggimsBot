@@ -940,7 +940,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                     {
                         DiscordId = profile.DiscordId,
                         Gots = profile.Gots,
-                        gotWordRatio = profile.gotWordRatio,
+                        gotWordRatio = profile.GotWordRatio,
                         Xp = profile.Xp
                     });
                 }
