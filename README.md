@@ -32,7 +32,7 @@ These terms are not 'proper' but just simple explanations from my understanding 
 * CommandContext<sub>D#</sub> - The command context contains all the information needed for the rob to react to the environment. it contains the information on who executed the command, where it was executed and contains several methods for communicating with the discord API.
 
 # Commands
-~~All commands for wiggims bot can be found [here](https://github.com/MrWiggims1/WiggimsBot/tree/master/WigsBot.Bots/Commands). Commands are split up between files to keep everything organized and tidy, and some are further put into folders, for example any commands that interact with a discord members profile can be found in the profile folder.
+All commands for wiggims bot can be found [here](https://github.com/MrWiggims1/WiggimsBot/tree/master/WigsBot.Bots/Commands). Commands are split up between files to keep everything organized and tidy, and some are further put into folders, for example any commands that interact with a discord members profile can be found in the profile folder.
 
 below is my guide on how commands are made, however you can read this [guide here](https://dsharpplus.emzi0767.com/articles/commandsnext.html#4-creating-your-first-command) which will probably be better.
 
