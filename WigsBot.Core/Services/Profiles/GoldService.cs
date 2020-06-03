@@ -331,11 +331,14 @@ namespace WigsBot.Core.Services.Profiles
 
             checked { payee.Gold += goldAmount; }
 
-            payer.TimesPayedOtherMember++;
-            checked { payer.GoldPayedToMembers += goldAmount; }
+            if (payee.DiscordId != 629962329655607308) // The member being paid is wiggims bot then don't include the stats to the update.
+            {
+                payer.TimesPayedOtherMember++;
+                checked { payer.GoldPayedToMembers += goldAmount; }
 
-            payee.TimesPayedByMember++;
-            checked { payee.GoldRecivedFromMembers += goldAmount; }
+                payee.TimesPayedByMember++;
+                checked { payee.GoldRecivedFromMembers += goldAmount; }
+            }
 
 
             context.Profiles.Update(payer);

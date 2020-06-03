@@ -13,12 +13,14 @@ using WigsBot.Core.Services.GuildPreferenceServices;
 using WigsBot.Core.Services.GuildPreferencesServices;
 using WigsBot.DAL.Models.GuildPreferences;
 using static WigsBot.Core.Services.GuildPreferencesServices.AssignableRoleService;
+using DSharpPlus.Exceptions;
 
 namespace WigsBot.Bot.Commands
 {
     public class ManagementCommands : BaseCommandModule
     {
         [Group("role")]
+        [RequirePrefixes("w!", "W!")]
         [Description("Commands for leaving and joining roles.")]
         public class roles : BaseCommandModule
         {
@@ -199,7 +201,7 @@ namespace WigsBot.Bot.Commands
 
                 await ctx.Channel.SendMessageAsync($"{ctx.User.Username} has joined the following roles:\n```json\n{sb2}\n```");
             }
-            
+
             //######## Role Tasks #########
             public async Task<AssignableRoleJson> GetRoleJson(CommandContext ctx)
             {
@@ -279,63 +281,123 @@ namespace WigsBot.Bot.Commands
 
                 infoEmbed.AddField("Roles available through `w!role join` and `w!role leave`:", sb.ToString());
 
-                await ctx.Channel.SendMessageAsync("",  embed: infoEmbed);
+                await ctx.Channel.SendMessageAsync("", embed: infoEmbed);
             }
 
-            [Command("addrole")]
+            [Group("role")]
             [RequirePrefixes("w@", "W@")]
-            [Aliases("addAssignableRole")]
-            [Description("Adds a role that all users can assign themselves using w!role join")]
-            [RequireUserPermissions(Permissions.Administrator)]
-            public async Task addAssignableRole(CommandContext ctx, [Description("Discord Role to add.")] DiscordRole discordRole, [Description("Discord Emoji to assign to role.")]DiscordEmoji emoji)
+            [Description("Shows current roles available for members to join using commands, as well as allows for adding and removing roles.")]
+            [Aliases("roles")]
+            public class GuildRoleCommands : BaseCommandModule
             {
-                await ctx.TriggerTypingAsync();
+                private readonly IGuildPreferences _guildPreferences;
+                private readonly IAssignableRoleService _assignableRoleService;
 
-                AssignableRoleJson json = await GetRoleJson(ctx);
+                public GuildRoleCommands(
+                IGuildPreferences guildPreferences,
+                IAssignableRoleService assignableRoleService
 
-                try
+                )
                 {
-                    DiscordEmoji testEmoji = DiscordEmoji.FromGuildEmote(ctx.Client, emoji.Id);
+                    _guildPreferences = guildPreferences;
+                    _assignableRoleService = assignableRoleService;
                 }
-                catch
-                {
-                    await ctx.Channel.SendMessageAsync("You can only use server emojis from a guild where wiggims bot is connected for this command, no default emojis either.");
-                    return;
-                }
 
-                foreach (var role in json.Roles)
+                [GroupCommand]
+                [RequirePrefixes("w@", "W@")]
+                public async Task ShowAssignableRoles(CommandContext ctx)
                 {
-                    if (role.RoleId == discordRole.Id || role.EmojiId == emoji.Id)
+                    var json = await GetRoleJson(ctx).ConfigureAwait(true);
+
+
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (Roles role in json.Roles)
                     {
-                        await ctx.Channel.SendMessageAsync("Either that role or emoji has already been used, if you wish to remove a role and add it again please user the `w!RemoveAssignableRole [Role] command`");
+                        DiscordEmoji emoji = DiscordEmoji.FromGuildEmote(ctx.Client, role.EmojiId);
+                        string roleName = ctx.Guild.GetRole(role.RoleId).Name;
+
+                        sb.Append(emoji + $" : {roleName}\n");
+                    }
+
+                    var embed = new DiscordEmbedBuilder
+                    {
+                        Description = $"To edit the roles that are available use the `w@guild role add [role]` and `w@guild role rm [role]`.\nRoles available:\n{sb}",
+                        Color = DiscordColor.Orange
+                    };
+
+                    await ctx.Channel.SendMessageAsync(" ", embed: embed);
+                }
+
+                [Command("add")]
+                [RequirePrefixes("w@", "W@")]
+                [Description("Adds a role that all users can assign themselves using w!role join")]
+                [RequireUserPermissions(Permissions.Administrator)]
+                public async Task addAssignableRole(CommandContext ctx, [Description("Discord Role to add.")] DiscordRole discordRole, [Description("Discord Emoji to assign to role.")]DiscordEmoji emoji)
+                {
+                    await ctx.TriggerTypingAsync();
+
+                    AssignableRoleJson json = await GetRoleJson(ctx);
+
+                    try
+                    {
+                        DiscordEmoji testEmoji = DiscordEmoji.FromGuildEmote(ctx.Client, emoji.Id);
+                    }
+                    catch
+                    {
+                        await ctx.Channel.SendMessageAsync("You can only use server emojis from a guild where wiggims bot is connected for this command, no default emojis either.");
                         return;
+                    }
+
+                    foreach (var role in json.Roles)
+                    {
+                        if (role.RoleId == discordRole.Id || role.EmojiId == emoji.Id)
+                        {
+                            await ctx.Channel.SendMessageAsync("Either that role or emoji has already been used, if you wish to remove a role and add it again please use the `w@guild role rm [Role] command`");
+                            return;
+                        }
+                    }
+
+                    await _assignableRoleService.AddRoleToAssignableRoles(ctx.Guild.Id, discordRole.Id, emoji.Id);
+
+                    await ctx.Channel.SendMessageAsync($"{discordRole.Name} was added to the assignable roles list! Please not if the role is higher up than the bots role wiggims bot will not be able to assign this role. Mr_Wiggims1 hasn't figured out how to check for this yet.");
+                }
+
+                [Command("Remove")]
+                [RequirePrefixes("w@", "W@")]
+                [Aliases("rm")]
+                [Description("removes a role from the assignable roles list.")]
+                [RequireUserPermissions(Permissions.Administrator)]
+                public async Task RemoveAssignableRole(CommandContext ctx, [Description("Discord Role to remove.")] DiscordRole discordRole)
+                {
+                    await ctx.TriggerTypingAsync();
+
+                    AssignableRoleJson json = await GetRoleJson(ctx);
+
+                    if (!json.Roles.Exists(x => x.RoleId == discordRole.Id))
+                    {
+                        throw new Exception("This role does not exist in the list for this command.");
+                    }
+
+                    try
+                    {
+                        await _assignableRoleService.RemoveRoleFromAssignableRoles(ctx.Guild.Id, discordRole.Id);
+                        await ctx.Channel.SendMessageAsync($"{discordRole.Name} was removed from the assignable roles list!");
+                    }
+                    catch
+                    {
+                        await ctx.Channel.SendMessageAsync($"There was an issue removing {discordRole.Name} from the assignable roles list.");
                     }
                 }
 
-                await _assignableRoleService.AddRoleToAssignableRoles(ctx.Guild.Id, discordRole.Id, emoji.Id);
-
-                await ctx.Channel.SendMessageAsync($"{discordRole.Name} was added to the assignable roles list! Please not if the role is higher up than the bots role wiggims bot will not be able to assign this role. Mr_Wiggims1 hasn't figured out how to check for this yet.");
-            }
-
-            [Command("Removerole")]
-            [RequirePrefixes("w@", "W@")]
-            [Aliases("RemoveAssignableRole", "rmrole")]
-            [Description("removes a role from the assignable roles list.")]
-            [RequireUserPermissions(Permissions.Administrator)]
-            public async Task RemoveAssignableRole(CommandContext ctx, [Description("Discord Role to remove.")] DiscordRole discordRole)
-            {
-                await ctx.TriggerTypingAsync();
-
-                AssignableRoleJson json = await GetRoleJson(ctx);
-
-                try
+                //######## Guild role Tasks ############
+                public async Task<AssignableRoleJson> GetRoleJson(CommandContext ctx)
                 {
-                    await _assignableRoleService.RemoveRoleFromAssignableRoles(ctx.Guild.Id, discordRole.Id);
-                    await ctx.Channel.SendMessageAsync($"{discordRole.Name} was removed from the assignable roles list!");
-                }
-                catch
-                {
-                    await ctx.Channel.SendMessageAsync($"There was an issue removing {discordRole.Name} from the assignable roles list.");
+                    GuildPreferences guildPreferences = await _guildPreferences.GetOrCreateGuildPreferences(ctx.Guild.Id);
+
+                    AssignableRoleJson json = JsonConvert.DeserializeObject<AssignableRoleJson>(guildPreferences.AssignableRoleJson);
+
+                    return json;
                 }
             }
 
@@ -391,7 +453,7 @@ namespace WigsBot.Bot.Commands
                 await ctx.RespondAsync($"{discordRole.Name} has been set as the timeout role for {ctx.Guild.Name}.").ConfigureAwait(false);
             }
 
-            //######## Guild Tasks ############
+            //######## Guild role Tasks ############
             public async Task<AssignableRoleJson> GetRoleJson(CommandContext ctx)
             {
                 GuildPreferences guildPreferences = await _guildPreferences.GetOrCreateGuildPreferences(ctx.Guild.Id);

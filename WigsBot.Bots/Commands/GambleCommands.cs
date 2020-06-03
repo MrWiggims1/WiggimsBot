@@ -36,7 +36,7 @@ namespace WigsBot.Bot.Commands
         [RequirePrefixes("w!", "W!")]
         [Description("Test your luck and try to earn some money.")]
         [Cooldown(1, 3, CooldownBucketType.User)]
-        public async Task roulette(CommandContext ctx,[Description("Number you want to bet on. 0 - 36")] int guess,[Description("How much gold do you want to bet?")] int bet)
+        public async Task roulette(CommandContext ctx, [Description("Number you want to bet on. 0 - 36")] int guess,[Description("How much gold do you want to bet?")] int bet)
         {
             var random = new Random();
             int Results = random.Next(0, 37);

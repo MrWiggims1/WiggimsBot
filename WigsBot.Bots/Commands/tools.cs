@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using System.Text;
 using DSharpPlus.Net.Models;
 using WigsBot.Core.Services.GuildPreferenceServices;
+using DSharpPlus.Exceptions;
 
 namespace WigsBot.Bot.Commands
 {
@@ -360,7 +361,15 @@ namespace WigsBot.Bot.Commands
 
                 foreach (var role in roles)
                 {
-                    await member.RevokeRoleAsync(role);
+                    try
+                    {
+                        await member.RevokeRoleAsync(role);
+                    }
+                    catch(UnauthorizedException ex)
+                    {
+                        await ctx.RespondAsync("Wiggimsbot is unable to remove the roles of this member, as they have a role with higher permissions than the bot.");
+                        return;
+                    }
                 }
 
                 await member.GrantRoleAsync(timeoutRole);
