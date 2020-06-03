@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using System.Web;
+using WigsBot.Bot.Models;
 
 namespace WigsBot.Bot.Commands
 {
@@ -53,9 +54,9 @@ namespace WigsBot.Bot.Commands
                 sr.Close();
             }
 
-            xkcdJson Json = JsonConvert.DeserializeObject<xkcdJson>(stringresulttest);
+            XkcdJson Json = JsonConvert.DeserializeObject<XkcdJson>(stringresulttest);
 
-            await ctx.Channel.SendMessageAsync($"{Json.title}:\n{Json.img}");
+            await ctx.Channel.SendMessageAsync($"{Json.Title}:\n{Json.Img}");
         }
 
         [Command("joke")]
@@ -82,7 +83,7 @@ namespace WigsBot.Bot.Commands
                 sr.Close();
             }
 
-            jokeAPIJson Json = JsonConvert.DeserializeObject<jokeAPIJson>(stringresulttest);
+            JokeAPIJson Json = JsonConvert.DeserializeObject<JokeAPIJson>(stringresulttest);
 
             if (Json.error)
             {
@@ -116,22 +117,6 @@ namespace WigsBot.Bot.Commands
                 await ctx.Channel.SendMessageAsync(embed: embed);
                 return;
             }
-        }
-
-        public class xkcdJson
-        {
-            public string title { get; set; }
-            public string img { get; set; }
-        }
-
-        public class jokeAPIJson
-        {
-            public string type { get; set; }
-            public string joke { get; set; }
-            public string setup { get; set; }
-            public string delivery { get; set; }
-            public bool error { get; set; }
-            public List<string> causedBy { get; set; }
         }
     }
 }

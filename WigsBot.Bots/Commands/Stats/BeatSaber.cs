@@ -14,6 +14,7 @@ using WigsBot.Core.ViewModels;
 using WigsBot.Bot.Handlers.Dialogue.Steps;
 using WigsBot.Bot.Handlers.Dialogue;
 using DSharpPlus.CommandsNext.Exceptions;
+using WigsBot.Bot.Models;
 
 namespace WigsBot.Bot.Commands.Stats
 {
@@ -383,48 +384,6 @@ namespace WigsBot.Bot.Commands.Stats
             jsonScores Json = JsonConvert.DeserializeObject<jsonScores>(stringresulttest);
 
             return Json;
-        }
-
-        public class jsonBeatSaber
-        {
-            public playerInfo playerInfo { get; set; }
-            public scoreStats scoreStats { get; set; }
-        }
-
-        public class playerInfo
-        {
-            public long playerid { get; set; }
-            public double pp { get; set; }
-            public string name { get; set; }
-            public string country { get; set; }
-            public string avatar { get; set; }
-            public int rank { get; set; }
-            public int countryRank { get; set; }
-        }
-
-        public class scoreStats
-        {
-            public int totalScore { get; set; }
-            public int totalRankedScore { get; set; }
-            public double averageRankedAccuracy { get; set; }
-            public int totalPlayCount { get; set; }
-            public int rankedPlayCount { get; set; }
-        }
-
-        public class jsonScores
-        {
-            public List<scores> scores { get; set;}
-        }
-        
-        public class scores
-        {
-            public int score { get; set; }
-            public double pp { get; set; }
-            public string name { get; set; }
-            public string songAuthorName { get; set; }
-            public string levelAuthorName { get; set; }
-            public string diff { get; set; }
-            public string rank { get; set; }
         }
     }
 }

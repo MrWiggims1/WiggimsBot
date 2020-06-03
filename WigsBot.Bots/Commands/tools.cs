@@ -22,6 +22,7 @@ using System.Text;
 using DSharpPlus.Net.Models;
 using WigsBot.Core.Services.GuildPreferenceServices;
 using DSharpPlus.Exceptions;
+using WigsBot.Bot.Models;
 
 namespace WigsBot.Bot.Commands
 {
@@ -450,12 +451,6 @@ namespace WigsBot.Bot.Commands
 
                 return timeoutJson;
             }
-
-            public class TimeoutJson
-            {
-                public List<ulong> RoleId { get; set; }
-            }
-
         }
     }
 }
