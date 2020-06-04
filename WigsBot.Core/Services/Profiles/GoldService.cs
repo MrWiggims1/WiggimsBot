@@ -129,6 +129,27 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="goldAmount">The amount of gold to transfer.</param>
         /// <returns></returns>
         Task ProccessMembersPayingEachother(ulong payerId, ulong payeeId, ulong guildId, int goldAmount);
+
+        /// <summary>
+        /// Transfers the gold between the member and bot as well as tracks the stats.
+        /// </summary>
+        /// <param name="memberId">The discord Id of the member.</param>
+        /// <param name="botId">THe discord Id of the bot.</param>
+        /// <param name="guildId">The discord guild Id.</param>
+        /// <param name="goldNum">The amount of gold to transfer between the member and the bot.</param>
+        /// <param name="memberWonGame">Did the member win the game? if so gold will be transfered from the bot otherwise the bot gains the gold.</param>
+        /// <returns></returns>
+        Task ProccessMemberCoinFlip(ulong memberId, ulong botId, ulong guildId, int goldNum, bool memberWonGame);
+
+        /// <summary>
+        /// Transfers the gold between the member and bot as well as tracks the stats.
+        /// </summary>
+        /// <param name="profile">The profile of the member.</param>
+        /// <param name="botProfile">The profile of the bot.</param>
+        /// <param name="goldNum">The amount of gold to transfer between the member and the bot.</param>
+        /// <param name="memberWonGame">Did the member win the game? if so gold will be transfered from the bot otherwise the bot gains the gold.</param>
+        /// <returns></returns>
+        Task ProccessMemberCoinFlip(Profile profile, Profile botProfile, int goldNum, bool memberWonGame);
     }
 
     public class GoldService : IGoldService
@@ -143,7 +164,6 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
             _robbingItemService = robbingItemService;
         }
-
         
         public async Task GrantGoldAsync(ulong discordId, ulong guildId, int GoldAmount)
         {
@@ -388,6 +408,65 @@ namespace WigsBot.Core.Services.Profiles
             }
 
             profile.TotalRouletteEarnings += goldNum;
+
+            profile.Gold += goldNum;
+            botProfile.Gold -= goldNum;
+
+            context.Profiles.Update(profile);
+            context.Profiles.Update(botProfile);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMemberCoinFlip(ulong memberId, ulong botId, ulong guildId, int goldNum, bool memberWonGame)
+        {
+            using var context = new RPGContext(_options);
+
+            var profile = await _profileService.GetOrCreateProfileAsync(memberId, guildId);
+            var botProfile = await _profileService.GetOrCreateProfileAsync(botId, guildId);
+
+            if (!memberWonGame)
+            {
+                profile.CoindFlipsLost++;
+                checked { profile.GoldLostCoinFlip += goldNum; }
+
+                //Make sure set to negative after you track the results not before.
+                goldNum = -goldNum;
+            }
+            else
+            {
+                profile.CoinFilpsWon++;
+                checked { profile.GoldWonCoinFlip += goldNum; }
+            }
+
+
+            checked { profile.Gold += goldNum; }
+            checked { botProfile.Gold -= goldNum; }
+
+            context.Profiles.Update(profile);
+            context.Profiles.Update(botProfile);
+
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task ProccessMemberCoinFlip(Profile profile, Profile botProfile, int goldNum, bool memberWonGame)
+        {
+            using var context = new RPGContext(_options);
+
+            if (!memberWonGame)
+            {
+                profile.CoindFlipsLost++;
+                profile.GoldLostCoinFlip += goldNum;
+
+                //Make sure set to negative after you track the results not before.
+                goldNum = -goldNum;
+            }
+            else
+            {
+                profile.CoinFilpsWon++;
+                profile.GoldWonCoinFlip += goldNum;
+            }
+
 
             profile.Gold += goldNum;
             botProfile.Gold -= goldNum;

@@ -7,14 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WigsBot.Bot.Models;
 using WigsBot.Core.Services.Profiles;
 using WigsBot.Core.ViewModels;
 using WigsBot.DAL.Models.Profiles;
 
 namespace WigsBot.Bot.Commands
 {
-    //[Group("gamble")]
-    //[Aliases("bet", "csgolottery","lottery")]
     public class GambleCommands : BaseCommandModule
     {
         private readonly IProfileService _profileService;
@@ -36,7 +35,7 @@ namespace WigsBot.Bot.Commands
         [RequirePrefixes("w!", "W!")]
         [Description("Test your luck and try to earn some money.")]
         [Cooldown(1, 3, CooldownBucketType.User)]
-        public async Task roulette(CommandContext ctx, [Description("Number you want to bet on. 0 - 36")] int guess,[Description("How much gold do you want to bet?")] int bet)
+        public async Task Roulette(CommandContext ctx, [Description("Number you want to bet on. 0 - 36")] int guess,[Description("How much gold do you want to bet?")] int bet)
         {
             var random = new Random();
             int Results = random.Next(0, 37);
@@ -71,6 +70,39 @@ namespace WigsBot.Bot.Commands
             }
         }
 
+        [Command("Coin")]
+        [RequirePrefixes("w!", "W!")]
+        [Description("Bet gold on a toss of the coin. 50% - 50%")]
+        [Cooldown(1, 3, CooldownBucketType.User)]
+        public async Task FlipCoin(CommandContext ctx, [Description("Heads or Tails")] string headsOrTails, [Description("How much gold do you want to bet on the coin")] int bet)
+        {
+            var random = new Random().Next(0, 2);
+
+            HeadsOrTails coinResult = (HeadsOrTails)random;
+
+            var profile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id);
+            var botProfile = await _profileService.GetOrCreateProfileAsync(ctx.Client.CurrentUser.Id, ctx.Guild.Id);
+
+            if (profile.Gold < bet)
+            {
+                throw new Exception("You do not have enough gold to bet.");
+            }
+
+            bool memberWon = coinResult == Enum.Parse<HeadsOrTails>(headsOrTails.ToLower());
+            
+            await _goldService.ProccessMemberCoinFlip(profile, botProfile, bet, memberWon);
+
+            if (memberWon)
+            {
+                await ctx.RespondAsync($"You won {bet} gold!");
+            }
+            else
+            {
+                await ctx.RespondAsync($"You lost {bet} gold.");
+            }
+        }
+
+        // Tasks 
         private async Task GrantGot(CommandContext ctx, int gotNum, ulong memberId)
         {
             Profile profile = await _profileService.GetOrCreateProfileAsync(memberId, ctx.Guild.Id);
@@ -100,5 +132,9 @@ namespace WigsBot.Bot.Commands
             
             await _goldService.GrantGoldAsync(memberId, ctx.Guild.Id, GoldNum).ConfigureAwait(false);
         }
+
+        // Classes
+
+        
     }
 }

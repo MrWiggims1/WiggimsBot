@@ -230,17 +230,30 @@ namespace WigsBot.DAL.Models.Profiles
         /// </summary>
         public int GoldRecivedFromMembers { get; set; }
 
-
-
-
+        /// <summary>
+        /// How many times has this member flipped a coin and won gold.
+        /// </summary>
+        public int CoinFilpsWon { get; set; }
 
         /// <summary>
-        /// A members karma, used for determining how evil / good someone is. Not is use just yet.
+        /// How many times has this member flipped a coin and lost.
         /// </summary>
-        public decimal Karma => GoldPayedToMembers - (RobbingAttackLost + RobbingAttackLost + TimesMurdered + TimesFailedToMurder);
+        public int CoindFlipsLost { get; set; }
+
+        /// <summary>
+        /// How much gold has this member won from flipping coins.
+        /// </summary>
+        public int GoldWonCoinFlip { get; set; }
+
+        /// <summary>
+        /// How much gold has this member lost from flipping coins.
+        /// </summary>
+        public int GoldLostCoinFlip { get; set; }
 
 
-        
+
+
+
 
         /// <summary>
         /// The level of the member, based on the members Xp.
@@ -296,5 +309,25 @@ namespace WigsBot.DAL.Models.Profiles
         /// The average amount of gold earned from the daily command.
         /// </summary>
         public decimal AverageEarntFromDailies => Math.Round(Convert.ToDecimal(TotalDailyEarnings) / Convert.ToDecimal(DailiesCollected));
+
+        /// <summary>
+        /// How many times has this member flipped a coin for gold.
+        /// </summary>
+        public int TotalCoinFlips => CoindFlipsLost + CoinFilpsWon;
+
+        /// <summary>
+        /// This members win rate on flipping coins for gold.
+        /// </summary>
+        public decimal CoinFlipWinRate => Math.Round(Convert.ToDecimal(CoinFilpsWon) / Convert.ToDecimal(TotalCoinFlips));
+
+        /// <summary>
+        /// How much gold has this member lost/earned in total.
+        /// </summary>
+        public int TotalGoldGainedFromCoinFlips => GoldWonCoinFlip - GoldLostCoinFlip;
+
+        /// <summary>
+        /// A members karma, used for determining how evil / good someone is. Not is use just yet.
+        /// </summary>
+        public decimal Karma => GoldPayedToMembers - (RobbingAttackLost + RobbingAttackLost + TimesMurdered + TimesFailedToMurder);
     }
 }

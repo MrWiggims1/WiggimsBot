@@ -61,26 +61,6 @@ namespace WigsBot.Bot.Commands
             await ctx.RespondAsync($"{emoji} Pong! Ping: {ctx.Client.Ping}ms");
         }
 
-        [Command("coin")]
-        [RequirePrefixes("w!", "W!")]
-        [Description("Flip a coin.")]
-        public async Task coin(CommandContext ctx)
-        {
-            var random = new Random();
-            int randomNumber = random.Next(0, 2);
-
-            Console.WriteLine(randomNumber);
-
-            if (randomNumber == 1)
-            {
-                await ctx.Channel.SendMessageAsync("The coin landed on heads!").ConfigureAwait(false);
-            }
-            else
-            {
-                await ctx.Channel.SendMessageAsync("The coin landed on tails!").ConfigureAwait(false);
-            }
-        }
-
         [Command("dice")]
         [RequirePrefixes("w!", "W!")]
         [Description("Roll a dice with x sides. 6 by default.")]
