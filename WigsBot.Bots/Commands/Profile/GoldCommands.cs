@@ -229,7 +229,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             }
 
             var rnd = new Random();
-            decimal luck = rnd.Next(10, 30);
+            decimal luck = rnd.Next(15, 40);
             decimal boost = 1.3M;
             DiscordEmoji emoji = DiscordEmoji.FromName(ctx.Client, ":moneybag:");
             DiscordRole boostRole;
