@@ -14,6 +14,14 @@ using WigsBot.Core.Services.GuildPreferencesServices;
 using WigsBot.DAL.Models.GuildPreferences;
 using static WigsBot.Core.Services.GuildPreferencesServices.AssignableRoleService;
 using DSharpPlus.Exceptions;
+using WigsBot.Core.Services.GuildPreferencesServices.StatChannels;
+using System.Runtime.CompilerServices;
+using WigsBot.Bot.Handlers.Dialogue.Steps;
+using WigsBot.Bot.Handlers.Dialogue;
+using WigsBot.Bot.Models;
+using Microsoft.EntityFrameworkCore;
+using WigsBot.DAL;
+using WigsBot.Core.Services.Profiles;
 
 namespace WigsBot.Bot.Commands
 {
@@ -218,7 +226,6 @@ namespace WigsBot.Bot.Commands
         [RequirePrefixes("w@", "W@")]
         [Description("Shows current wiggims bot settings for the guild.")]
         [Aliases("Guildsettings")]
-        [RequireUserPermissions(Permissions.Administrator)]
         public class Guild : BaseCommandModule
         {
             private readonly IGuildPreferences _guildPreferences;
@@ -440,7 +447,7 @@ namespace WigsBot.Bot.Commands
             [RequirePrefixes("w@", "W@")]
             [Description("Sets the role that the timeout command will give the target member.")]
             [RequireUserPermissions(Permissions.Administrator)]
-            public async Task SetTimeoutRole(CommandContext ctx, DiscordRole discordRole)
+            public async Task SetTimeoutRole(CommandContext ctx, [Description("The role to be given during timeouts.")]DiscordRole discordRole)
             {
                 if (discordRole.Name.ToLower() == "timeout")
                 {
@@ -453,6 +460,274 @@ namespace WigsBot.Bot.Commands
                 await ctx.RespondAsync($"{discordRole.Name} has been set as the timeout role for {ctx.Guild.Name}.").ConfigureAwait(false);
             }
 
+            [Group("Stats")]
+            [RequirePrefixes("w@", "W@")]
+            [Description("Used for configuring the stats show withing channels.")]
+            [Aliases("stat")]
+            public class Stat : BaseCommandModule
+            {
+                private readonly DbContextOptions<RPGContext> _options;
+
+                private readonly IGuildPreferences _guildPreferences;
+                private readonly IProfileService _profileService;
+                private readonly IStatChannelService _statChannelService;
+
+                public Stat(
+                    IGuildPreferences guildPreferences,
+                    IProfileService profileService,
+                    IStatChannelService statChannelService,
+                    DbContextOptions<RPGContext> options
+                    )
+                {
+                    _guildPreferences = guildPreferences;
+                    _profileService = profileService;
+                    _statChannelService = statChannelService;
+                    _options = options;
+                }
+
+                [Command("setcategory")]
+                [RequirePrefixes("w@", "W@")]
+                [Description("Sets the channel category that will show stats from wiggims bot.")]
+                [RequireUserPermissions(Permissions.Administrator)]
+                public async Task SetStatChannelCatergory(CommandContext ctx, [Description("The category that will house all the stat channels.")]DiscordChannel discordChannel)
+                {
+                    if (!discordChannel.IsCategory)
+                        await ctx.RespondAsync("You must use a channel category or else this will not work.");
+
+                    await _guildPreferences.SetStatChannelCategory(ctx.Guild.Id, discordChannel.Id).ConfigureAwait(true);
+
+                    await ctx.RespondAsync($"{discordChannel.Name} has been set as the category that will wiggims bot will use to show stats to the rest of the server.").ConfigureAwait(false);
+                }
+            
+                [Command("edit")]
+                [Description("Adds or modifies a stat for the server.")]
+                [RequirePrefixes("w@", "W@")]
+                [Aliases("modify", "new", "change", "add")]
+                [RequireUserPermissions(Permissions.Administrator)]
+                public async Task AddOrModify(CommandContext ctx)
+                {
+                    var guildPrefs = await _guildPreferences.GetOrCreateGuildPreferences(ctx.Guild.Id);
+                    DiscordChannel parentChannel = ctx.Guild.GetChannel(guildPrefs.StatChannelCatergoryId);
+
+                    if (parentChannel == null)
+                    {
+                        throw new Exception("You have not yet added a category where stats will be shown under. `w@guild stat setcategory <Channel category>`.");
+                    }
+
+                    var messageStep = new TextStep("What would you like the channel name to say? Will show as `<Your text here>: [stat] [Members name]` the limited number of characters is set low to prevent the stat from being hidden.", null, 0, 12);
+                    var statStep = new IntStep("What kind of stat would you like to track? Please enter the corresponding number.\nMost gold - 0\nRobbing attack success rate - 1\nRobbing defense success rate - 2\nXp - 3\nGots - 4\nBoganness - 5\nGold Stolen - 6\nSpelling accuracy - 7\nGold Lost From Theft - 8\nRobbing Attack Wins - 9\nRobbing Defend Wins - 10", messageStep, 0, 10);
+
+                    int statInput;
+                    StatOption stat = StatOption.Gold;
+
+                    string msgInput;
+                    string message = "1";
+
+                    statStep.OnValidResult += (result) =>
+                    {
+                        statInput = result;
+
+                        stat = (StatOption)result;
+
+                        statStep.SetNextStep(messageStep);
+                    };
+
+                    messageStep.onValidResult += (result) =>
+                    {
+                        msgInput = result;
+
+                        message = result;
+                    };
+
+                    var userChannel = await ctx.Member.CreateDmChannelAsync().ConfigureAwait(false);
+
+                    var inputDialogueHandler = new DialogueHandler(
+                        ctx.Client,
+                        ctx.Channel,
+                        ctx.User,
+                        statStep
+                    );
+
+                    bool succeeded = await inputDialogueHandler.ProcessDialogue().ConfigureAwait(false);
+
+                    if (!succeeded) { return; }
+
+                    ulong channelId;
+
+                    if (guildPrefs.StatChannels.Exists(x => x.StatOption == stat))
+                    {
+                        channelId = guildPrefs.StatChannels.Where(x => x.StatOption == stat).FirstOrDefault().ChannelId;
+                    }
+                    else
+                    {
+                        channelId = ctx.Guild.CreateVoiceChannelAsync("waiting for update...", parentChannel).Result.Id;
+                    }
+
+                    await _statChannelService.CreateOrModifyStatChannel(ctx.Guild.Id, channelId, stat, message);
+
+                    await ctx.Channel.SendMessageAsync("There should be a new text channel in the specified category. Wiggims will have to update something manually before stats will show up.").ConfigureAwait(false);
+                }
+
+                private Dictionary<ulong,bool> updateNeeded = new Dictionary<ulong, bool>();
+
+                [Command("queueupdate")]
+                [Hidden]
+                public async Task QueueUpdateChannelStats(CommandContext ctx)
+                {
+                    if (!updateNeeded.ContainsKey(ctx.Guild.Id))
+                    {
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updated, created dictionary instance and update queued.", DateTime.Now);
+                        updateNeeded.Add(ctx.Guild.Id, true);
+                    }
+                    else
+                    {
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updated, update queued.", DateTime.Now);
+                        updateNeeded[ctx.Guild.Id] = true;
+                    }
+                }
+
+                [Command("update")]
+                [Hidden]
+                public async Task UpdateChannelStats(CommandContext ctx, bool force = false)
+                {
+                    if (!updateNeeded.ContainsKey(ctx.Guild.Id))
+                    {
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} not found in updateNeeded dictionary creating new instance.", DateTime.Now);
+                        updateNeeded.Add(ctx.Guild.Id, true);
+                    }
+
+                    if (!updateNeeded[ctx.Guild.Id] || force)
+                    {
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} Does not need to update stats.", DateTime.Now);
+                        return;
+                    }
+
+                    ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updating, updating now...", DateTime.Now);
+
+                    updateNeeded[ctx.Guild.Id] = false;
+                    
+
+                    using var context = new RPGContext(_options);
+
+                    var guildPrefs = await _guildPreferences.GetOrCreateGuildPreferences(ctx.Guild.Id);
+
+                    guildPrefs.TotalCommandsExecuted++;
+                    context.Update(guildPrefs);
+                    await context.SaveChangesAsync();
+
+                    if (guildPrefs.StatChannels.Count == 0)
+                    {
+                        ctx.Client.DebugLogger.LogMessage(DSharpPlus.LogLevel.Debug, ctx.Client.CurrentApplication.Name, "This guild is not configured to update a stat channel, updating other stats and returning.", DateTime.Now);
+                        return;
+                    }
+
+                    foreach (var statChannel in guildPrefs.StatChannels)
+                    {
+                        DiscordChannel channel = null;
+
+                        channel = ctx.Guild.GetChannel(statChannel.ChannelId);
+
+                        if (channel == null)
+                        {
+                            ctx.Client.DebugLogger.LogMessage(LogLevel.Warning, ctx.Client.CurrentApplication.Name, $"The stat channel for stat option {statChannel.StatOption} no longer exists and the data base entry will be removed.", DateTime.Now);
+                            await _statChannelService.DeleteStatChannel(ctx.Guild.Id, statChannel.StatOption);
+                            break;
+                        }
+
+                        await channel.ModifyAsync(x => x.Name = $"{statChannel.StatMessage}: { GetStat(ctx, statChannel.StatOption) }").ConfigureAwait(false);
+                    }
+                }
+
+                private string GetStat(CommandContext ctx, StatOption option)
+                {
+                    var list = _profileService.GetAllGuildProfiles(ctx.Guild.Id);
+                    var memberList = ctx.Guild.GetAllMembersAsync().Result;
+                    memberList = new List<DiscordMember>(memberList);
+                    var memberIdList = memberList.Where(x => !x.IsBot).Select(x => x.Id).ToList();
+
+                    try
+                    {
+                        switch (option)
+                        {
+                            case StatOption.Boganness:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.Boganometer).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{Math.Round(returnMember.Boganometer)}% {userName}";
+                                }
+                            case StatOption.Gold:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.Gold).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.Gold} {userName}";
+                                }
+                            case StatOption.GoldStolen:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.GoldStolen).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.GoldStolen} {userName}";
+                                }
+                            case StatOption.Gots:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.Gots).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.Gots} {userName}";
+                                }
+                            case StatOption.RobAttackSuccessRate:
+                                {
+                                    var returnMember = list.Where(x => x.RobbingAttackWon > 3).OrderByDescending(x => x.RobAttackSuccessRate).Where(x => memberIdList.Contains(x.DiscordId) && x.RobAttackSuccessRate > 0).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{Math.Round(returnMember.RobAttackSuccessRate)}% {userName}";
+                                }
+                            case StatOption.RobDefendSuccessRate:
+                                {
+                                    var returnMember = list.Where(x => x.RobbingDefendWon > 3).OrderByDescending(x => x.RobDefendSuccessRate).Where(x => memberIdList.Contains(x.DiscordId) && x.RobDefendSuccessRate > 0).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{Math.Round(returnMember.RobDefendSuccessRate)}% {userName}";
+                                }
+                            case StatOption.SpellAcc:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.SpellAcc).Where(x => memberIdList.Contains(x.DiscordId) && x.SpellAcc > 0).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{Math.Round(returnMember.SpellAcc)}% {userName}";
+                                }
+                            case StatOption.Xp:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.Xp).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.Xp} {userName}";
+                                }
+                            case StatOption.GoldLostFromTheft:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.GoldLostFromTheft).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.GoldLostFromTheft} {userName}";
+                                }
+                            case StatOption.RobbingAttackWon:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.RobbingAttackWon).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.RobbingAttackWon} {userName}";
+                                }
+                            case StatOption.RobbingDefendWon:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.RobbingDefendWon).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.RobbingDefendWon} {userName}";
+                                }
+                            default:
+                                {
+                                    return "Error stat type not found.";
+                                }
+                        }
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        return "Not Enough Data";
+                    }
+                }
+
+            }
             //######## Guild role Tasks ############
             public async Task<AssignableRoleJson> GetRoleJson(CommandContext ctx)
             {

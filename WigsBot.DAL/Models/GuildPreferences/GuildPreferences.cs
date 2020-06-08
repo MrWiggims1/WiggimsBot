@@ -20,13 +20,11 @@ namespace WigsBot.DAL.Models.GuildPreferences
         public string AssignableRoleJson { get; set; }
         public ulong TimeoutRoleId { get; set; }
         public ulong TimeoutTextChannelId { get; set; }
-
-        public ulong AdminRole { get; set; }
         public ulong AutoRole { get; set; }
+        public ulong StatChannelCatergoryId { get; set; }
 
-        public bool GuildEventNotification { get; set; }
-        public ulong AdminNotificationChannel { get; set; }
+        public int TotalCommandsExecuted { get; set; }
 
-        public bool PunishAtEveryone { get; set; }
+        public List<StatChannel> StatChannels { get; set; } = new List<StatChannel>();
     }
 }

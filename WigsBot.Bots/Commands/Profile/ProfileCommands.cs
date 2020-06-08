@@ -20,8 +20,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
 {
     public class AdminProfileCommands : BaseCommandModule
     {
-
-
         private readonly IProfileService _profileService;
         private readonly IGuildPreferences _guildPreferences;
         private readonly IExperienceService _experienceService;

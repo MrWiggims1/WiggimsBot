@@ -85,7 +85,7 @@ namespace WigsBot.Bot.Commands
 
             if (profile.Gold < bet)
             {
-                throw new Exception("You do not have enough gold to bet.");
+                throw new Exception($"You do not have enough gold to bet, you only have {profile.Gold}.");
             }
 
             bool memberWon = coinResult == Enum.Parse<HeadsOrTails>(headsOrTails.ToLower());

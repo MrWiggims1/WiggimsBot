@@ -14,5 +14,6 @@ namespace WigsBot.DAL
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<GuildPreferences> GuildPreferences { get; set; }
         public DbSet<RobbingItems> RobbingItems { get; set; }
+        public DbSet<StatChannel> StatChannels { get; set; }
     }
 }

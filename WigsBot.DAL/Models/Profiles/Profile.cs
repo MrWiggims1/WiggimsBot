@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-//using WigsBot.DAL.Models.Items;
 
 namespace WigsBot.DAL.Models.Profiles
 {
@@ -249,6 +246,8 @@ namespace WigsBot.DAL.Models.Profiles
         /// How much gold has this member lost from flipping coins.
         /// </summary>
         public int GoldLostCoinFlip { get; set; }
+
+        public int CommandsExecuted { get; set; }
 
 
 

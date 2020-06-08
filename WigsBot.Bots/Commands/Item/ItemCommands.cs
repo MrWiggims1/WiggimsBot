@@ -30,6 +30,7 @@ namespace WigsBot.Bot.Commands.Item
     [Group("Item")]
     [Aliases("items")]
     [Description("Shows an item shop, where you can spend your gold.")]
+    [Cooldown(5, 60, CooldownBucketType.User)]
     public class ItemCommands : BaseCommandModule
     {
         private readonly IRobbingItemService _robbingItemService;

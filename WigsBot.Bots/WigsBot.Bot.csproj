@@ -18,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ChannelStats.cs" />
     <Compile Remove="Commands\ItemCommands.cs" />
     <Compile Remove="Commands\Stats\SiegeGG.cs" />
     <Compile Remove="Commands\Template.cs" />

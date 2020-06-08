@@ -13,6 +13,7 @@ using WeCantSpell.Hunspell;
 using WigsBot.Bot.Attributes;
 using WigsBot.Bot.Handlers.Dialogue;
 using WigsBot.Bot.Handlers.Dialogue.Steps;
+using WigsBot.Bot.Models;
 using WigsBot.DAL;
 //using WigsBot.DAL.Models.Items;
 

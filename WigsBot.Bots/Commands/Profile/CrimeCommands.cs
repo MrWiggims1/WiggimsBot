@@ -36,13 +36,13 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
         private decimal defualCarryPercent = .5M;
         private readonly int maxchance = 80;
-        private decimal chanceMult = 1.1M;
+        private decimal chanceMult = 1.3M;
 
         [Command("rob")]
         [RequirePrefixes("w!", "W!")]
         [Description("Try your luck and attempt to steal someones gold, don't get too greedy or it may cost you. Defaults to max available.\n\n`Cooldown`: 90 Minutes")]
         [Aliases("StealGold", "TakeGold")]
-        //[Cooldown(1, 9000, CooldownBucketType.User)]
+        [Cooldown(1, 5, CooldownBucketType.Guild)]
         public async Task rob(CommandContext ctx, [Description("Discord user")] DiscordMember member, [Description("How much do you want to steal")] int goldNum = 97153)
         {
             await ctx.TriggerTypingAsync();
@@ -53,13 +53,13 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
             //Make sure its been 24 hours since the command has been used.
 
-            System.TimeSpan timeDiff = TimeSpan.FromHours(1.5).Subtract(DateTime.Now.Subtract(attackProfile.RobbingCooldown));
+            System.TimeSpan timeDiff = TimeSpan.FromHours(2).Subtract(DateTime.Now.Subtract(attackProfile.RobbingCooldown));
 
             if (timeDiff > TimeSpan.FromHours(0))
             {
                 DiscordEmbedBuilder CooldownEmbed = new DiscordEmbedBuilder()
                 {
-                    Title = $"You must wait 90 minutes between robberies { timeDiff.Hours }:{ timeDiff.Minutes}:{ timeDiff.Seconds} remaining.",
+                    Title = $"You must wait 2 hours between robberies { timeDiff.Hours }:{ timeDiff.Minutes}:{ timeDiff.Seconds} remaining.",
                     Color = DiscordColor.Red
                 };
 

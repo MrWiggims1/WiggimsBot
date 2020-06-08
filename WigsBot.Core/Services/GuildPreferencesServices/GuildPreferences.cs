@@ -49,6 +49,14 @@ namespace WigsBot.Core.Services.GuildPreferenceServices
         /// <param name="roleId">The Id of the role.</param>
         /// <returns></returns>
         Task SetAutoRole(ulong guildId, ulong roleId);
+
+        /// <summary>
+        /// Sets the Id of the channel category which wiggims bot will use to show stats to the server.
+        /// </summary>
+        /// <param name="guildId">The Id of the guild.</param>
+        /// <param name="channelId">The Id of the role.</param>
+        /// <returns></returns>
+        Task SetStatChannelCategory(ulong guildId, ulong channelId);
     }
 
     public class GuildPreferencesService : IGuildPreferences
@@ -66,6 +74,7 @@ namespace WigsBot.Core.Services.GuildPreferenceServices
 
             GuildPreferences guildPrefences = await context.GuildPreferences
                 .Where(x => x.GuildId == guildId)
+                .Include(sc => sc.StatChannels)
                 .FirstOrDefaultAsync(x => x.GuildId == guildId).ConfigureAwait(false);
 
             if (guildPrefences != null) { return guildPrefences; }
@@ -134,6 +143,19 @@ namespace WigsBot.Core.Services.GuildPreferenceServices
             var guildPrefs = await GetOrCreateGuildPreferences(guildId);
 
             guildPrefs.AutoRole = roleId;
+
+            context.GuildPreferences.Update(guildPrefs);
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SetStatChannelCategory(ulong guildId, ulong channelId)
+        {
+            using var context = new RPGContext(_options);
+
+            var guildPrefs = await GetOrCreateGuildPreferences(guildId);
+
+            guildPrefs.StatChannelCatergoryId = channelId;
 
             context.GuildPreferences.Update(guildPrefs);
 

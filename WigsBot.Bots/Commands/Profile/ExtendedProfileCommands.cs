@@ -28,6 +28,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
     [RequireGuild]
     [Description("Shows your profile with menu for more information.")]
     [Aliases("profiles","bal","balance","money","xp","level")]
+    [Cooldown(5, 60, CooldownBucketType.User)]
     public class ExtendedProfileCommands : BaseCommandModule
     {
 

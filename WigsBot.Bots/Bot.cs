@@ -25,7 +25,12 @@ using WigsBot.Bot.Commands.Profilecommands;
 using DSharpPlus.VoiceNext;
 using DSharpPlus.VoiceNext.Codec;
 using WigsBot.Bot.Commands.Item;
+using WigsBot.Bot;
 using DSharpPlus.CommandsNext.Attributes;
+using WigsBot.Core.Services.GuildPreferenceServices;
+using Microsoft.EntityFrameworkCore;
+using WigsBot.DAL;
+using WigsBot.Bot.Models;
 
 namespace WigsBot.Bot
 {
@@ -35,8 +40,8 @@ namespace WigsBot.Bot
         public CommandsNextExtension Commands { get; private set; }
         public DiscordMember DiscordMember { get; private set; }
         public VoiceNextExtension Voice { get; private set; }
-        public Bot(IServiceProvider services)
 
+        public Bot(IServiceProvider services)
         {
             var json = string.Empty;
 
@@ -114,7 +119,6 @@ namespace WigsBot.Bot
 
             this.Voice = this.Client.UseVoiceNext(VoiceConfig);
 
-
             Client.ConnectAsync();
 
             Client.UpdateStatusAsync(new DiscordActivity("w!help or w@help."), UserStatus.Online, null);
@@ -188,7 +192,35 @@ namespace WigsBot.Bot
                         Console.WriteLine($"dad bot added a got to {prevMessage.Author.Username}");
                     }
                 }
+
+                if (e.Message.Content.ToLower().Contains("w!") || e.Message.Content.ToLower().Contains("w@") )
+                {
+                    if (e.Message.Author.IsBot) { return; }
+
+                    if (
+                    e.Message.Content.ToLower().Contains("rob") ||
+                    e.Message.Content.ToLower().Contains("coin") ||
+                    e.Message.Content.ToLower().Contains("roulette") ||
+                    e.Message.Content.ToLower().Contains("fish") ||
+                    e.Message.Content.ToLower().Contains("pay") ||
+                    e.Message.Content.ToLower().Contains("daily") ||
+                    e.Message.Content.ToLower().Contains("dole")
+                    )
+                    {
+                        var cmd = this.Commands.FindCommand("guild stat queueupdate", out var args);
+                        var ctx = this.Commands.CreateContext(e.Message, "w@", cmd);
+                        await this.Commands.ExecuteCommandAsync(ctx);
+                    }
+                }
             };
+
+            var startTimeSpan = TimeSpan.Zero;
+            var periodTimeSpan = TimeSpan.FromMinutes(10);
+
+            var timer = new System.Threading.Timer((e) =>
+            {
+                TryToResetStatChannels();
+            }, null, startTimeSpan, periodTimeSpan);
         }
 
         // let us know the client is ready
@@ -220,11 +252,23 @@ namespace WigsBot.Bot
             await this.Commands.ExecuteCommandAsync(ctx);
         }
 
+        private async Task TryToResetStatChannels()
+        {
+            foreach (var guild in this.Client.Guilds.Keys)
+            {
+                var cmd = this.Commands.FindCommand("guild stat update", out var args);
+                var fctx = this.Commands.CreateFakeContext(this.Client.CurrentUser, this.Client.Guilds[guild].Channels.First().Value, $"false", "w@", cmd, $"false");
+                await this.Commands.ExecuteCommandAsync(fctx);
+            }
+        }
+
         // let us know if and how a command has been executed
-        private Task Commands_CommandExecuted(CommandExecutionEventArgs e)
+        private async Task Commands_CommandExecuted(CommandExecutionEventArgs e)
         {
             e.Context.Client.DebugLogger.LogMessage(LogLevel.Info, "WigsBot", $"{e.Context.User.Username} successfully executed within the {e.Context.Guild.Name}. '{e.Command.QualifiedName}'", DateTime.Now);
-            return Task.CompletedTask;
+
+            //await ChannelStats.StaticRef.UpdateChannelStats(e.Context);
+            //return Task.CompletedTask;
         }
 
 
@@ -236,7 +280,7 @@ namespace WigsBot.Bot
 
             if (e.Exception is ChecksFailedException ex)
             {
-                if (e.Command.Name == "earnxp" || e.Command.Name == "wiggimsbotspell") { return; }
+                if (e.Command.Name == "earnxp" || e.Command.Name == "wiggimsbotspell" || e.Command.Name == "guild stats update") { return; }
 
                 if (e.Command.Name == "fish")
                 {
@@ -253,6 +297,12 @@ namespace WigsBot.Bot
                 if (e.Command.Name == "mimic")
                 {
                     await e.Context.Channel.SendMessageAsync("For some reason streaming audio gets messy if you request it too quick. Globally limited to 5 per minute.");
+                    return;
+                }
+
+                if (e.Command.Name == "rob")
+                {
+                    await e.Context.Channel.SendMessageAsync("Please allow 5 seconds between each rob within a guild to give wiggims bot time to process the transaction.");
                     return;
                 }
 
@@ -342,6 +392,7 @@ namespace WigsBot.Bot
                         Timestamp = System.DateTime.Now
                     };
                     embed.AddField("exception type:", $"{e.Exception.GetType()}" );
+                    try { embed.AddField("Inner Exception:", e.Exception.InnerException.Message); } catch { }
                     await e.Context.RespondAsync("", embed: embed);
                 }
                 catch
@@ -349,7 +400,7 @@ namespace WigsBot.Bot
                     var embed = new DiscordEmbedBuilder
                     {
                         Title = "Unknown Error",
-                        Description = $"Error too large to send \n \n<@318999364192174080> please check. \nPlease don't delete this error message as Wiggims can use this to provide more helpful errors in the future (or just figure wtf he did wrong).",
+                        Description = $"Error too large to send.",
                         Color = new DiscordColor(0xFF0000), // red
                         Timestamp = System.DateTime.Now
                     };

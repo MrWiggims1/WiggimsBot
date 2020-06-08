@@ -13,6 +13,7 @@ using System.Text;
 using WigsBot.Core.Services;
 using WigsBot.Core.Services.GuildPreferenceServices;
 using WigsBot.Core.Services.GuildPreferencesServices;
+using WigsBot.Core.Services.GuildPreferencesServices.StatChannels;
 using WigsBot.Core.Services.Items;
 using WigsBot.Core.Services.Profiles;
 using WigsBot.DAL;
@@ -60,6 +61,7 @@ namespace WigsBot.Bot
             services.AddScoped<IRobbingItemService, RobbingItemService>();
             services.AddScoped<IVersionService, VersionService>();
             services.AddScoped<IStatsService, StatsService>();
+            services.AddScoped<IStatChannelService, StatChannelService>();
 
 #pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
             var serviceProvider = services.BuildServiceProvider();
