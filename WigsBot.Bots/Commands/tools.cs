@@ -283,7 +283,6 @@ namespace WigsBot.Bot.Commands
 
         [Command("stealemoji")]
         [RequirePrefixes("w!", "W!")]
-        [RequireUserPermissions(Permissions.ManageEmojis)]
         [Description("Adds an emoji from another discord server.")]
         public async Task stealemoji(CommandContext ctx, [Description("Emoji you wish to steal"), Optional] DiscordEmoji emoji, [Description("new emojis name")] string emojiName = null)
         {
@@ -336,7 +335,13 @@ namespace WigsBot.Bot.Commands
                 if (timeSpan == null)
                     timeSpan = TimeSpan.FromMinutes(10);
 
-                string filePath = MakeTimeoutJson(member);
+                if (timeSpan > TimeSpan.FromMinutes(30))
+                {
+                    await ctx.RespondAsync("Please use a timeout duration of less that half an hour.");
+                    return;
+                }
+
+                string filePath = MakeTimeoutJson(ctx, member, $"{member.Username}-{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Hour}-{DateTime.Now.Minute}.json");
                 var roles = member.Roles.ToArray();
                 DiscordRole timeoutRole = ctx.Guild.GetRole(guildPrefs.TimeoutRoleId);
 
@@ -370,12 +375,16 @@ namespace WigsBot.Bot.Commands
 
                 var roleJson = GetTimeoutJson(filePath);
 
+                if (roleJson.HasBeenRestored)
+                    return;
+
                 foreach (var roleId in roleJson.RoleId)
                 {
                     DiscordRole role = ctx.Guild.GetRole(roleId);
                     await member.GrantRoleAsync(role);
                 }
 
+                MarkTimeoutDone(filePath);
                 await ctx.Channel.SendMessageAsync($"{member.Username}'s timeout has ended.");
             }
 
@@ -387,6 +396,12 @@ namespace WigsBot.Bot.Commands
             {
                 var roleJson = GetTimeoutJson(TimeoutJson);
 
+                if (roleJson.HasBeenRestored)
+                {
+                    await ctx.RespondAsync("Roles have already been restored");
+                    return;
+                }
+
                 foreach (var roleId in roleJson.RoleId)
                 {
                     DiscordRole role = ctx.Guild.GetRole(roleId);
@@ -394,15 +409,22 @@ namespace WigsBot.Bot.Commands
                 }
 
                 await ctx.Channel.SendMessageAsync($"{member.Username}'s roles have been manually reset.");
+                MarkTimeoutDone(TimeoutJson);
             }
 
              // #### tasks ####
 
-            static string MakeTimeoutJson(DiscordMember member)
+            static string MakeTimeoutJson(CommandContext ctx, DiscordMember member, string fileName)
             {
                 var roles = member.Roles.ToArray();
-                var json = new TimeoutJson() { RoleId = new List<ulong>() };
-                string fileName = $"Resources/RoleJSONs/{member.Username}-{DateTime.Now.Day}-{DateTime.Now.Month}-{DateTime.Now.Hour}-{DateTime.Now.Minute}.json";
+                var json = new TimeoutJson() 
+                { 
+                    RoleId = new List<ulong>(),
+                    CommandCaller = new CommandCaller { DiscordId = ctx.Member.Id, Username = ctx.Member.Username},
+                    Victim = new Victim { DiscordId = member.Id, Username = member.Username },
+                    HasBeenRestored = false
+                };
+                string filepath = $"Resources/RoleJSONs/{fileName}";
 
                 if (roles.Length > 0)
                 {
@@ -414,7 +436,7 @@ namespace WigsBot.Bot.Commands
 
                 string jsonString = JsonConvert.SerializeObject(json, Formatting.Indented);
 
-                File.WriteAllText($"{fileName}", jsonString);
+                File.WriteAllText($"{filepath}", jsonString);
 
                 return fileName;
             }
@@ -423,13 +445,31 @@ namespace WigsBot.Bot.Commands
             {
                 var json = string.Empty;
 
-                using (var fs = File.OpenRead(filePath))
+                using (var fs = File.OpenRead($"Resources/RoleJSONs/{filePath}"))
                 using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
                     json = sr.ReadToEnd();
 
                 TimeoutJson timeoutJson = JsonConvert.DeserializeObject<TimeoutJson>(json);
 
                 return timeoutJson;
+            }
+
+            void MarkTimeoutDone(string filePath)
+            {
+                var json = string.Empty;
+
+                using (var fs = File.OpenRead($"Resources/RoleJSONs/{filePath}"))
+                using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
+                    json = sr.ReadToEnd();
+
+                TimeoutJson timeoutJson = JsonConvert.DeserializeObject<TimeoutJson>(json);
+
+                timeoutJson.HasBeenRestored = true;
+
+                string jsonString = JsonConvert.SerializeObject(timeoutJson, Formatting.Indented);
+                Console.WriteLine(jsonString);
+
+                File.WriteAllText($"Resources/RoleJSONs/{filePath}", jsonString);
             }
         }
     }

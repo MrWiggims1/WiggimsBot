@@ -57,7 +57,7 @@ namespace WigsBot.Bot
                 TokenType = TokenType.Bot,
 
                 AutoReconnect = true,
-                LogLevel = LogLevel.Info,
+                LogLevel = LogLevel.Debug,
                 UseInternalLogHandler = true
             };
 
@@ -204,7 +204,9 @@ namespace WigsBot.Bot
                     e.Message.Content.ToLower().Contains("fish") ||
                     e.Message.Content.ToLower().Contains("pay") ||
                     e.Message.Content.ToLower().Contains("daily") ||
-                    e.Message.Content.ToLower().Contains("dole")
+                    e.Message.Content.ToLower().Contains("dole") ||
+                    e.Message.Content.ToLower().Contains("stats") ||
+                    e.Message.Content.ToLower().Contains("stat")
                     )
                     {
                         var cmd = this.Commands.FindCommand("guild stat queueupdate", out var args);
@@ -214,6 +216,20 @@ namespace WigsBot.Bot
                 }
             };
 
+            Client.VoiceStateUpdated += async e =>
+            {
+
+                try
+                {
+                    this.Client.DebugLogger.LogMessage(LogLevel.Debug, this.Client.CurrentApplication.Name, $"{e.User.Username} has joined the '{e.Channel.Name}' in '{e.Guild.Name}'", DateTime.Now);
+                }
+                catch
+                {
+                    return;
+                }
+            };
+
+            /*
             var startTimeSpan = TimeSpan.Zero;
             var periodTimeSpan = TimeSpan.FromMinutes(10);
 
@@ -221,6 +237,17 @@ namespace WigsBot.Bot
             {
                 TryToResetStatChannels();
             }, null, startTimeSpan, periodTimeSpan);
+            */
+
+            Task task = new Task(() =>
+            {
+                while (true)
+                {
+                    TryToResetStatChannels();
+                    Thread.Sleep(600000);
+                }
+            });
+            task.Start();
         }
 
         // let us know the client is ready
@@ -234,6 +261,10 @@ namespace WigsBot.Bot
         private Task Client_GuildAvailable(GuildCreateEventArgs e)
         {
             e.Client.DebugLogger.LogMessage(LogLevel.Info, "WigsBot", $"Guild available: {e.Guild.Name}", DateTime.Now);
+            Task.Delay(5000);
+            var cmd = this.Commands.FindCommand("guild stat queueupdate", out var args);
+            var ctx = this.Commands.CreateFakeContext(this.Client.CurrentUser, e.Guild.Channels.First().Value, "uhh" , "w@", cmd);
+            this.Commands.ExecuteCommandAsync(ctx);
             return Task.CompletedTask;
         }
 
@@ -254,11 +285,13 @@ namespace WigsBot.Bot
 
         private async Task TryToResetStatChannels()
         {
-            foreach (var guild in this.Client.Guilds.Keys)
+            foreach (var guildKey in this.Client.Guilds.Keys)
             {
+                this.Client.DebugLogger.LogMessage(LogLevel.Debug, this.Client.CurrentApplication.Name, $"Trying for stat update in guild: {this.Client.Guilds[guildKey].Name}", DateTime.Now);
                 var cmd = this.Commands.FindCommand("guild stat update", out var args);
-                var fctx = this.Commands.CreateFakeContext(this.Client.CurrentUser, this.Client.Guilds[guild].Channels.First().Value, $"false", "w@", cmd, $"false");
+                var fctx = this.Commands.CreateFakeContext(this.Client.CurrentUser, this.Client.Guilds[guildKey].Channels.First().Value, $"false", "w@", cmd, $"false");
                 await this.Commands.ExecuteCommandAsync(fctx);
+                Client.DebugLogger.LogMessage(LogLevel.Info, Client.CurrentApplication.Name, $"Next channel up date in 10 minutes at {DateTime.Now.Add(TimeSpan.FromMinutes(10)).ToShortTimeString()}.", DateTime.Now);
             }
         }
 
@@ -386,8 +419,8 @@ namespace WigsBot.Bot
                 {
                     var embed = new DiscordEmbedBuilder
                     {
-                        Title = "Unknown Error",
-                        Description = $"{e.Exception.Message}",
+                        Title = "Error",
+                        Description = $"{e.Exception.Message}\n\n{e.Exception.InnerException}",
                         Color = new DiscordColor(0xFF0000), // red
                         Timestamp = System.DateTime.Now
                     };
@@ -399,7 +432,7 @@ namespace WigsBot.Bot
                 {                    
                     var embed = new DiscordEmbedBuilder
                     {
-                        Title = "Unknown Error",
+                        Title = "Error",
                         Description = $"Error too large to send.",
                         Color = new DiscordColor(0xFF0000), // red
                         Timestamp = System.DateTime.Now

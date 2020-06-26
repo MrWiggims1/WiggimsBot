@@ -491,7 +491,7 @@ namespace WigsBot.Bot.Commands.Stats
             {
                 Title = $"CSGO {type} Stats",
                 Description = $"SteamID: {Json.playerstats.steamID}\nProfile for {jsonUser.response.players[0].personaname}: {jsonUser.response.players[0].profileurl}\n\nIf you didn't find the stat you were looking for try 'w!help cs' to see what options there are.",
-                ThumbnailUrl = jsonUser.response.players[0].avatarmedium,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = jsonUser.response.players[0].avatarmedium },
                 Color = ctx.Member.Color
             };
 

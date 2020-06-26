@@ -26,9 +26,9 @@ Y:\WigsBot\WigsBot.Core\bin\Release\netcoreapp3.1\WigsBot.Core.pdb
 Y:\WigsBot\WigsBot.Core\bin\Release\netcoreapp3.1\WigsBot.DAL.dll
 Y:\WigsBot\WigsBot.Core\bin\Release\netcoreapp3.1\WigsBot.DAL.pdb
 Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.csprojAssemblyReference.cache
+Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.csproj.CoreCompileInputs.cache
 Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.AssemblyInfoInputs.cache
 Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.AssemblyInfo.cs
 Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.csproj.CopyComplete
 Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.dll
 Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.pdb
-Y:\WigsBot\WigsBot.Core\obj\Release\netcoreapp3.1\WigsBot.Core.csproj.CoreCompileInputs.cache

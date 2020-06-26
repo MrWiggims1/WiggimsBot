@@ -10,6 +10,7 @@ using System;
 using DSharpPlus;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Net.Models;
+using WigsBot.Core.Services.GuildPreferenceServices;
 
 namespace WigsBot.Bot.Commands.Profilecommands
 {
@@ -18,16 +19,19 @@ namespace WigsBot.Bot.Commands.Profilecommands
         private readonly IProfileService _profileService;
         private readonly IGotService _gotService;
         private readonly IGoldService _goldService;
+        private readonly IGuildPreferences _guildPreferences;
 
         public GoldCommands(
             IProfileService profileService,
             IGotService gotService,
-            IGoldService goldService
+            IGoldService goldService,
+            IGuildPreferences guildPreferences
             )
         {
             _profileService = profileService;
             _gotService = gotService;
             _goldService = goldService;
+            _guildPreferences = guildPreferences;
         }
 
         [Command("daily")]
@@ -71,6 +75,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Aliases("payGold", "transfergold", "givegold")]
         public async Task pay(CommandContext ctx, [Description("Mention or use member Id.")] DiscordMember member, [Description("How much you want to pay?")] int goldNum)
         {
+
             if (ctx.Message.Author.Id == member.Id) { await ctx.Channel.SendMessageAsync("God you're a fucking nugget."); return; }
 
             Profile profile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id);
@@ -78,6 +83,8 @@ namespace WigsBot.Bot.Commands.Profilecommands
             if (goldNum < 0) { await ctx.Channel.SendMessageAsync("https://tenor.com/view/wait-thats-illegal-halo-meme-gif-14048618"); return; }
 
             if (goldNum > profile.Gold) { await ctx.Channel.SendMessageAsync($"You can't afford to give { member.Username } {goldNum} gold").ConfigureAwait(false); return; }
+
+            if (member.IsBot) { await ctx.Channel.SendMessageAsync($"Sorry you can no longer pay gold to bots, feel free to gamble it away if you wish."); return; }
 
             Profile payeeProfile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id);
 
@@ -121,8 +128,8 @@ namespace WigsBot.Bot.Commands.Profilecommands
                     break;
 
                 case 3:
-                    castEarn = commonFish;
-                    reply = $"You caught a common fish worth {castEarn} gold";
+                    castEarn = 0;
+                    reply = $"You caught nothing";
                     break;
 
                 case 4:
@@ -167,13 +174,20 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var embed = new DiscordEmbedBuilder()
             {
                 Title = $"{ctx.Member.Username} went fishing",
-                Description = reply + $", You spent {castCost} to cast the rod",
+                Description = reply + $", You spent {castCost} gold to cast the rod",
                 Color = ctx.Member.Color
             };
 
             embed.WithFooter("This crappy command will not stay like this for long.");
 
             Profile profile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id);
+
+            if (profile.Gold < castCost)
+            {
+                await ctx.RespondAsync($"You do not have enough gold to cast your rod, you need at least {castCost} gold.");
+                return;
+            }
+
             Profile botProfile = await _profileService.GetOrCreateProfileAsync(ctx.Client.CurrentUser.Id, ctx.Guild.Id);
 
             await _goldService.TransferGold(botProfile, profile, castEarn - castCost, false);
@@ -197,7 +211,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var levelUpEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName} has been dun got gitten {viewModel.Profile.Gots} times now... Dang.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color
             };
 
@@ -210,6 +224,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
         {
             await ctx.TriggerTypingAsync();
             Profile profile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id);
+
             Profile botProfile = await _profileService.GetOrCreateProfileAsync(ctx.Client.CurrentUser.Id, ctx.Guild.Id);
 
             //Make sure its been 24 hours since the command has been used.
@@ -244,22 +259,17 @@ namespace WigsBot.Bot.Commands.Profilecommands
             }
             catch { }
 
-            if (profile.Gold > 0)
-            {
-                await ctx.Channel.SendMessageAsync($"{emoji} {member.DisplayName} gained {Convert.ToInt32(luck)} gold!").ConfigureAwait(false);
-            }
-            else if (profile.Gold < 0 && profile.Gold > -200)
+            if (profile.Gold < 0 && profile.Gold > -200)
             {
                 luck *= 1.5M;
-                await ctx.Channel.SendMessageAsync($"{emoji} {emoji} {emoji} {member.DisplayName} gained {Convert.ToInt32(luck)} gold!").ConfigureAwait(false);
             }
             else if (profile.Gold < -200)
             {
                 luck *= 2M;
-                await ctx.Channel.SendMessageAsync($"{emoji} {emoji} {emoji} {emoji} {emoji} {member.DisplayName} gained {Convert.ToInt32(luck)} gold!").ConfigureAwait(false);
             }
 
             int payment = Convert.ToInt32(luck);
+            await ctx.RespondAsync($"{emoji} {member.DisplayName} gained {payment} gold!").ConfigureAwait(false);
             await _goldService.ProccessMemberDaily(profile, botProfile, payment);
         }
     }

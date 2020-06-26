@@ -234,8 +234,8 @@ namespace WigsBot.Bot.Commands.Stats
             var embed = new DiscordEmbedBuilder
             {
                 Title = $"Beatsaber stats for {json.playerInfo.name}",
-                Description = $"Beatsaber Id: {json.playerInfo.playerid}\n[Score Saber Website](https://scoresaber.com/u/{ json.playerInfo.playerid }\n\nFor more stats on Beatsaber try w!beatsaber Top, or w!beatsaber Recent)",
-                ThumbnailUrl = $"https://new.scoresaber.com/{ json.playerInfo.avatar }",
+                Description = $"Beatsaber Id: {json.playerInfo.playerid}\n[Score Saber Website](https://scoresaber.com/u/{ json.playerInfo.playerid })\n\nFor more stats on Beatsaber try w!beatsaber Top, or w!beatsaber Recent)",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = $"https://new.scoresaber.com/{ json.playerInfo.avatar }" },
                 Color = DiscordColor.Orange
             };
 
@@ -296,7 +296,7 @@ namespace WigsBot.Bot.Commands.Stats
             var embed = new DiscordEmbedBuilder
             {
                 Description = $"Beatsaber Id: {jsonUser.playerInfo.playerid}\n[Score Saber Website](https://scoresaber.com/u/{ jsonUser.playerInfo.playerid })",
-                ThumbnailUrl = $"https://new.scoresaber.com/{ jsonUser.playerInfo.avatar }",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = $"https://new.scoresaber.com/{ jsonUser.playerInfo.avatar }" },
                 Color = DiscordColor.Orange
             };
 

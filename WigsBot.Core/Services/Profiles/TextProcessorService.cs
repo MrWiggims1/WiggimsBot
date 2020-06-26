@@ -21,10 +21,10 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="spellWrong">The incorrect number of words.</param>
         /// <param name="boganCount">The count of bogan words.</param>
         /// <param name="xpAmount">The number of xp to give</param>
-        /// <param name="arrayLength">The length of the incorrectly spelt words list.</param>
+        /// <param name="arrayLength">The length of the incorrectly spelled words list.</param>
         /// <param name="incorrectWords">The incorrect words to add to a members list.</param>
         /// <returns>Weather or not if the member leveled up, don't know how it works, just copy and paste the code.</returns>
-        Task<TextProcessorViewModel> ProcessTextAsync(ulong discordId, ulong guildId, int spellCorrect, int spellWrong, int boganCount, int xpAmount, int arrayLength, List<string> incorrectWords);
+        Task<TextProcessorViewModel> ProcessTextAsync(ulong discordId, ulong guildId, string Username,int spellCorrect, int spellWrong, int boganCount, int xpAmount, int arrayLength, List<string> incorrectWords);
 
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace WigsBot.Core.Services.Profiles
             _profileService = profileService;
         }
 
-        public async Task<TextProcessorViewModel> ProcessTextAsync(ulong discordId, ulong guildId, int spellCorrect, int spellWrong, int boganCount, int xpAmount, int arrayLength, List<string> incorrectWords)
+        public async Task<TextProcessorViewModel> ProcessTextAsync(ulong discordId, ulong guildId, string username,int spellCorrect, int spellWrong, int boganCount, int xpAmount, int arrayLength, List<string> incorrectWords)
         {
             using var context = new RPGContext(_options);
 
@@ -57,6 +57,8 @@ namespace WigsBot.Core.Services.Profiles
             int levelBefore = profile.Level;
 
             profile.Xp += xpAmount;
+
+            profile.UserName = username;
 
             // process spelling
 

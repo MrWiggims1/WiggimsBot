@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +33,14 @@ namespace WigsBot.Core.Services.Profiles
         /// <param name="guildId">The guild id.</param>
         /// <returns>List of guild profiles.</returns>
         List<Profile> GetAllGuildProfiles(ulong guildId);
+
+        /// <summary>
+        /// Fixes everyones username in the guild.
+        /// </summary>
+        /// <param name="guildId">The guild Id</param>
+        /// <param name="usernameDictionary">discord id - username.</param>
+        /// <returns></returns>
+        Task FixUserNames(ulong guildId, Dictionary<ulong, string> usernameDictionary);
     }
 
     public class ProfileService : IProfileService
@@ -68,11 +77,12 @@ namespace WigsBot.Core.Services.Profiles
             {
                 DiscordId = discordId,
                 GuildId = guildId,
+                UserName = "undefined",
                 Xp = 0,
                 Gold = 0,
                 Gots = 0,
                 LeaveCount = 0,
-                SpellErrorCount = 0,
+                SpellErrorCount = 1,
                 SpellCorrectCount = 1,
                 BoganCount = 0,
                 BeatSaberId = 0L,
@@ -100,6 +110,26 @@ namespace WigsBot.Core.Services.Profiles
             List<Profile> profiles = profileEnumerable.ToList();
 
             return profiles;
+        }
+
+        public async Task FixUserNames(ulong guildId, Dictionary<ulong,string> usernameDictionary)
+        {
+            using var context = new RPGContext(_options);
+
+            var members = GetAllGuildProfiles(guildId);
+
+            foreach (var profile in members)
+            {
+                try
+                {
+                    profile.UserName = usernameDictionary[usernameDictionary.Keys.Where(x => x == profile.DiscordId).Single()];
+                }
+                catch { }
+            }
+
+            context.UpdateRange(members);
+
+            await context.SaveChangesAsync();
         }
     }
 }

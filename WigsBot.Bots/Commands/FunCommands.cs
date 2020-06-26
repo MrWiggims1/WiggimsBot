@@ -327,7 +327,7 @@ namespace WigsBot.Bot.Commands
             var levelUpEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName} has been dun got gitten {viewModel.Profile.Gots} times now... Dang.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color
             };
 

@@ -54,8 +54,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         public async Task profile(CommandContext ctx)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -71,8 +69,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         public async Task profile(CommandContext ctx, [Description("Discord user")] DiscordUser discordUser)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -92,8 +88,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Aliases("gameinfo", "gamesettings", "gameoptions", "game")]
         public async Task GameId(CommandContext ctx)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -109,8 +103,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         public async Task GameId(CommandContext ctx, [Description("Discord user")] DiscordUser discordUser)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -128,8 +120,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Aliases("Spell", "canispell")]
         public async Task spelling(CommandContext ctx)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -145,8 +135,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         public async Task spelling(CommandContext ctx, [Description("Discord user")] DiscordUser discordUser)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -164,8 +152,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Aliases("settings")]
         public async Task options(CommandContext ctx)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -181,8 +167,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         public async Task options(CommandContext ctx, [Description("Discord user")] DiscordUser discordUser)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -200,8 +184,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [Aliases("inv","items")]
         public async Task inventory(CommandContext ctx)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -217,8 +199,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
         [RequirePrefixes("w!", "W!")]
         public async Task inventory(CommandContext ctx, [Description("Discord user")] DiscordUser discordUser)
         {
-            await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
             var message = await ctx.Channel.SendMessageAsync("Getting Profile...");
 
             await ctx.TriggerTypingAsync();
@@ -317,10 +297,13 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Profile.",
-                ThumbnailUrl = member.AvatarUrl,
+                Description = $"[Extra Stats](https://grafana.wiggims1.com/d/TclixHkMz/discord-member-stats?orgId=1&var-DiscordId={ member.Id }&var-GuildId={ ctx.Guild.Id}) Username and Password is 'guest'.",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
+
+            profileEmbed.WithFooter("Please don't fuck around with shit on the Grafana website, Everyone shares the same account and id rather not take it down.");
 
             profileEmbed.AddField("Level", $"{profile.Level.ToString()} - `{profile.Xp} xp`", true);
             profileEmbed.AddField("Gold", ":moneybag: " + profile.Gold.ToString(), true);
@@ -358,7 +341,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s spelling stats.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -397,7 +380,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Game Ids.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -433,7 +416,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Profile Information.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -483,7 +466,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             {
                 Title = $"{member.DisplayName}'s Inventory.",
                 Description = $"Current robbing strength:\nAttack: {userBuffStats.attack * 100}%\nDefense: {userBuffStats.defense*100}%\nInventory is worth {_robbingItemService.GetInvWorth(profile)} Gold.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -530,6 +513,8 @@ namespace WigsBot.Bot.Commands.Profilecommands
             await message.DeleteAllReactionsAsync();
 
             ItemsJson itemsJson = JsonConvert.DeserializeObject<ItemsJson>(profile.ItemJson);
+
+            var invworth = _robbingItemService.GetInvWorth(profile);
 
             List<RobbingItems> robbingItems = _robbingItemService.GetAllRobbingItems();
 
@@ -591,7 +576,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 }
             }
 
-            await message.ModifyAsync($"```py\n@To find more information or purchase an item use `w!item info [item name]` and `w!item buy [Item Name]`\n\nYou currently have {profile.Gold} Gold are level {profile.Level}.\n\n{sb.ToString()}\n```", null).ConfigureAwait(false);
+            await message.ModifyAsync($"```py\n@To find more information or purchase an item use `w!item info [item name]` and `w!item buy [Item Name]`\n\nYou currently have {profile.Gold} Gold are level {profile.Level}.\nInventory is currently worth: {invworth}\n{sb.ToString()}\n```", null).ConfigureAwait(false);
 
             var emojiList = new List<DiscordEmoji>();
             emojiList.Add(DiscordEmoji.FromName(ctx.Client, ":smiley:"));
@@ -629,8 +614,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             [RequirePrefixes("w!", "W!")]
             public async Task top(CommandContext ctx)
             {
-                await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
                 var message = await ctx.Channel.SendMessageAsync("Getting Profiles...");
 
                 await ctx.TriggerTypingAsync();
@@ -646,8 +629,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             [Description("Shows the users with the most Xp.")]
             public async Task topxp(CommandContext ctx)
             {
-                await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
                 var message = await ctx.Channel.SendMessageAsync("Getting Profiles...");
 
                 await ctx.TriggerTypingAsync();
@@ -663,8 +644,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             [Aliases("money")]
             public async Task topgold(CommandContext ctx)
             {
-                await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
                 var message = await ctx.Channel.SendMessageAsync("Getting Profiles...");
 
                 await ctx.TriggerTypingAsync();
@@ -680,8 +659,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             [Description("Shows the users with the most gots.")]
             public async Task topgots(CommandContext ctx)
             {
-                await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
                 var message = await ctx.Channel.SendMessageAsync("Getting Profiles...");
 
                 await ctx.TriggerTypingAsync();
@@ -697,8 +674,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             [Description("Shows the users with the highest spelling stats.")]
             public async Task topspelling(CommandContext ctx)
             {
-                await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
                 var message = await ctx.Channel.SendMessageAsync("Getting Profiles...");
 
                 await ctx.TriggerTypingAsync();
@@ -714,8 +689,6 @@ namespace WigsBot.Bot.Commands.Profilecommands
             [Description("Shows who is the most bogan.")]
             public async Task topBogan(CommandContext ctx)
             {
-                await ctx.Message.DeleteAsync().ConfigureAwait(false);
-
                 var message = await ctx.Channel.SendMessageAsync("Getting Profiles...");
 
                 await ctx.TriggerTypingAsync();
@@ -837,7 +810,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 {
                     try
                     {
-                        if (user.Level >= 1)
+                        if (user.Level >= 1 || user.Gold > 0)
                         {
                             sb.Append($"[{place}]\t> #{ctx.Guild.GetMemberAsync(user.DiscordId).Result.Username}\n\t\tGold: {user.Gold}\n\n"); 
                             place += 1;
@@ -850,7 +823,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 {
                     Timestamp = System.DateTime.Now,
                     Title = "Users with most gold:",
-                    Description = $"```py\n{sb.ToString()}-------------------------------------------------------\n@This list only shows users who are are level 1+, all others probably have 0 gold\n@ To see more select an emoji below.\n```",
+                    Description = $"```py\n{sb.ToString()}-------------------------------------------------------\n@This list only shows users who are level 1+ or have gold.\n@ To see more select an emoji below.\n```",
                     Color = DiscordColor.Orange
                 };
 

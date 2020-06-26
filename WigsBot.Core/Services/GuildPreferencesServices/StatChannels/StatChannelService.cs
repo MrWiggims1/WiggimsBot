@@ -51,7 +51,8 @@ namespace WigsBot.Core.Services.GuildPreferencesServices.StatChannels
                 {
                     StatMessage = message,
                     StatOption = stat,
-                    ChannelId = channelId
+                    ChannelId = channelId,
+                    GuildPreferencesId = guildPrefs.Id
                 };
                 context.Add(channelStat);
             }

@@ -21,7 +21,7 @@ namespace WigsBot.Bot.Commands
             var embed = new DiscordEmbedBuilder
             {
                 Title = ctx.Client.CurrentUser.Username,
-                ThumbnailUrl = ctx.Client.CurrentUser.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Client.CurrentUser.AvatarUrl },
                 Description = "Wiggims Bot is just for a bit of fun and to be used as a bit of a learning tool for Wiggims.",
                 Color = DiscordColor.Orange
             };
@@ -42,7 +42,7 @@ namespace WigsBot.Bot.Commands
             var embed = new DiscordEmbedBuilder
             {
                 Title = ctx.Guild.Name,
-                ThumbnailUrl = ctx.Guild.IconUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Guild.IconUrl },
                 Description = $"The {ctx.Guild.Name} discord server has been running since {ctx.Guild.CreationTimestamp.Year}, and currently holds {ctx.Guild.MemberCount} nerds, {ctx.Guild.Name} is primarily place to chat, meme, game and punch other nerds.",
                 Color = DiscordColor.Orange
             };
@@ -64,7 +64,7 @@ namespace WigsBot.Bot.Commands
             var embed = new DiscordEmbedBuilder
             {
                 Title = ctx.Guild.Name,
-                ThumbnailUrl = ctx.Guild.IconUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Guild.IconUrl },
                 Description = $"You are currently in the {ctx.Channel.Name} {ctx.Channel.Type} channel described as '{ChannelDescrpt}'",
                 Color = DiscordColor.Orange
             };
@@ -83,7 +83,7 @@ namespace WigsBot.Bot.Commands
             var embed = new DiscordEmbedBuilder
             {
                 Title = "Possible features of wiggims bot",
-                ThumbnailUrl = ctx.Client.CurrentUser.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Client.CurrentUser.AvatarUrl },
                 Color = DiscordColor.Orange,
                 Description = "Feel free to message wiggims if you have anything you want added."
             };

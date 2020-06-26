@@ -398,19 +398,21 @@ namespace WigsBot.Core.Services.Profiles
             if (!memberWonGame)
             {
                 profile.RouletteFails++;
+                profile.GoldLostRoulette += goldNum;
 
-                //Make sure set to negative after you track the results not before.
-                goldNum = -goldNum;
+                profile.Gold -= goldNum;
+                botProfile.Gold += goldNum;
             }
             else
             {
                 profile.RouletteSuccesses++;
+                profile.GoldWonRoulette += goldNum;
+
+                profile.Gold += goldNum;
+                botProfile.Gold -= goldNum;
             }
 
-            profile.TotalRouletteEarnings += goldNum;
-
-            profile.Gold += goldNum;
-            botProfile.Gold -= goldNum;
+            
 
             context.Profiles.Update(profile);
             context.Profiles.Update(botProfile);

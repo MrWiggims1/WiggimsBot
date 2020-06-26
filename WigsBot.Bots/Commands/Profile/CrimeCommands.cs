@@ -36,17 +36,16 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
         private decimal defualCarryPercent = .5M;
         private readonly int maxchance = 80;
-        private decimal chanceMult = 1.3M;
+        private decimal chanceMult = 1.2M;
 
         [Command("rob")]
         [RequirePrefixes("w!", "W!")]
         [Description("Try your luck and attempt to steal someones gold, don't get too greedy or it may cost you. Defaults to max available.\n\n`Cooldown`: 90 Minutes")]
         [Aliases("StealGold", "TakeGold")]
-        [Cooldown(1, 5, CooldownBucketType.Guild)]
+        [Cooldown(1, 1, CooldownBucketType.Guild)]
         public async Task rob(CommandContext ctx, [Description("Discord user")] DiscordMember member, [Description("How much do you want to steal")] int goldNum = 97153)
         {
             await ctx.TriggerTypingAsync();
-
             Profile vicProfile = await _profileService.GetOrCreateProfileAsync(member.Id, ctx.Guild.Id).ConfigureAwait(false);
             Profile attackProfile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id).ConfigureAwait(false);
             StringBuilder extras = new StringBuilder();
@@ -202,13 +201,13 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 var reaction = await interactivity.WaitForReactionAsync(
                     x => x.Message == msg &&
-                    x.User.Id == 318999364192174080 &&
+                    x.User.Id == ctx.Member.Id &&
                     x.Emoji == DiscordEmoji.FromName(ctx.Client, ":alarm_clock:"));
 
                 if (!reaction.TimedOut)
                 {
                     await msg.DeleteAllReactionsAsync();
-                    DiscordDmChannel dmChannel = ctx.Guild.GetMemberAsync(318999364192174080).Result.CreateDmChannelAsync().Result;
+                    DiscordDmChannel dmChannel = ctx.Guild.GetMemberAsync(ctx.Member.Id).Result.CreateDmChannelAsync().Result;
 
                     DiscordEmbedBuilder CooldownEmbed = new DiscordEmbedBuilder()
                     {

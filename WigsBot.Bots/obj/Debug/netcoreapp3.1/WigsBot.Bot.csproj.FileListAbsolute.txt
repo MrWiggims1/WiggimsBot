@@ -123,6 +123,11 @@
 /home/liam/discord_bots/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/staticwebassets/WigsBot.Bot.StaticWebAssets.xml
 /home/liam/discord_bots/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.dll
 /home/liam/discord_bots/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.pdb
+Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.csprojAssemblyReference.cache
+Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.csproj.CoreCompileInputs.cache
+Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.MvcApplicationPartsAssemblyInfo.cache
+Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.AssemblyInfoInputs.cache
+Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.AssemblyInfo.cs
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.dll
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.pdb
 Y:/WigsBot/WigsBot.Bots/bin/Debug/netcoreapp3.1/config-example.json
@@ -229,13 +234,9 @@ Y:/WigsBot/WigsBot.Bots/bin/Debug/netcoreapp3.1/WigsBot.DAL.Migrations.dll
 Y:/WigsBot/WigsBot.Bots/bin/Debug/netcoreapp3.1/WigsBot.Core.pdb
 Y:/WigsBot/WigsBot.Bots/bin/Debug/netcoreapp3.1/WigsBot.DAL.Migrations.pdb
 Y:/WigsBot/WigsBot.Bots/bin/Debug/netcoreapp3.1/WigsBot.DAL.pdb
-Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.csprojAssemblyReference.cache
-Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.csproj.CoreCompileInputs.cache
-Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.MvcApplicationPartsAssemblyInfo.cache
-Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.AssemblyInfoInputs.cache
-Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.AssemblyInfo.cs
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.RazorTargetAssemblyInfo.cache
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.csproj.CopyComplete
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/staticwebassets/WigsBot.Bot.StaticWebAssets.Manifest.cache
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/staticwebassets/WigsBot.Bot.StaticWebAssets.xml
 Y:/WigsBot/WigsBot.Bots/obj/Debug/netcoreapp3.1/WigsBot.Bot.genruntimeconfig.cache
+/home/liam/discord_bots/WigsBot/WigsBot.Bots/bin/Debug/netcoreapp3.1/Resources/RoleJSONs/Mr_Wiggims2-24-6-1-30.json

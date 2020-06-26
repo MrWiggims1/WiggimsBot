@@ -117,7 +117,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var levelUpEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName} Is Now Level {viewModel.Profile.Level}",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color
             };
 
@@ -222,7 +222,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Profile",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -256,7 +256,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Profile",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -297,7 +297,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var levelUpEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName} has been dun got gitten {viewModel.Profile.Gots} times now... Dang.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color
             };
 

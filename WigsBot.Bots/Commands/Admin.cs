@@ -6,6 +6,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -84,7 +85,7 @@ namespace WigsBot.Bot.Commands
             var embed = new DiscordEmbedBuilder
             {
                 Title = $"User Name : {Member.Username}",
-                ThumbnailUrl = $"{Member.AvatarUrl}",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = Member.AvatarUrl },
                 Color = Member.Color,
                 Timestamp = System.DateTime.Now
             };
@@ -163,6 +164,24 @@ namespace WigsBot.Bot.Commands
             int newGold = await _goldService.ResetGold(member.Id, ctx.Guild.Id, goldperlevelup).ConfigureAwait(false);
 
             await ctx.Channel.SendMessageAsync($"{member.Username}'s gold was changed from {prevGold} to {newGold}.").ConfigureAwait(false);
+        }
+
+        [Command("fixusernames")]
+        [RequirePrefixes("w@", "W@")]
+        [Description("Fixes all the usernames in the database.")]
+        [RequireOwner]
+        public async Task FixUsernames(CommandContext ctx)
+        {
+            var members = ctx.Guild.Members;
+
+            Dictionary<ulong, string> memberDictionary = new Dictionary<ulong, string>();
+
+            foreach (var member in members.Values)
+            {
+                memberDictionary.Add(member.Id, $"{member.Username}#{member.Discriminator}"); 
+            }
+
+            await _profileService.FixUserNames(ctx.Guild.Id, memberDictionary);
         }
 
         [Command("Resetallgold")]

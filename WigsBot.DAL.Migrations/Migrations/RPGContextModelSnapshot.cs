@@ -78,7 +78,7 @@ namespace WigsBot.DAL.Migrations.Migrations
                     b.Property<decimal>("ChannelId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.Property<int?>("GuildPreferencesId")
+                    b.Property<int>("GuildPreferencesId")
                         .HasColumnType("int");
 
                     b.Property<string>("StatMessage")
@@ -155,9 +155,6 @@ namespace WigsBot.DAL.Migrations.Migrations
                     b.Property<int>("CoindFlipsLost")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommandsExecuted")
-                        .HasColumnType("int");
-
                     b.Property<int>("DailiesCollected")
                         .HasColumnType("int");
 
@@ -182,6 +179,9 @@ namespace WigsBot.DAL.Migrations.Migrations
                     b.Property<int>("GoldLostFromTheft")
                         .HasColumnType("int");
 
+                    b.Property<int>("GoldLostRoulette")
+                        .HasColumnType("int");
+
                     b.Property<int>("GoldPayedToMembers")
                         .HasColumnType("int");
 
@@ -192,6 +192,9 @@ namespace WigsBot.DAL.Migrations.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("GoldWonCoinFlip")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoldWonRoulette")
                         .HasColumnType("int");
 
                     b.Property<int>("Gots")
@@ -274,12 +277,12 @@ namespace WigsBot.DAL.Migrations.Migrations
                     b.Property<int>("TotalDailyEarnings")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalRouletteEarnings")
-                        .HasColumnType("int");
-
                     b.Property<string>("UplayUsername")
                         .HasColumnType("nvarchar(40)")
                         .HasMaxLength(40);
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Xp")
                         .HasColumnType("int");
@@ -291,9 +294,11 @@ namespace WigsBot.DAL.Migrations.Migrations
 
             modelBuilder.Entity("WigsBot.DAL.Models.GuildPreferences.StatChannel", b =>
                 {
-                    b.HasOne("WigsBot.DAL.Models.GuildPreferences.GuildPreferences", null)
+                    b.HasOne("WigsBot.DAL.Models.GuildPreferences.GuildPreferences", "GuildPreferences")
                         .WithMany("StatChannels")
-                        .HasForeignKey("GuildPreferencesId");
+                        .HasForeignKey("GuildPreferencesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -22,6 +22,9 @@ namespace WigsBot.Bot.Models
         SpellAcc,
         GoldLostFromTheft,
         RobbingAttackWon,
-        RobbingDefendWon
+        RobbingDefendWon,
+        HeadsOrTailsWins,
+        HeadsOrTailsLosses,
+        CoinflipWinRate
     }
 }

@@ -66,7 +66,7 @@ namespace WigsBot.Bot.Commands
                 var joinEmbed = new DiscordEmbedBuilder
                 {
                     Title = "Would you like to stop receiving pings for specific games?",
-                    ThumbnailUrl = ctx.Member.AvatarUrl,
+                    Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Member.AvatarUrl },
                     Color = ctx.Member.Color,
                     Description = $"Click the icons for the games that you do not wish to play anymore (only after all emojis have appeared).\nAfter 60 seconds your role changes will be applied.\n\nThis command does not allow you to join the role, if you wish to join a role please use the `w!role join` command."
                 };
@@ -149,7 +149,7 @@ namespace WigsBot.Bot.Commands
                 var joinEmbed = new DiscordEmbedBuilder
                 {
                     Title = "Would you like to receiving pings for specific games?",
-                    ThumbnailUrl = ctx.Member.AvatarUrl,
+                    Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Member.AvatarUrl },
                     Color = ctx.Member.Color,
                     Description = $"Click the icons for the games that you wish to play (only after all emojis have appeared).\nAfter 60 seconds your role changes will be applied.\n\nThis command does not allow you to leave the role, if you wish to join a role please use the `w!role leave` command."
                 };
@@ -270,7 +270,7 @@ namespace WigsBot.Bot.Commands
                 {
                     Title = $"Wiggims Bot Settings for {ctx.Guild.Name}",
                     Description = "To edit any of the following settings, type `w!help guild` to see the options available.",
-                    //ThumbnailUrl = ctx.Guild.IconUrl,
+                    //Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url =  = ctx.Guild.IconUrl,
                     Color = DiscordColor.Orange
                 };
 
@@ -499,10 +499,7 @@ namespace WigsBot.Bot.Commands
                     await ctx.RespondAsync($"{discordChannel.Name} has been set as the category that will wiggims bot will use to show stats to the rest of the server.").ConfigureAwait(false);
                 }
             
-                [Command("edit")]
-                [Description("Adds or modifies a stat for the server.")]
-                [RequirePrefixes("w@", "W@")]
-                [Aliases("modify", "new", "change", "add")]
+                [GroupCommand]
                 [RequireUserPermissions(Permissions.Administrator)]
                 public async Task AddOrModify(CommandContext ctx)
                 {
@@ -515,7 +512,7 @@ namespace WigsBot.Bot.Commands
                     }
 
                     var messageStep = new TextStep("What would you like the channel name to say? Will show as `<Your text here>: [stat] [Members name]` the limited number of characters is set low to prevent the stat from being hidden.", null, 0, 12);
-                    var statStep = new IntStep("What kind of stat would you like to track? Please enter the corresponding number.\nMost gold - 0\nRobbing attack success rate - 1\nRobbing defense success rate - 2\nXp - 3\nGots - 4\nBoganness - 5\nGold Stolen - 6\nSpelling accuracy - 7\nGold Lost From Theft - 8\nRobbing Attack Wins - 9\nRobbing Defend Wins - 10", messageStep, 0, 10);
+                    var statStep = new IntStep("What kind of stat would you like to track you can only have one of each type, to modify an existing one just select the same option? Please enter the corresponding number.\nMost gold - 0\nRobbing attack success rate - 1\nRobbing defense success rate - 2\nXp - 3\nGots - 4\nBoganness - 5\nGold Stolen - 6\nSpelling accuracy - 7\nGold Lost From Theft - 8\nRobbing Attack Wins - 9\nRobbing Defend Wins - 10\nHeads or tails wins - 11\nHeads or tails losses - 12\nCoin flip Win Rate - 13", messageStep, 0, 13);
 
                     int statInput;
                     StatOption stat = StatOption.Gold;
@@ -565,7 +562,7 @@ namespace WigsBot.Bot.Commands
 
                     await _statChannelService.CreateOrModifyStatChannel(ctx.Guild.Id, channelId, stat, message);
 
-                    await ctx.Channel.SendMessageAsync("There should be a new text channel in the specified category. Wiggims will have to update something manually before stats will show up.").ConfigureAwait(false);
+                    await ctx.Channel.SendMessageAsync("There should be a new text channel in the specified category and will be updated on the next stat update cycle.").ConfigureAwait(false);
                 }
 
                 private Dictionary<ulong,bool> updateNeeded = new Dictionary<ulong, bool>();
@@ -576,13 +573,20 @@ namespace WigsBot.Bot.Commands
                 {
                     if (!updateNeeded.ContainsKey(ctx.Guild.Id))
                     {
-                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updated, created dictionary instance and update queued.", DateTime.Now);
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Warning, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updated, created dictionary instance and update queued.", DateTime.Now);
                         updateNeeded.Add(ctx.Guild.Id, true);
+
+                        var guildPrefs = await _guildPreferences.GetOrCreateGuildPreferences(ctx.Guild.Id);
+
+                        await ctx.Guild.GetChannel(guildPrefs.StatChannelCatergoryId).ModifyAsync(x => x.Name = $"Server Stats - Updates at :x{DateTime.Now.Minute % 10}");
                     }
                     else
                     {
-                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updated, update queued.", DateTime.Now);
+                        if (updateNeeded[ctx.Guild.Id] == true)
+                            return;
+
                         updateNeeded[ctx.Guild.Id] = true;
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Warning, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} needs stats to be updated, update queued.", DateTime.Now);
                     }
                 }
 
@@ -592,13 +596,13 @@ namespace WigsBot.Bot.Commands
                 {
                     if (!updateNeeded.ContainsKey(ctx.Guild.Id))
                     {
-                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} not found in updateNeeded dictionary creating new instance.", DateTime.Now);
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} not found in updateNeeded dictionary creating new instance.", DateTime.Now);
                         updateNeeded.Add(ctx.Guild.Id, true);
                     }
 
-                    if (!updateNeeded[ctx.Guild.Id] || force)
+                    if (!updateNeeded[ctx.Guild.Id] && !force)
                     {
-                        ctx.Client.DebugLogger.LogMessage(LogLevel.Info, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} Does not need to update stats.", DateTime.Now);
+                        ctx.Client.DebugLogger.LogMessage(LogLevel.Debug, ctx.Client.CurrentApplication.Name, $"{ctx.Guild.Name} Does not need to update stats.", DateTime.Now);
                         return;
                     }
 
@@ -629,7 +633,7 @@ namespace WigsBot.Bot.Commands
 
                         if (channel == null)
                         {
-                            ctx.Client.DebugLogger.LogMessage(LogLevel.Warning, ctx.Client.CurrentApplication.Name, $"The stat channel for stat option {statChannel.StatOption} no longer exists and the data base entry will be removed.", DateTime.Now);
+                            ctx.Client.DebugLogger.LogMessage(LogLevel.Warning, ctx.Client.CurrentApplication.Name, $"The stat channel for stat option {statChannel.StatOption} in the guild '{ctx.Guild.Name}' no longer exists and the data base entry will be removed.", DateTime.Now);
                             await _statChannelService.DeleteStatChannel(ctx.Guild.Id, statChannel.StatOption);
                             break;
                         }
@@ -675,13 +679,13 @@ namespace WigsBot.Bot.Commands
                                 }
                             case StatOption.RobAttackSuccessRate:
                                 {
-                                    var returnMember = list.Where(x => x.RobbingAttackWon > 3).OrderByDescending(x => x.RobAttackSuccessRate).Where(x => memberIdList.Contains(x.DiscordId) && x.RobAttackSuccessRate > 0).First();
+                                    var returnMember = list.Where(x => x.RobbingAttackWon + x.RobbingAttackLost > 10).OrderByDescending(x => x.RobAttackSuccessRate).Where(x => memberIdList.Contains(x.DiscordId) && x.RobAttackSuccessRate > 0).First();
                                     string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
                                     return $"{Math.Round(returnMember.RobAttackSuccessRate)}% {userName}";
                                 }
                             case StatOption.RobDefendSuccessRate:
                                 {
-                                    var returnMember = list.Where(x => x.RobbingDefendWon > 3).OrderByDescending(x => x.RobDefendSuccessRate).Where(x => memberIdList.Contains(x.DiscordId) && x.RobDefendSuccessRate > 0).First();
+                                    var returnMember = list.Where(x => x.RobbingDefendWon + x.RobbingDefendLost > 10).OrderByDescending(x => x.RobDefendSuccessRate).Where(x => memberIdList.Contains(x.DiscordId) && x.RobDefendSuccessRate > 0).First();
                                     string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
                                     return $"{Math.Round(returnMember.RobDefendSuccessRate)}% {userName}";
                                 }
@@ -714,6 +718,24 @@ namespace WigsBot.Bot.Commands
                                     var returnMember = list.OrderByDescending(x => x.RobbingDefendWon).Where(x => memberIdList.Contains(x.DiscordId)).First();
                                     string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
                                     return $"{returnMember.RobbingDefendWon} {userName}";
+                                }
+                            case StatOption.HeadsOrTailsLosses:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.CoindFlipsLost).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.CoindFlipsLost} {userName}";
+                                }
+                            case StatOption.HeadsOrTailsWins:
+                                {
+                                    var returnMember = list.OrderByDescending(x => x.CoinFilpsWon).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.CoinFilpsWon} {userName}";
+                                }
+                            case StatOption.CoinflipWinRate:
+                                {
+                                    var returnMember = list.Where(x => x.CoinFilpsWon + x.CoindFlipsLost > 10).OrderByDescending(x => x.CoinFlipWinRate).Where(x => memberIdList.Contains(x.DiscordId)).First();
+                                    string userName = ctx.Guild.GetMemberAsync(returnMember.DiscordId).Result.Username;
+                                    return $"{returnMember.CoinFlipWinRate}% {userName}";
                                 }
                             default:
                                 {

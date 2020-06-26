@@ -51,19 +51,19 @@
           "dependencies": {
             "DSharpPlus": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00689, )"
+              "version": "[4.0.0-nightly-00706, )"
             },
             "DSharpPlus.CommandsNext": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00689, )"
+              "version": "[4.0.0-nightly-00706, )"
             },
             "DSharpPlus.Interactivity": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00689, )"
+              "version": "[4.0.0-nightly-00706, )"
             },
             "DSharpPlus.VoiceNext": {
               "target": "Package",
-              "version": "[4.0.0-nightly-00689, )"
+              "version": "[4.0.0-nightly-00706, )"
             },
             "Google.Apis": {
               "target": "Package",

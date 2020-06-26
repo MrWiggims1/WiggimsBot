@@ -14,7 +14,7 @@
           "lib/netstandard2.0/AngleSharp.dll": {}
         }
       },
-      "DSharpPlus/4.0.0-nightly-00689": {
+      "DSharpPlus/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
@@ -31,10 +31,10 @@
           "lib/netstandard2.0/DSharpPlus.dll": {}
         }
       },
-      "DSharpPlus.CommandsNext/4.0.0-nightly-00689": {
+      "DSharpPlus.CommandsNext/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689",
+          "DSharpPlus": "4.0.0-nightly-00706",
           "Microsoft.Extensions.DependencyInjection": "3.1.1"
         },
         "compile": {
@@ -44,10 +44,10 @@
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {}
         }
       },
-      "DSharpPlus.Interactivity/4.0.0-nightly-00689": {
+      "DSharpPlus.Interactivity/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689"
+          "DSharpPlus": "4.0.0-nightly-00706"
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
@@ -56,10 +56,10 @@
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
         }
       },
-      "DSharpPlus.VoiceNext/4.0.0-nightly-00689": {
+      "DSharpPlus.VoiceNext/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689",
+          "DSharpPlus": "4.0.0-nightly-00706",
           "DSharpPlus.VoiceNext.Natives": "1.0.0"
         },
         "compile": {
@@ -2854,7 +2854,7 @@
           "lib/netstandard2.0/AngleSharp.dll": {}
         }
       },
-      "DSharpPlus/4.0.0-nightly-00689": {
+      "DSharpPlus/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
@@ -2871,10 +2871,10 @@
           "lib/netstandard2.0/DSharpPlus.dll": {}
         }
       },
-      "DSharpPlus.CommandsNext/4.0.0-nightly-00689": {
+      "DSharpPlus.CommandsNext/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689",
+          "DSharpPlus": "4.0.0-nightly-00706",
           "Microsoft.Extensions.DependencyInjection": "3.1.1"
         },
         "compile": {
@@ -2884,10 +2884,10 @@
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {}
         }
       },
-      "DSharpPlus.Interactivity/4.0.0-nightly-00689": {
+      "DSharpPlus.Interactivity/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689"
+          "DSharpPlus": "4.0.0-nightly-00706"
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
@@ -2896,10 +2896,10 @@
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
         }
       },
-      "DSharpPlus.VoiceNext/4.0.0-nightly-00689": {
+      "DSharpPlus.VoiceNext/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689",
+          "DSharpPlus": "4.0.0-nightly-00706",
           "DSharpPlus.VoiceNext.Natives": "1.0.0"
         },
         "compile": {
@@ -5689,7 +5689,7 @@
           "lib/netstandard2.0/AngleSharp.dll": {}
         }
       },
-      "DSharpPlus/4.0.0-nightly-00689": {
+      "DSharpPlus/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "12.0.3",
@@ -5706,10 +5706,10 @@
           "lib/netstandard2.0/DSharpPlus.dll": {}
         }
       },
-      "DSharpPlus.CommandsNext/4.0.0-nightly-00689": {
+      "DSharpPlus.CommandsNext/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689",
+          "DSharpPlus": "4.0.0-nightly-00706",
           "Microsoft.Extensions.DependencyInjection": "3.1.1"
         },
         "compile": {
@@ -5719,10 +5719,10 @@
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {}
         }
       },
-      "DSharpPlus.Interactivity/4.0.0-nightly-00689": {
+      "DSharpPlus.Interactivity/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689"
+          "DSharpPlus": "4.0.0-nightly-00706"
         },
         "compile": {
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
@@ -5731,10 +5731,10 @@
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
         }
       },
-      "DSharpPlus.VoiceNext/4.0.0-nightly-00689": {
+      "DSharpPlus.VoiceNext/4.0.0-nightly-00706": {
         "type": "package",
         "dependencies": {
-          "DSharpPlus": "4.0.0-nightly-00689",
+          "DSharpPlus": "4.0.0-nightly-00706",
           "DSharpPlus.VoiceNext.Natives": "1.0.0"
         },
         "compile": {
@@ -8547,13 +8547,13 @@
         "lib/netstandard2.0/AngleSharp.xml"
       ]
     },
-    "DSharpPlus/4.0.0-nightly-00689": {
-      "sha512": "v+23zxHAIwLetb8z14tWUYglYpoV1mX7IeW9SRW7cg18dNhKgzxCpZjr1ZIHhRGAIBNw5i+pLyA3saPJWh3tfQ==",
+    "DSharpPlus/4.0.0-nightly-00706": {
+      "sha512": "VSTkXfAv0342dbbYK6cuK7ytaMropN79eWkdLEHiXmGlUNdYXQz4dYICFKsfPfUfc8gOZ/nbCX7gttMtngCw8g==",
       "type": "package",
-      "path": "dsharpplus/4.0.0-nightly-00689",
+      "path": "dsharpplus/4.0.0-nightly-00706",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.4.0.0-nightly-00689.nupkg.sha512",
+        "dsharpplus.4.0.0-nightly-00706.nupkg.sha512",
         "dsharpplus.nuspec",
         "lib/netstandard1.3/DSharpPlus.dll",
         "lib/netstandard1.3/DSharpPlus.xml",
@@ -8561,13 +8561,13 @@
         "lib/netstandard2.0/DSharpPlus.xml"
       ]
     },
-    "DSharpPlus.CommandsNext/4.0.0-nightly-00689": {
-      "sha512": "WvbfeFyJT2DjaeDr+BCc8TN1h0TQ1zkD9rwJwxkYQ8ff7shYKQVeqOgBCxEc264N5mAPgOS/j2osHsaPrI1IgQ==",
+    "DSharpPlus.CommandsNext/4.0.0-nightly-00706": {
+      "sha512": "11Gf1ERskl6Y4rYKdvORy/gur1ehYXPOcAgaRicKAMwAJtNWv4bWyCbOGUVxBNQuUndL7cHCD11Zlqm/Mu6eVA==",
       "type": "package",
-      "path": "dsharpplus.commandsnext/4.0.0-nightly-00689",
+      "path": "dsharpplus.commandsnext/4.0.0-nightly-00706",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.commandsnext.4.0.0-nightly-00689.nupkg.sha512",
+        "dsharpplus.commandsnext.4.0.0-nightly-00706.nupkg.sha512",
         "dsharpplus.commandsnext.nuspec",
         "lib/netstandard1.3/DSharpPlus.CommandsNext.dll",
         "lib/netstandard1.3/DSharpPlus.CommandsNext.xml",
@@ -8575,13 +8575,13 @@
         "lib/netstandard2.0/DSharpPlus.CommandsNext.xml"
       ]
     },
-    "DSharpPlus.Interactivity/4.0.0-nightly-00689": {
-      "sha512": "PkcYqn9plA28YJgFjhcfxWBlGWBZ0+Iq1hvndTsJ1+VITTFwWw17o4uJ8ILdLluSn0QaIpAjvTpANysanRlt+A==",
+    "DSharpPlus.Interactivity/4.0.0-nightly-00706": {
+      "sha512": "K2JpEh5I+hkzxbASdaaszet54CWJ/jniI7owyKXw0XM9rLnpBwY645hZqYetOrdDZOZ6rr1yy1PQkWBboVIfPw==",
       "type": "package",
-      "path": "dsharpplus.interactivity/4.0.0-nightly-00689",
+      "path": "dsharpplus.interactivity/4.0.0-nightly-00706",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.interactivity.4.0.0-nightly-00689.nupkg.sha512",
+        "dsharpplus.interactivity.4.0.0-nightly-00706.nupkg.sha512",
         "dsharpplus.interactivity.nuspec",
         "lib/netstandard1.3/DSharpPlus.Interactivity.dll",
         "lib/netstandard1.3/DSharpPlus.Interactivity.xml",
@@ -8589,13 +8589,13 @@
         "lib/netstandard2.0/DSharpPlus.Interactivity.xml"
       ]
     },
-    "DSharpPlus.VoiceNext/4.0.0-nightly-00689": {
-      "sha512": "9Yi07N5R3pIeoKpaFzCFiV0VY6SDZQzJ0a7Xg0U1HXNwEBBstoph4qcBjyO0Jq5jQpauQLKLX2Kshvi3KUGbPA==",
+    "DSharpPlus.VoiceNext/4.0.0-nightly-00706": {
+      "sha512": "b/ejEiEpaVxRMIR131DZ3jiOH4hFhp/0VMGFMcrduYNkHkgIvxEvtCFcFIwrT7DQPQ40Oc5FQs9Vjw+FOOzWBA==",
       "type": "package",
-      "path": "dsharpplus.voicenext/4.0.0-nightly-00689",
+      "path": "dsharpplus.voicenext/4.0.0-nightly-00706",
       "files": [
         ".nupkg.metadata",
-        "dsharpplus.voicenext.4.0.0-nightly-00689.nupkg.sha512",
+        "dsharpplus.voicenext.4.0.0-nightly-00706.nupkg.sha512",
         "dsharpplus.voicenext.nuspec",
         "lib/netstandard1.3/DSharpPlus.VoiceNext.dll",
         "lib/netstandard1.3/DSharpPlus.VoiceNext.xml",
@@ -15207,10 +15207,10 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "DSharpPlus >= 4.0.0-nightly-00689",
-      "DSharpPlus.CommandsNext >= 4.0.0-nightly-00689",
-      "DSharpPlus.Interactivity >= 4.0.0-nightly-00689",
-      "DSharpPlus.VoiceNext >= 4.0.0-nightly-00689",
+      "DSharpPlus >= 4.0.0-nightly-00706",
+      "DSharpPlus.CommandsNext >= 4.0.0-nightly-00706",
+      "DSharpPlus.Interactivity >= 4.0.0-nightly-00706",
+      "DSharpPlus.VoiceNext >= 4.0.0-nightly-00706",
       "Google.Apis >= 1.45.0",
       "Google.Apis.Auth >= 1.45.0",
       "Google.Apis.YouTube.v3 >= 1.45.0.1929",
@@ -15282,19 +15282,19 @@
         "dependencies": {
           "DSharpPlus": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00689, )"
+            "version": "[4.0.0-nightly-00706, )"
           },
           "DSharpPlus.CommandsNext": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00689, )"
+            "version": "[4.0.0-nightly-00706, )"
           },
           "DSharpPlus.Interactivity": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00689, )"
+            "version": "[4.0.0-nightly-00706, )"
           },
           "DSharpPlus.VoiceNext": {
             "target": "Package",
-            "version": "[4.0.0-nightly-00689, )"
+            "version": "[4.0.0-nightly-00706, )"
           },
           "Google.Apis": {
             "target": "Package",

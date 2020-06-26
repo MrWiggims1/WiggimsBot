@@ -21,6 +21,11 @@ namespace WigsBot.DAL.Models.Profiles
         public ulong GuildId { get; set; }
 
         /// <summary>
+        /// The members user name with discriminator.
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
         /// The xp the user has, this is also how many messages the user has sent if xp per message is set to 1.
         /// </summary>
         public int Xp { get; set; }
@@ -185,7 +190,9 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// How much money has the member won from roulette in total (includes losses). (since 27/5/20)
         /// </summary>
-        public int TotalRouletteEarnings { get; set; }
+        public int GoldWonRoulette { get; set; }
+
+        public int GoldLostRoulette { get; set; }
 
         /// <summary>
         /// How many times this member has murdered another.
@@ -247,8 +254,6 @@ namespace WigsBot.DAL.Models.Profiles
         /// </summary>
         public int GoldLostCoinFlip { get; set; }
 
-        public int CommandsExecuted { get; set; }
-
 
 
 
@@ -282,32 +287,32 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// How often does this member succeed at robbing.
         /// </summary>
-        public decimal RobAttackSuccessRate => Math.Round(Convert.ToDecimal(RobbingAttackWon) / (Convert.ToDecimal(RobbingAttackWon) + Convert.ToDecimal(RobbingAttackLost)) * 100, 2);
+        public decimal RobAttackSuccessRate => Math.Round(Convert.ToDecimal(RobbingAttackWon) / (Convert.ToDecimal(RobbingAttackWon) + Convert.ToDecimal(RobbingAttackLost)) * 100, 4);
 
         /// <summary>
         /// How often does this member succeed at defending a robbing.
         /// </summary>
-        public decimal RobDefendSuccessRate => Math.Round(Convert.ToDecimal(RobbingDefendWon) / (Convert.ToDecimal(RobbingDefendWon) + Convert.ToDecimal(RobbingDefendLost)) * 100, 2);
+        public decimal RobDefendSuccessRate => Math.Round(Convert.ToDecimal(RobbingDefendWon) / (Convert.ToDecimal(RobbingDefendWon) + Convert.ToDecimal(RobbingDefendLost)) * 100, 4);
 
         /// <summary>
         /// How often does this member succeed at Roulette.
         /// </summary>
-        public decimal RouletteSuccessRate => Math.Round(Convert.ToDecimal(RouletteSuccesses) / (Convert.ToDecimal(RouletteSuccesses) + Convert.ToDecimal(RouletteFails)) * 100, 2);
+        public decimal RouletteSuccessRate => Math.Round(Convert.ToDecimal(RouletteSuccesses) / (Convert.ToDecimal(RouletteSuccesses) + Convert.ToDecimal(RouletteFails)) * 100, 4);
 
         /// <summary>
         /// How much gold the member gets per robbing on average.
         /// </summary>
-        public decimal AverageRobAmout => Math.Round(Convert.ToDecimal(GoldStolen) / Convert.ToDecimal(RobbingAttackLost + RobbingAttackWon));
+        public decimal AverageRobAmout => Math.Round(Convert.ToDecimal(GoldStolen) / Convert.ToDecimal(RobbingAttackLost + RobbingAttackWon), 4) * 100;
 
         /// <summary>
         /// The average amount of gold being stolen when failing to rob another member.
         /// </summary>
-        public decimal AverageRobLostAmout => Math.Round(Convert.ToDecimal(GoldLostFines / .3M) / Convert.ToDecimal(RobbingAttackLost));
+        public decimal AverageRobLostAmout => Math.Round(Convert.ToDecimal(GoldLostFines / .3M) / Convert.ToDecimal(RobbingAttackLost), 4) * 100;
 
         /// <summary>
         /// The average amount of gold earned from the daily command.
         /// </summary>
-        public decimal AverageEarntFromDailies => Math.Round(Convert.ToDecimal(TotalDailyEarnings) / Convert.ToDecimal(DailiesCollected));
+        public decimal AverageEarntFromDailies => Math.Round(Convert.ToDecimal(TotalDailyEarnings) / Convert.ToDecimal(DailiesCollected), 4) * 100;
 
         /// <summary>
         /// How many times has this member flipped a coin for gold.
@@ -317,7 +322,7 @@ namespace WigsBot.DAL.Models.Profiles
         /// <summary>
         /// This members win rate on flipping coins for gold.
         /// </summary>
-        public decimal CoinFlipWinRate => Math.Round(Convert.ToDecimal(CoinFilpsWon) / Convert.ToDecimal(TotalCoinFlips));
+        public decimal CoinFlipWinRate => Math.Round(Convert.ToDecimal(CoinFilpsWon) / Convert.ToDecimal(TotalCoinFlips), 4) * 100;
 
         /// <summary>
         /// How much gold has this member lost/earned in total.

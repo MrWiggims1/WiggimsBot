@@ -112,7 +112,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var levelUpEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{ctx.Member.DisplayName} Is Now Level {viewModel.Profile.Level}",
-                ThumbnailUrl = ctx.Member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Member.AvatarUrl },
                 Color = ctx.Member.Color
             };
 
@@ -209,7 +209,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
 
                 Profile profile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id);
 
-                TextProcessorViewModel viewModel = await _textProcessorService.ProcessTextAsync(ctx.Member.Id, ctx.Guild.Id, correctCount, errorCount, boganCount, 1, guildPreferences.ErrorListLength, sb).ConfigureAwait(false);
+                TextProcessorViewModel viewModel = await _textProcessorService.ProcessTextAsync(ctx.Member.Id, ctx.Guild.Id, $"{ctx.Member.Username}#{ctx.Member.Discriminator}",correctCount, errorCount, boganCount, 1, guildPreferences.ErrorListLength, sb).ConfigureAwait(false);
 
                 if (!viewModel.LevelledUp) { return; }
 
@@ -229,7 +229,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
                 var levelUpEmbed = new DiscordEmbedBuilder
                 {
                     Title = $"{ctx.Member.DisplayName} Is Now Level {viewModel.Profile.Level}",
-                    ThumbnailUrl = ctx.Member.AvatarUrl,
+                    Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = ctx.Member.AvatarUrl },
                     Color = ctx.Member.Color
                 };
 
@@ -253,7 +253,7 @@ namespace WigsBot.Bot.Commands.Profilecommands
             var profileEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName}'s Profile",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color,
                 Timestamp = System.DateTime.Now
             };

@@ -45,7 +45,7 @@ namespace WigsBot.Bot.Commands
             var embed = new DiscordEmbedBuilder
             {
                 Title = "Minecraft server",
-                ThumbnailUrl = "https://cdn.imgbin.com/11/10/13/imgbin-minecraft-pocket-edition-computer-icons-minecraft-mods-mining-Apf2GevkuW2t3yDzqmFvwEkkq.jpg",
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = "https://cdn.imgbin.com/11/10/13/imgbin-minecraft-pocket-edition-computer-icons-minecraft-mods-mining-Apf2GevkuW2t3yDzqmFvwEkkq.jpg" },
                 Description = $"BAH minecraft server, anyone can join.",
                 Color = DiscordColor.Green
             };

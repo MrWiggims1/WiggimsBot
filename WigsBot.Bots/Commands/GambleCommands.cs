@@ -73,12 +73,18 @@ namespace WigsBot.Bot.Commands
         [Command("Coin")]
         [RequirePrefixes("w!", "W!")]
         [Description("Bet gold on a toss of the coin. 50% - 50%")]
-        [Cooldown(1, 3, CooldownBucketType.User)]
+        [Cooldown(1, 30, CooldownBucketType.User)]
         public async Task FlipCoin(CommandContext ctx, [Description("Heads or Tails")] string headsOrTails, [Description("How much gold do you want to bet on the coin")] int bet)
         {
             var random = new Random().Next(0, 2);
 
             HeadsOrTails coinResult = (HeadsOrTails)random;
+
+            if (bet < 1)
+            {
+                await ctx.Channel.SendMessageAsync("You're a dip shit, you cant bet less than 1 Gold.");
+                return;
+            }
 
             var profile = await _profileService.GetOrCreateProfileAsync(ctx.Member.Id, ctx.Guild.Id);
             var botProfile = await _profileService.GetOrCreateProfileAsync(ctx.Client.CurrentUser.Id, ctx.Guild.Id);
@@ -116,7 +122,7 @@ namespace WigsBot.Bot.Commands
             var levelUpEmbed = new DiscordEmbedBuilder
             {
                 Title = $"{member.DisplayName} has been dun got gitten {viewModel.Profile.Gots} times now... Dang.",
-                ThumbnailUrl = member.AvatarUrl,
+                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = member.AvatarUrl },
                 Color = member.Color
             };
 

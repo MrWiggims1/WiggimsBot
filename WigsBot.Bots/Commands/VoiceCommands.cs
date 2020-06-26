@@ -222,7 +222,7 @@ namespace WigsBot.Bot.Commands
                     return;
                 }
 
-                await ctx.Channel.SendMessageAsync($"Mimicking {discordMember.Username} (Mimic Id: {Id}), if they dont want people to have the ability to do this, they can use `W!Profile ToggleMimicking`.");
+                await ctx.Channel.SendMessageAsync($"Mimicking {discordMember.Username} (Mimic Id: {Id}, Mimic Name: {file.Remove(0, 42).Replace(".mp3", " ")}), if they don't want people to have the ability to do this, they can use `W!Profile ToggleMimicking`.");
                 await _mimicableService.TackAMimic(profile);
 
                 var psi = new ProcessStartInfo
@@ -392,9 +392,9 @@ namespace WigsBot.Bot.Commands
             [Description("Submit a new mimic for a user, as long as they are mimicable.")]
             public async Task submiMimic(CommandContext ctx, [Description("Mention or use discord Id.")] DiscordMember member)
             {
-                if (ctx.Message.Attachments.Count != 1)
+                if (ctx.Message.Attachments.Count == 0)
                 {
-                    await ctx.Channel.SendMessageAsync("you have either provided too many or too little fines please provide 1 mp3 file.");
+                    await ctx.Channel.SendMessageAsync("You must send a mp3 file within the same message as the command.");
                     return;
                 }
 

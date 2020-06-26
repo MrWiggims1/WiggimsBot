@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using WigsBot.Bot.Models;
 
@@ -16,5 +17,10 @@ namespace WigsBot.DAL.Models.GuildPreferences
 
         [Required, MaxLength(12)]
         public string StatMessage { get; set; }
+
+        public int GuildPreferencesId { get; set; }
+
+        [ForeignKey("GuildPreferencesId")]
+        public GuildPreferences GuildPreferences { get; set; }
     }
 }
